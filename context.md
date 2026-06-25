@@ -19,7 +19,7 @@ This file is the primary context source for future AI sessions working on Angula
 | Styling | Tailwind CSS v4 |
 | UI components | Volt UI (`@voltui/components`) |
 | Animations | Angular Movement (`angular-movement`) |
-| Code editor | Vertex Editor (`@vertex/web-editor`) — placeholder, see below |
+| Code editor | Vertex Editor (`<vertex-editor>` / `<vertex-editor-lite>` web components) |
 | Unit/component tests | Vitest + Angular Testing Library |
 | E2E tests | Playwright |
 | CI/CD | GitHub Actions |
@@ -37,7 +37,12 @@ angular-lab/
 ├── src/
 │   ├── app/
 │   │   ├── components/     # Shared components
+│   │   │   ├── counter/    # Example component + tests
+│   │   │   ├── editor/     # Vertex Editor wrapper
+│   │   │   └── layout/     # App shell
 │   │   ├── pages/          # Analog file-based routes
+│   │   │   ├── index.page.ts
+│   │   │   └── mission.page.ts
 │   │   ├── app.config.ts   # Application config
 │   │   └── app.ts          # Root component
 │   ├── main.ts
@@ -57,25 +62,26 @@ angular-lab/
 
 ## Important Decisions
 
-1. **Static build for Cloudflare Pages**
+1. **Tailwind v4 scans Volt UI and Angular Movement**
+   - `src/styles.css` uses `@source` directives to scan `node_modules/@voltui/components` and `node_modules/angular-movement`.
+   - This ensures host classes like `bg-primary`, `rounded-xl`, and `p-6` from Volt components are generated.
+   - Global `button`/`a` styles from the original Vite template were removed because they override Tailwind utility layers.
+
+2. **Static build for Cloudflare Pages**
    - Analog.js is configured with `ssr: false` and `static: true`.
    - Production build output: `dist/analog/public`.
    - This keeps the project on the Cloudflare Pages free tier without server functions.
 
-2. **Peer dependency overrides**
+3. **Peer dependency overrides**
    - `@voltui/components` and `angular-movement` declare Angular `^21.2.0` peer dependencies.
    - The project uses Angular `^22.0.0`.
    - pnpm overrides force these packages to use the project's Angular version.
 
-3. **Vertex Editor placeholder**
-   - The intended editor is `@vertex/web-editor` from `github:Andersseen/vertex`.
-   - It is not published to npm and requires `bun` to build from the monorepo.
-   - It is documented here and in prompts but not installed in Phase 01.
-   - Once published, install with:
-     ```bash
-     pnpm add @vertex/web-editor
-     ```
-   - The component exposes `<vertex-editor>` and `<vertex-editor-lite>` web components.
+4. **Vertex Editor integration**
+   - Vertex Editor ships as self-contained web components from the `Andersseen/vertex` releases.
+   - Assets are vendored in `public/vertex-editor/` and loaded in `index.html`.
+   - Use `app-vertex-editor` (Angular wrapper) for two-way binding, or use `<vertex-editor>` / `<vertex-editor-lite>` directly.
+   - Do not try to install it via npm; it is not published as a package.
 
 4. **Spec-driven development**
    - Product behavior lives in `specs/`.

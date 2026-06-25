@@ -31,5 +31,6 @@ Prepare a clean, professional, open source-ready foundation for the Angular Lab 
 
 ## Notes
 
-- Vertex Editor is intended for the browser-based code editor. If it is not yet available as a published package, document the integration path and add a placeholder instead of blocking the foundation.
+- Vertex Editor is integrated as web components from the `Andersseen/vertex` releases (full editor and read-only lite variant).
+- Include a small demo app structure (landing page + mission page) to validate Volt UI, Angular Movement, and Vertex Editor integration.
 - Specs must describe product behavior only and must not mention implementation dependencies.

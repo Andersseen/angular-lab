@@ -27,6 +27,8 @@ Angular Lab helps developers learn Angular by doing. Instead of reading long tut
 - ✅ Tailwind CSS 4
 - ✅ Volt UI components
 - ✅ Angular Movement animations
+- ✅ Vertex Editor (full + lite) integrated as web components
+- ✅ Demo app structure (landing + mission pages)
 - ✅ Vitest + Angular Testing Library
 - ✅ Playwright E2E tests
 - ✅ ESLint
@@ -90,6 +92,26 @@ pnpm build:prod
 ```
 
 The static files are output to `dist/analog/public`.
+
+## Styling Notes
+
+Tailwind CSS v4 is configured in `src/styles.css`. The `@source` directive scans `node_modules/@voltui/components` and `node_modules/angular-movement` so their host classes are included in the build.
+
+## Vertex Editor
+
+Vertex Editor is bundled as a framework-agnostic web component in `public/vertex-editor/`:
+
+- `web-editor.min.js` — full editable editor (`<vertex-editor>`)
+- `web-editor-lite.min.js` — read-only display editor (`<vertex-editor-lite>`)
+
+The full editor script is loaded in `index.html`. Use the `app-vertex-editor` Angular wrapper component or the `<vertex-editor>` custom element directly.
+
+To update the editor assets to the latest release:
+
+```bash
+curl -fsSL -o public/vertex-editor/web-editor.min.js https://github.com/Andersseen/vertex/releases/download/web-editor-latest/web-editor.min.js
+curl -fsSL -o public/vertex-editor/web-editor-lite.min.js https://github.com/Andersseen/vertex/releases/download/web-editor-latest/web-editor-lite.min.js
+```
 
 ## Deploy to Cloudflare Pages
 

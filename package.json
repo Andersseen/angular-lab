@@ -15,6 +15,7 @@
     "test:unit": "vitest run",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "install:vertex": "mkdir -p public/vertex-editor && curl -fsSL -o public/vertex-editor/web-editor.min.js https://github.com/Andersseen/vertex/releases/download/web-editor-latest/web-editor.min.js && curl -fsSL -o public/vertex-editor/web-editor-lite.min.js https://github.com/Andersseen/vertex/releases/download/web-editor-latest/web-editor-lite.min.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "preview": "node dist/analog/server/index.mjs"

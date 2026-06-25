@@ -2,6 +2,7 @@ import { Component, signal } from '@angular/core';
 
 @Component({
   selector: 'app-counter',
+  standalone: true,
   imports: [],
   template: `
     <section aria-label="Counter example" class="flex flex-col items-center gap-4">

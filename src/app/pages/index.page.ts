@@ -1,42 +1,97 @@
 import { Component } from '@angular/core';
-import { Counter } from '../components/counter/counter';
-import { VoltButton } from '@voltui/components';
-import { MoveEnterDirective } from 'angular-movement';
+import { RouterLink } from '@angular/router';
+import {
+  VoltButton,
+  VoltCard,
+  VoltCardContent,
+  VoltCardDescription,
+  VoltCardHeader,
+  VoltCardTitle,
+} from '@voltui/components';
+import { MoveEnterDirective, MoveHoverDirective } from 'angular-movement';
+
+interface Feature {
+  title: string;
+  description: string;
+  detail: string;
+}
+
+const FEATURES: Feature[] = [
+  {
+    title: 'Missions',
+    description: 'Step-by-step learning paths that combine theory and practice.',
+    detail: 'Progress through tracks like Reactivity, Routing, and Testing.',
+  },
+  {
+    title: 'Live Editor',
+    description: 'Edit TypeScript and HTML directly in the browser.',
+    detail: 'Changes compile and render instantly inside a sandboxed preview.',
+  },
+  {
+    title: 'Comparisons',
+    description: 'See two approaches side by side and learn when to use each.',
+    detail: 'No single "right way" — understand the trade-offs.',
+  },
+];
 
 @Component({
   selector: 'app-home',
-  imports: [Counter, VoltButton, MoveEnterDirective],
+  standalone: true,
+  imports: [
+    RouterLink,
+    VoltButton,
+    VoltCard,
+    VoltCardContent,
+    VoltCardDescription,
+    VoltCardHeader,
+    VoltCardTitle,
+    MoveEnterDirective,
+    MoveHoverDirective,
+  ],
   template: `
-    <main class="flex flex-col items-center gap-8 p-8">
-      <header moveEnter="fade-up" class="text-center">
-        <h1 class="text-4xl font-bold">Angular Lab</h1>
-        <p class="text-lg text-slate-600 dark:text-slate-300">
-          An interactive learning platform for modern Angular.
+    <section class="mx-auto flex w-full max-w-6xl flex-col items-center gap-12 px-6 py-16">
+      <header moveEnter="fade-up" class="max-w-3xl text-center">
+        <h1 class="text-5xl font-extrabold tracking-tight">
+          Learn Angular by doing
+        </h1>
+        <p class="mt-6 text-xl text-slate-600 dark:text-slate-300">
+          Guided missions, editable examples, and instant browser previews. No
+          setup, no backend, just code.
         </p>
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+          <a routerLink="/mission">
+            <volt-button size="lg">Start Demo Mission</volt-button>
+          </a>
+          <a href="https://github.com" target="_blank" rel="noopener">
+            <volt-button variant="outline" size="lg">Contribute</volt-button>
+          </a>
+        </div>
       </header>
 
-      <app-counter />
-
-      <volt-button
-        variant="outline"
-        (click)="showNotice = !showNotice"
-        >
-        {{ showNotice ? 'Hide notice' : 'Show notice' }}
-      </volt-button>
-
-      @if (showNotice) {
-        <p
-          moveEnter="fade-up"
-          class="max-w-md rounded-lg border border-slate-200 bg-slate-50 p-4 text-center text-sm text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
-          role="status"
-        >
-          Foundation phase complete. The learning platform will be built in
-          upcoming phases.
-        </p>
-      }
-    </main>
+      <div class="grid w-full gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        @for (feature of features; track feature.title; let i = $index) {
+          <volt-card
+            moveEnter="fade-up"
+            [moveDelay]="i * 100"
+            [moveWhileHover]="{ scale: [1, 1.03] }"
+            [moveDuration]="200"
+            class="transition-shadow hover:shadow-lg"
+          >
+            <volt-card-header>
+              <volt-card-title>{{ feature.title }}</volt-card-title>
+              <volt-card-description>
+                {{ feature.description }}
+              </volt-card-description>
+            </volt-card-header>
+            <volt-card-content>
+              {{ feature.detail }}
+            </volt-card-content>
+          </volt-card>
+        }
+      </div>
+    </section>
   `,
 })
 export default class Home {
-  showNotice = false;
+  readonly features = FEATURES;
 }

@@ -1,23 +1,16 @@
 import { test, expect } from '@playwright/test';
 
-test('homepage counter can be incremented', async ({ page }) => {
+test('landing page navigates to demo mission', async ({ page }) => {
   await page.goto('/');
 
-  const heading = page.getByRole('heading', { name: /angular lab/i });
-  await expect(heading).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: /learn angular by doing/i })
+  ).toBeVisible();
 
-  const count = page.getByTestId('counter-count');
-  await expect(count).toHaveText('0');
+  await page.getByRole('link', { name: /start demo mission/i }).click();
 
-  await page.getByRole('button', { name: /increment/i }).click();
-  await expect(count).toHaveText('1');
-
-  await page.getByRole('button', { name: /increment/i }).click();
-  await expect(count).toHaveText('2');
-
-  await page.getByRole('button', { name: /decrement/i }).click();
-  await expect(count).toHaveText('1');
-
-  await page.getByRole('button', { name: /reset/i }).click();
-  await expect(count).toHaveText('0');
+  await expect(page).toHaveURL(/\/mission$/);
+  await expect(
+    page.getByRole('heading', { name: /reactive signals/i })
+  ).toBeVisible();
 });
