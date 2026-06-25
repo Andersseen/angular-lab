@@ -1,37 +1,42 @@
 import { Component } from '@angular/core';
+import { Counter } from '../components/counter/counter';
+import { VoltButton } from '@voltui/components';
+import { MoveEnterDirective } from 'angular-movement';
 
 @Component({
   selector: 'app-home',
+  imports: [Counter, VoltButton, MoveEnterDirective],
   template: `
-    <h2>Analog</h2>
+    <main class="flex flex-col items-center gap-8 p-8">
+      <header moveEnter="fade-up" class="text-center">
+        <h1 class="text-4xl font-bold">Angular Lab</h1>
+        <p class="text-lg text-slate-600 dark:text-slate-300">
+          An interactive learning platform for modern Angular.
+        </p>
+      </header>
 
-    <h3>The fullstack meta-framework for Angular!</h3>
+      <app-counter />
 
-    <p class="read-the-docs">
-      <a href="https://analogjs.org" target="_blank">Docs</a> |
-      <a href="https://github.com/analogjs/analog" target="_blank">GitHub</a> |
-      <a href="https://github.com/sponsors/brandonroberts" target="_blank">
-        Sponsor
-      </a>
-    </p>
-  `,
-  styles: `
-    :host {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
+      <volt-button
+        variant="outline"
+        (click)="showNotice = !showNotice"
+        >
+        {{ showNotice ? 'Hide notice' : 'Show notice' }}
+      </volt-button>
 
-    .read-the-docs > * {
-      color: #fff;
-    }
-
-    @media (prefers-color-scheme: light) {
-      .read-the-docs > * {
-        color: #213547;
+      @if (showNotice) {
+        <p
+          moveEnter="fade-up"
+          class="max-w-md rounded-lg border border-slate-200 bg-slate-50 p-4 text-center text-sm text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+          role="status"
+        >
+          Foundation phase complete. The learning platform will be built in
+          upcoming phases.
+        </p>
       }
-    }
+    </main>
   `,
 })
-export default class Home {}
+export default class Home {
+  showNotice = false;
+}
