@@ -4,14 +4,17 @@ import {
   VoltButton,
   VoltCard,
   VoltCardContent,
+  VoltCardFooter,
   VoltCardHeader,
   VoltCardTitle,
+  VoltProgress,
+  VoltSeparator,
   VoltTabs,
   VoltTabsContent,
   VoltTabsList,
   VoltTabsTrigger,
 } from '@voltui/components';
-import { MoveEnterDirective, MoveHoverDirective } from 'angular-movement';
+import { MOVEMENT_DIRECTIVES } from 'angular-movement';
 import { VertexEditor } from '../components/editor/vertex-editor';
 
 interface Step {
@@ -67,30 +70,48 @@ export class Greeter {
     VoltButton,
     VoltCard,
     VoltCardContent,
+    VoltCardFooter,
     VoltCardHeader,
     VoltCardTitle,
+    VoltProgress,
+    VoltSeparator,
     VoltTabs,
     VoltTabsContent,
     VoltTabsList,
     VoltTabsTrigger,
-    MoveEnterDirective,
-    MoveHoverDirective,
+    ...MOVEMENT_DIRECTIVES,
   ],
   template: `
     <div class="mx-auto w-full max-w-7xl px-6 py-8">
-      <header moveEnter="fade-down" class="mb-8 flex flex-col gap-2">
-        <div class="flex flex-wrap items-center gap-3">
-          <h1 class="text-3xl font-bold">Reactive Signals</h1>
-          <volt-badge variant="secondary">Beginner</volt-badge>
+      <header [move]="'fade-down'" class="mb-8 flex flex-col gap-5">
+        <div class="flex flex-col justify-between gap-4 md:flex-row md:items-end">
+          <div class="flex flex-col gap-3">
+            <div class="flex flex-wrap items-center gap-3">
+              <h1 class="text-3xl font-bold text-slate-950 dark:text-white">
+                Reactive Signals
+              </h1>
+              <volt-badge variant="secondary">Beginner</volt-badge>
+            </div>
+            <p class="max-w-2xl text-slate-600 dark:text-slate-300">
+              Learn how to create and update signals in Angular.
+            </p>
+          </div>
+          <div class="min-w-56">
+            <div class="mb-2 flex items-center justify-between text-sm">
+              <span class="font-medium">Mission progress</span>
+              <span class="text-slate-500 dark:text-slate-400">
+                {{ progress() }}%
+              </span>
+            </div>
+            <volt-progress [value]="progress()" />
+          </div>
         </div>
-        <p class="text-slate-600 dark:text-slate-300">
-          Learn how to create and update signals in Angular.
-        </p>
       </header>
 
       <div class="grid gap-6 lg:grid-cols-3">
         <nav
-          moveEnter="fade-right"
+          [move]="'fade-right'"
+          [moveStagger]="70"
           class="flex flex-col gap-2 lg:col-span-1"
           aria-label="Mission steps"
         >
@@ -98,6 +119,7 @@ export class Greeter {
             <button
               type="button"
               class="rounded-lg border px-4 py-3 text-left transition-colors"
+              [move]="'fade-up'"
               [class.border-blue-500]="activeStep() === step.id"
               [class.bg-blue-50]="activeStep() === step.id"
               [class.dark:bg-blue-950]="activeStep() === step.id"
@@ -106,21 +128,31 @@ export class Greeter {
               (click)="activeStep.set(step.id)"
               moveWhileHover="slide-right"
             >
-              <span class="font-semibold">{{ i + 1 }}. {{ step.title }}</span>
+              <span class="block text-xs font-medium uppercase text-slate-500 dark:text-slate-400">
+                Step {{ i + 1 }}
+              </span>
+              <span class="font-semibold">{{ step.title }}</span>
             </button>
           }
         </nav>
 
-        <section moveEnter="fade-up" class="flex flex-col gap-6 lg:col-span-2">
+        <section [move]="'fade-up'" class="flex flex-col gap-6 lg:col-span-2">
           <volt-card>
             <volt-card-header>
               <volt-card-title>{{ currentStep().title }}</volt-card-title>
             </volt-card-header>
             <volt-card-content>
-              <p class="text-slate-700 dark:text-slate-200">
+              <p class="text-base leading-7 text-slate-700 dark:text-slate-200">
                 {{ currentStep().content }}
               </p>
             </volt-card-content>
+            <volt-card-footer>
+              <div class="flex flex-wrap items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
+                <span>{{ currentStepNumber() }} of {{ steps().length }}</span>
+                <volt-separator orientation="vertical" class="h-4" />
+                <span>{{ currentStep().id }}</span>
+              </div>
+            </volt-card-footer>
           </volt-card>
 
           <volt-tabs value="editor">
@@ -143,12 +175,23 @@ export class Greeter {
 
             <volt-tabs-content value="preview">
               <div
-                class="flex h-96 items-center justify-center rounded-lg border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900"
+                class="flex h-96 items-center justify-center rounded-lg border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900"
               >
-                <p class="text-slate-500">
-                  Preview will render here once the playground engine is wired
-                  up.
-                </p>
+                <div class="w-full max-w-md rounded-lg border border-slate-200 p-5 shadow-sm dark:border-slate-800">
+                  <p class="text-sm font-medium text-slate-500 dark:text-slate-400">
+                    Preview stub
+                  </p>
+                  <p class="mt-2 text-2xl font-bold text-slate-950 dark:text-white">
+                    Count: 0
+                  </p>
+                  <div class="mt-4">
+                    <volt-button size="sm" disabled>Increment</volt-button>
+                  </div>
+                  <p class="mt-4 text-sm text-slate-500 dark:text-slate-400">
+                    Preview will render here once the playground engine is wired
+                    up.
+                  </p>
+                </div>
               </div>
             </volt-tabs-content>
           </volt-tabs>
@@ -187,6 +230,10 @@ export default class Mission {
   readonly hasPrevious = computed(() => this.stepIndex() > 0);
   readonly hasNext = computed(
     () => this.stepIndex() >= 0 && this.stepIndex() < this.steps().length - 1
+  );
+  readonly currentStepNumber = computed(() => this.stepIndex() + 1);
+  readonly progress = computed(() =>
+    Math.round((this.currentStepNumber() / this.steps().length) * 100)
   );
 
   previous(): void {
