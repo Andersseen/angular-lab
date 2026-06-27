@@ -1,6 +1,7 @@
 import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
+  effect,
   ElementRef,
   input,
   model,
@@ -8,6 +9,10 @@ import {
   OnInit,
   viewChild,
 } from '@angular/core';
+
+interface VertexEditorChangeDetail {
+  value?: string;
+}
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -32,7 +37,6 @@ declare global {
       class="block h-full w-full rounded-lg"
       [attr.language]="language()"
       [attr.theme]="theme()"
-      [attr.value]="value()"
     ></vertex-editor>
   `,
 })
@@ -44,25 +48,68 @@ export class VertexEditor implements OnInit, OnDestroy {
   private readonly editorRef =
     viewChild.required<ElementRef<HTMLElement>>('editor');
   private changeListener?: (event: Event) => void;
+  private isReady = false;
 
-  ngOnInit(): void {
+  constructor() {
+    effect(() => {
+      if (!this.isReady) {
+        return;
+      }
+      this.setAttribute('language', this.language());
+    });
+
+    effect(() => {
+      if (!this.isReady) {
+        return;
+      }
+      this.setAttribute('theme', this.theme());
+    });
+  }
+
+  async ngOnInit(): Promise<void> {
+    if (typeof customElements === 'undefined') {
+      return;
+    }
+
+    try {
+      await customElements.whenDefined('vertex-editor');
+    } catch {
+      return;
+    }
+
     const editor = this.editorRef().nativeElement;
+    this.setAttribute('value', this.value());
 
     this.changeListener = (event: Event) => {
-      const detail = (event as CustomEvent).detail;
-      const next = typeof detail === 'string' ? detail : detail?.value ?? '';
+      const detail = (event as CustomEvent<VertexEditorChangeDetail | string>)
+        .detail;
+      const next =
+        typeof detail === 'string' ? detail : detail?.value ?? this.value();
       this.value.set(next);
     };
 
     editor.addEventListener('change', this.changeListener);
+    this.isReady = true;
   }
 
   ngOnDestroy(): void {
     if (this.changeListener) {
-      this.editorRef().nativeElement.removeEventListener(
-        'change',
-        this.changeListener
-      );
+      try {
+        this.editorRef().nativeElement.removeEventListener(
+          'change',
+          this.changeListener
+        );
+      } catch {
+        // The element may already be detached; ignore cleanup errors.
+      }
+    }
+  }
+
+  private setAttribute(name: string, value: string): void {
+    try {
+      this.editorRef().nativeElement.setAttribute(name, value);
+    } catch {
+      // Ignore if the element is not available.
     }
   }
 }

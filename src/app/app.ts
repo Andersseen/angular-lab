@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Shell } from './components/layout/shell';
+import { ThemeService } from './core/services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,6 @@ import { Shell } from './components/layout/shell';
   imports: [Shell],
   template: `<app-shell />`,
 })
-export class App {}
+export class App {
+  private readonly _theme = inject(ThemeService);
+}

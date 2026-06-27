@@ -45,7 +45,10 @@ export default defineConfig(
   {
     name: 'templates',
     files: ['**/*.html'],
-    extends: [...angular.configs.templateRecommended],
+    extends: [
+      ...angular.configs.templateRecommended,
+      ...angular.configs.templateAccessibility,
+    ],
     rules: {},
   }
 );
