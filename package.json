@@ -18,11 +18,10 @@
     "install:vertex": "mkdir -p public/vertex-editor && curl -fsSL -o public/vertex-editor/web-editor.min.js https://github.com/Andersseen/vertex/releases/download/web-editor-latest/web-editor.min.js && curl -fsSL -o public/vertex-editor/web-editor-lite.min.js https://github.com/Andersseen/vertex/releases/download/web-editor-latest/web-editor-lite.min.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "preview": "node dist/analog/server/index.mjs"
+    "preview": "npx serve dist/analog/public"
   },
   "private": true,
   "dependencies": {
-    "@analogjs/content": "^2.6.1",
     "@analogjs/router": "^2.6.1",
     "@angular/animations": "^22.0.0",
     "@angular/common": "^22.0.0",
@@ -35,14 +34,8 @@
     "@tailwindcss/vite": "^4.1.4",
     "@voltui/components": "^0.3.0",
     "angular-movement": "^0.5.0",
-    "front-matter": "^4.0.2",
     "h3": "^1.13.0",
-    "marked": "^15.0.7",
-    "marked-gfm-heading-id": "^4.1.1",
-    "marked-highlight": "^2.2.1",
-    "marked-mangle": "^1.1.10",
     "postcss": "^8.5.3",
-    "prismjs": "^1.29.0",
     "rxjs": "~7.8.0",
     "tailwindcss": "^4.1.4",
     "tslib": "^2.3.0"

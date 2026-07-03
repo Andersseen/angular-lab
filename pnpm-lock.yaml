@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@analogjs/content':
-        specifier: ^2.6.1
-        version: 2.6.1(4c041d330cc94d9588ab4d650b2993e8)
       '@analogjs/router':
         specifier: ^2.6.1
         version: 2.6.1(@analogjs/content@2.6.1(4c041d330cc94d9588ab4d650b2993e8))(@angular/core@22.0.2(@angular/compiler@22.0.2)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/router@22.0.2(@angular/common@22.0.2(@angular/core@22.0.2(@angular/compiler@22.0.2)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@22.0.2(@angular/compiler@22.0.2)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@22.0.2(@angular/animations@22.0.2(@angular/core@22.0.2(@angular/compiler@22.0.2)(rxjs@7.8.2)(zone.js@0.15.1)))(@angular/common@22.0.2(@angular/core@22.0.2(@angular/compiler@22.0.2)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@22.0.2(@angular/compiler@22.0.2)(rxjs@7.8.2)(zone.js@0.15.1)))(rxjs@7.8.2))
@@ -47,30 +44,12 @@ importers:
       angular-movement:
         specifier: ^0.5.0
         version: 0.5.0(@angular/common@22.0.2(@angular/core@22.0.2(@angular/compiler@22.0.2)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@22.0.2(@angular/compiler@22.0.2)(rxjs@7.8.2)(zone.js@0.15.1))
-      front-matter:
-        specifier: ^4.0.2
-        version: 4.0.2
       h3:
         specifier: ^1.13.0
         version: 1.15.11
-      marked:
-        specifier: ^15.0.7
-        version: 15.0.12
-      marked-gfm-heading-id:
-        specifier: ^4.1.1
-        version: 4.1.4(marked@15.0.12)
-      marked-highlight:
-        specifier: ^2.2.1
-        version: 2.2.4(marked@15.0.12)
-      marked-mangle:
-        specifier: ^1.1.10
-        version: 1.1.13(marked@15.0.12)
       postcss:
         specifier: ^8.5.3
         version: 8.5.15
-      prismjs:
-        specifier: ^1.29.0
-        version: 1.30.0
       rxjs:
         specifier: ~7.8.0
         version: 7.8.2

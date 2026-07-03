@@ -55,6 +55,12 @@ pnpm dev
 
 Open [http://localhost:5173](http://localhost:5173) in your browser. The dev server supports hot module replacement.
 
+Main routes:
+- `/` — landing page
+- `/missions` — mission catalog
+- `/mission/:id` — interactive mission (e.g., `/mission/reactive-signals`)
+- `/mission` — redirects to `/missions`
+
 ## Run Tests
 
 Unit and component tests use Vitest and Angular Testing Library. They verify user-visible behavior, not private implementation details.
@@ -92,6 +98,12 @@ pnpm build:prod
 ```
 
 The static files are output to `dist/analog/public`.
+
+Preview the production build locally:
+
+```bash
+pnpm preview
+```
 
 ## Styling Notes
 
@@ -151,6 +163,7 @@ We follow spec-driven development. Before writing code, make sure the behavior i
 - Add tests for new behavior.
 - Do not add authentication, payments, backend logic, gamification, or real lesson content without an explicit phase prompt.
 - Update `context.md` and relevant specs when you change architecture or behavior.
+- The editor preview is mocked; label it clearly until real code execution lands in Phase 03.
 
 See `specs/contribution-principles.md` for the full contribution standards.
 

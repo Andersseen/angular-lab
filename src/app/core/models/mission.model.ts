@@ -3,13 +3,35 @@ export type StepType =
   | 'example'
   | 'practice'
   | 'comparison'
-  | 'checkpoint';
+  | 'checkpoint'
+  | 'summary';
+
+export interface Checkpoint {
+  readonly question: string;
+  readonly options: readonly string[];
+  readonly correctIndex: number;
+  readonly explanation: string;
+}
+
+export interface Comparison {
+  readonly titleA: string;
+  readonly titleB: string;
+  readonly points: readonly {
+    readonly aspect: string;
+    readonly a: string;
+    readonly b: string;
+  }[];
+  readonly recommendation: string;
+}
 
 export interface Step {
   readonly id: string;
   readonly title: string;
   readonly content: string;
   readonly type: StepType;
+  readonly hint?: string;
+  readonly checkpoints?: readonly Checkpoint[];
+  readonly comparison?: Comparison;
 }
 
 export interface Mission {
@@ -19,6 +41,7 @@ export interface Mission {
   readonly difficulty: 'beginner' | 'intermediate' | 'advanced';
   readonly durationMinutes: number;
   readonly track: string;
+  readonly tags: readonly string[];
   readonly steps: readonly Step[];
   readonly starterCode: string;
 }

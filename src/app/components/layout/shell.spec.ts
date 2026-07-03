@@ -3,6 +3,18 @@ import { render, screen } from '@testing-library/angular';
 import { Shell } from './shell';
 
 describe('Shell', () => {
+  beforeEach(() => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: vi.fn().mockImplementation((query: string) => ({
+        matches: false,
+        media: query,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      })),
+    });
+  });
+
   it('renders the brand, navigation and footer', async () => {
     await render(Shell, {
       providers: [provideRouter([])],
@@ -10,9 +22,7 @@ describe('Shell', () => {
 
     expect(screen.getByRole('link', { name: /angular lab/i })).toBeTruthy();
     expect(screen.getByRole('link', { name: /home/i })).toBeTruthy();
-    expect(screen.getByRole('link', { name: /demo mission/i })).toBeTruthy();
-    expect(
-      screen.getByText(/open source learning platform/i)
-    ).toBeTruthy();
+    expect(screen.getByRole('link', { name: /missions/i })).toBeTruthy();
+    expect(screen.getByText(/open source learning platform/i)).toBeTruthy();
   });
 });

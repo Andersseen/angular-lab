@@ -43,10 +43,13 @@ angular-lab/
 │   │   │   └── mission/    # Mission page subcomponents
 │   │   ├── core/           # Domain models and state services
 │   │   │   ├── models/     # Mission, Step, MissionState, etc.
-│   │   │   └── services/   # Catalog, state, storage
+│   │   │   └── services/   # Catalog, state, storage, theme
 │   │   ├── pages/          # Analog file-based routes
 │   │   │   ├── index.page.ts
-│   │   │   └── mission.page.ts
+│   │   │   ├── missions.page.ts
+│   │   │   └── mission/
+│   │   │       ├── index.page.ts     # redirects to /missions
+│   │   │       └── [id].page.ts      # dynamic mission route
 │   │   ├── app.config.ts   # Application config
 │   │   └── app.ts          # Root component
 │   ├── main.ts
@@ -94,15 +97,22 @@ angular-lab/
 
 6. **Mission state architecture**
    - Domain models live in `src/app/core/models/`.
-   - `MissionCatalogService` returns the static catalog of missions.
+   - `MissionCatalogService` returns the static catalog of missions grouped by track.
    - `MissionStateService` holds the active mission, current step, and code per step using signals.
    - `StorageService` persists mission progress to `localStorage` with error handling.
    - Pages and components are thin orchestrators that delegate to these services.
 
 7. **Dark mode handling**
-   - `ThemeService` listens to `prefers-color-scheme` and toggles the `dark` class on `<html>`.
-   - Tailwind's `dark:` variants and Volt UI's dark theme rely on this class.
+   - `ThemeService` supports `light`, `dark`, and `system` modes.
+   - User preference is stored in `localStorage` under `angular-lab:theme`.
+   - `system` mode follows `prefers-color-scheme`.
+   - Tailwind's `dark:` variants and Volt UI's dark theme rely on the `dark` class on `<html>`.
    - The service is injected in `App` so it initializes when the application starts.
+
+8. **Preview is currently mocked**
+   - The editor preview does not execute learner code (real execution requires WebContainer or a similar sandbox, planned for Phase 03).
+   - `MockPreview` renders an interactive but fake UI that matches the mission topic.
+   - The preview header clearly labels it as a "Mock preview" so learners are not misled.
 
 ## Conventions
 
@@ -118,6 +128,7 @@ angular-lab/
 pnpm install          # install dependencies
 pnpm dev              # start local dev server
 pnpm build:prod       # production build
+pnpm preview          # serve production build locally
 pnpm test:unit        # run unit/component tests
 pnpm test:e2e         # run E2E tests
 pnpm lint             # run ESLint
@@ -127,10 +138,15 @@ pnpm lint             # run ESLint
 
 1. Add the mission data to `src/app/core/services/mission-catalog.service.ts`.
 2. Follow the `Mission` and `Step` interfaces in `src/app/core/models/mission.model.ts`.
-3. Ensure every step has a single learning objective and a clear call to action.
-4. Add or update tests in `src/app/core/services/mission-state.service.spec.ts` and `src/app/pages/mission.page.spec.ts`.
+3. Support step types: `concept`, `example`, `practice`, `comparison`, `checkpoint`, `summary`.
+4. Add a matching mock preview case in `src/app/components/mission/mock-preview.ts` if the mission has practice/example steps.
+5. Add or update tests in:
+   - `src/app/core/services/mission-state.service.spec.ts`
+   - `src/app/pages/mission/[id].page.spec.ts`
+   - `src/app/pages/missions.page.spec.ts`
 
 ## Known Issues / Watch List
 
 - `@voltui/components` and `angular-movement` may emit peer-dep warnings if overrides are removed.
 - Vertex Editor integration is pending publication.
+- Real code execution preview is pending Phase 03 (WebContainer or equivalent).
