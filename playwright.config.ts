@@ -6,6 +6,7 @@ import { defineConfig, devices } from '@playwright/test';
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
+  globalSetup: './e2e/global-setup.ts',
   testDir: './e2e',
   fullyParallel: true,
   forbidOnly: !!process.env['CI'],
@@ -13,7 +14,7 @@ export default defineConfig({
   workers: process.env['CI'] ? 1 : undefined,
   reporter: 'list',
   use: {
-    baseURL: 'http://localhost:5173',
+    baseURL: 'http://localhost:8788',
     trace: 'on-first-retry',
   },
   projects: [
@@ -23,8 +24,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'pnpm start',
-    url: 'http://localhost:5173',
+    command: 'pnpm build:prod && pnpm exec wrangler pages dev dist/analog/public --port 8788 --compatibility-date=2026-06-27',
+    url: 'http://localhost:8788',
     reuseExistingServer: !process.env['CI'],
+    timeout: 120_000,
   },
 });

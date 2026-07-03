@@ -3,6 +3,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { VoltButton } from '@voltui/components';
 import { MoveEnterDirective } from 'angular-movement';
 import { ThemeService } from '../../core/services/theme.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-shell',
@@ -30,6 +31,13 @@ import { ThemeService } from '../../core/services/theme.service';
             <a routerLink="/missions">
               <volt-button variant="ghost" size="sm">Missions</volt-button>
             </a>
+
+            @if (auth.isAuthenticated()) {
+              <a routerLink="/dashboard">
+                <volt-button variant="ghost" size="sm">Dashboard</volt-button>
+              </a>
+            }
+
             <volt-button
               variant="ghost"
               size="sm"
@@ -91,6 +99,18 @@ import { ThemeService } from '../../core/services/theme.service';
                 }
               }
             </volt-button>
+
+            @if (auth.isAuthenticated()) {
+              <span
+                class="ml-2 hidden text-sm font-medium text-slate-700 dark:text-slate-200 sm:inline"
+              >
+                {{ auth.user()?.name }}
+              </span>
+            } @else {
+              <a routerLink="/login">
+                <volt-button variant="outline" size="sm">Log in</volt-button>
+              </a>
+            }
           </div>
         </nav>
       </header>
@@ -109,4 +129,5 @@ import { ThemeService } from '../../core/services/theme.service';
 })
 export class Shell {
   readonly theme = inject(ThemeService);
+  readonly auth = inject(AuthService);
 }

@@ -2,6 +2,7 @@ import { defineConfig } from 'eslint/config';
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import angular from 'angular-eslint';
+import globals from 'globals';
 
 export default defineConfig(
   {
@@ -14,6 +15,8 @@ export default defineConfig(
       'coverage/**',
       'playwright-report/**',
       'test-results/**',
+      '.wrangler/**',
+      'worker-configuration.d.ts',
     ],
   },
   {
@@ -50,5 +53,17 @@ export default defineConfig(
       ...angular.configs.templateAccessibility,
     ],
     rules: {},
+  },
+  {
+    name: 'workers',
+    files: ['functions/**/*.ts'],
+    languageOptions: {
+      globals: {
+        ...globals.worker,
+      },
+    },
+    rules: {
+      '@angular-eslint/no-angular-modules': 'off',
+    },
   }
 );

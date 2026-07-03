@@ -24,6 +24,8 @@ This file is the primary context source for future AI sessions working on Angula
 | E2E tests | Playwright |
 | CI/CD | GitHub Actions |
 | Hosting | Cloudflare Pages (static) |
+| Backend | Cloudflare Pages Functions |
+| Database | Cloudflare D1 |
 
 ## Project Structure
 
@@ -31,6 +33,9 @@ This file is the primary context source for future AI sessions working on Angula
 angular-lab/
 ├── .github/workflows/      # CI/CD
 ├── e2e/                    # Playwright E2E tests
+├── functions/              # Cloudflare Pages Functions
+│   └── api/auth/           # Auth endpoints (signup, login, logout, me)
+├── migrations/             # D1 database migrations
 ├── prompts/                # Phase prompts for AI sessions
 ├── public/                 # Static assets
 ├── specs/                  # Product specs (SDD)
@@ -42,10 +47,14 @@ angular-lab/
 │   │   │   ├── layout/     # App shell
 │   │   │   └── mission/    # Mission page subcomponents
 │   │   ├── core/           # Domain models and state services
-│   │   │   ├── models/     # Mission, Step, MissionState, etc.
-│   │   │   └── services/   # Catalog, state, storage, theme
+│   │   │   ├── guards/     # Route guards
+│   │   │   ├── models/     # Mission, Step, User, etc.
+│   │   │   └── services/   # Auth, catalog, state, storage, theme
 │   │   ├── pages/          # Analog file-based routes
 │   │   │   ├── index.page.ts
+│   │   │   ├── login.page.ts
+│   │   │   ├── signup.page.ts
+│   │   │   ├── dashboard.page.ts
 │   │   │   ├── missions.page.ts
 │   │   │   └── mission/
 │   │   │       ├── index.page.ts     # redirects to /missions
@@ -63,7 +72,8 @@ angular-lab/
 ├── playwright.config.ts
 ├── tsconfig.json
 ├── tsconfig.app.json
-└── vite.config.ts
+├── vite.config.ts
+└── wrangler.jsonc          # Cloudflare wrangler config
 ```
 
 ## Important Decisions
@@ -114,21 +124,31 @@ angular-lab/
    - `MockPreview` renders an interactive but fake UI that matches the mission topic.
    - The preview header clearly labels it as a "Mock preview" so learners are not misled.
 
+9. **Authentication on Cloudflare free tier**
+   - Auth is handled by Cloudflare Pages Functions (`functions/api/auth/*`) backed by Cloudflare D1.
+   - Passwords are hashed with Web Crypto PBKDF2-SHA256.
+   - Sessions are opaque random IDs stored in D1 and delivered as HTTP-only, Secure, SameSite=Lax cookies.
+   - Guests can use the platform without an account; local progress stays in `localStorage`.
+   - Email verification and password reset are intentionally out of scope until the platform moves toward production.
+
 ## Conventions
 
 - Components are standalone and small.
 - Use signal-based state where possible.
 - Prefer semantic HTML and accessible patterns.
 - Tests verify user-visible behavior, not private implementation details.
-- Do not add authentication, payments, backend logic, real lessons, or gamification.
+- Do not add payments, real lessons, or gamification without an explicit phase prompt.
+- Authentication may be added when explicitly requested, following the architecture above.
 
 ## Common Commands
 
 ```bash
 pnpm install          # install dependencies
-pnpm dev              # start local dev server
+pnpm dev              # start local Angular dev server (no functions)
+pnpm dev:pages        # build and serve Pages + Functions locally
 pnpm build:prod       # production build
-pnpm preview          # serve production build locally
+pnpm preview          # serve production build locally (static only)
+pnpm db:migrate       # apply D1 migrations locally
 pnpm test:unit        # run unit/component tests
 pnpm test:e2e         # run E2E tests
 pnpm lint             # run ESLint
@@ -150,3 +170,4 @@ pnpm lint             # run ESLint
 - `@voltui/components` and `angular-movement` may emit peer-dep warnings if overrides are removed.
 - Vertex Editor integration is pending publication.
 - Real code execution preview is pending Phase 03 (WebContainer or equivalent).
+- Password reset and email verification are pending future auth phases.
