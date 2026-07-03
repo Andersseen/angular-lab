@@ -1,44 +1,59 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
+
+export type ThemeMode = 'light' | 'dark';
+
+const STORAGE_KEY = 'angular-lab:theme';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ThemeService implements OnDestroy {
-  private readonly mediaQuery: MediaQueryList | undefined;
-  private readonly listener: (event: MediaQueryListEvent) => void;
+export class ThemeService {
+  readonly mode = signal<ThemeMode>('dark');
 
   constructor() {
-    this.mediaQuery =
-      typeof window !== 'undefined'
-        ? window.matchMedia('(prefers-color-scheme: dark)')
-        : undefined;
+    this.loadSavedMode();
+    this.apply();
+  }
 
-    this.listener = (event) => {
-      this.applyDarkMode(event.matches);
-    };
+  toggle(): void {
+    this.setMode(this.mode() === 'light' ? 'dark' : 'light');
+  }
 
-    this.applyDarkMode(this.mediaQuery?.matches ?? false);
+  setMode(mode: ThemeMode): void {
+    this.mode.set(mode);
+    this.persist();
+    this.apply();
+  }
 
-    if (this.mediaQuery) {
-      this.mediaQuery.addEventListener('change', this.listener);
+  private loadSavedMode(): void {
+    if (typeof localStorage === 'undefined') {
+      return;
+    }
+    const saved = localStorage.getItem(STORAGE_KEY) as ThemeMode | null;
+    if (saved === 'light' || saved === 'dark') {
+      this.mode.set(saved);
     }
   }
 
-  ngOnDestroy(): void {
-    if (this.mediaQuery) {
-      this.mediaQuery.removeEventListener('change', this.listener);
+  private persist(): void {
+    if (typeof localStorage === 'undefined') {
+      return;
     }
+    localStorage.setItem(STORAGE_KEY, this.mode());
   }
 
-  private applyDarkMode(isDark: boolean): void {
+  private apply(): void {
     if (typeof document === 'undefined') {
       return;
     }
+
     const root = document.documentElement;
-    if (isDark) {
+    if (this.mode() === 'dark') {
       root.classList.add('dark');
+      root.style.colorScheme = 'dark';
     } else {
       root.classList.remove('dark');
+      root.style.colorScheme = 'light';
     }
   }
 }

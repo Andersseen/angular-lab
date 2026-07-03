@@ -1,0 +1,18 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "angular-lab",
+  "compatibility_date": "2026-06-27",
+  "compatibility_flags": ["nodejs_compat"],
+  "pages_build_output_dir": "dist/analog/public",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "angular-lab-db",
+      "database_id": "<DATABASE_ID>"
+    }
+  ],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  }
+}

@@ -55,6 +55,24 @@ pnpm dev
 
 Open [http://localhost:5173](http://localhost:5173) in your browser. The dev server supports hot module replacement.
 
+Main routes:
+- `/` — landing page
+- `/missions` — mission catalog
+- `/mission/:id` — interactive mission (e.g., `/mission/reactive-signals`)
+- `/mission` — redirects to `/missions`
+- `/login` — log in
+- `/signup` — create account
+- `/dashboard` — user dashboard (authenticated)
+
+### Running with Pages Functions
+
+To test authentication locally, build the static site and run `wrangler pages dev`:
+
+```bash
+pnpm db:migrate       # apply D1 migrations locally
+pnpm dev:pages        # builds and serves Pages + Functions on http://localhost:8788
+```
+
 ## Run Tests
 
 Unit and component tests use Vitest and Angular Testing Library. They verify user-visible behavior, not private implementation details.
@@ -93,9 +111,26 @@ pnpm build:prod
 
 The static files are output to `dist/analog/public`.
 
+Preview the production build locally:
+
+```bash
+pnpm preview
+```
+
 ## Styling Notes
 
 Tailwind CSS v4 is configured in `src/styles.css`. The `@source` directive scans `node_modules/@voltui/components` and `node_modules/angular-movement` so their host classes are included in the build.
+
+## Authentication
+
+Authentication is implemented with Cloudflare Pages Functions and Cloudflare D1:
+
+- Passwords are hashed with Web Crypto PBKDF2-SHA256.
+- Sessions are opaque IDs stored in D1, delivered via HTTP-only cookies.
+- Guests can browse and complete missions without an account.
+- Email verification and password reset are not implemented yet.
+
+See `migrations/0001_init.sql` for the D1 schema and `functions/api/auth/` for the endpoints.
 
 ## Vertex Editor
 
@@ -151,6 +186,8 @@ We follow spec-driven development. Before writing code, make sure the behavior i
 - Add tests for new behavior.
 - Do not add authentication, payments, backend logic, gamification, or real lesson content without an explicit phase prompt.
 - Update `context.md` and relevant specs when you change architecture or behavior.
+- The editor preview is mocked; label it clearly until real code execution lands in Phase 03.
+- When changing auth behavior, update `specs/auth.md` and run `pnpm db:migrate` locally.
 
 See `specs/contribution-principles.md` for the full contribution standards.
 

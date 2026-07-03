@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   VoltBadge,
@@ -12,6 +12,7 @@ import {
   VoltProgress,
 } from '@voltui/components';
 import { MOVEMENT_DIRECTIVES } from 'angular-movement';
+import { MissionCatalogService } from '../core/services/mission-catalog.service';
 
 interface Feature {
   title: string;
@@ -24,13 +25,13 @@ const FEATURES: Feature[] = [
   {
     title: 'Missions',
     description: 'Step-by-step learning paths that combine theory and practice.',
-    detail: 'Progress through tracks like Reactivity, Routing, and Testing.',
+    detail: 'Progress through tracks like Fundamentals, Routing, and Testing.',
     accent: 'bg-blue-500',
   },
   {
     title: 'Live Editor',
     description: 'Edit TypeScript and HTML directly in the browser.',
-    detail: 'Changes compile and render instantly inside a sandboxed preview.',
+    detail: 'Mock previews show the expected result while the engine is built.',
     accent: 'bg-emerald-500',
   },
   {
@@ -39,12 +40,6 @@ const FEATURES: Feature[] = [
     detail: 'No single "right way" — understand the trade-offs.',
     accent: 'bg-amber-500',
   },
-];
-
-const STATS = [
-  { value: '3', label: 'guided tracks' },
-  { value: '<1 min', label: 'to first edit' },
-  { value: '100%', label: 'browser based' },
 ];
 
 @Component({
@@ -79,8 +74,8 @@ const STATS = [
             setup, no backend, just code.
           </p>
           <div class="mt-8 flex flex-wrap gap-3">
-            <a routerLink="/mission">
-              <volt-button size="lg">Start Demo Mission</volt-button>
+            <a routerLink="/missions">
+              <volt-button size="lg">Browse Missions</volt-button>
             </a>
             <a href="https://github.com" target="_blank" rel="noopener">
               <volt-button variant="outline" size="lg">Contribute</volt-button>
@@ -92,24 +87,24 @@ const STATS = [
           [move]="'blur-in'"
           [moveDuration]="420"
           class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900"
-          aria-label="Demo mission snapshot"
+          aria-label="Demo platform snapshot"
         >
           <div class="flex items-center justify-between gap-4 border-b border-slate-200 pb-4 dark:border-slate-800">
             <div>
               <p class="text-sm font-medium text-slate-500 dark:text-slate-400">
-                Current mission
+                Available missions
               </p>
-              <h2 class="text-2xl font-bold">Reactive Signals</h2>
+              <h2 class="text-2xl font-bold">{{ missionCount() }}</h2>
             </div>
-            <volt-badge>Live</volt-badge>
+            <volt-badge>Live demo</volt-badge>
           </div>
 
           <div class="py-5">
             <div class="mb-2 flex items-center justify-between text-sm">
-              <span class="font-medium">Demo readiness</span>
-              <span class="text-slate-500 dark:text-slate-400">72%</span>
+              <span class="font-medium">Platform readiness</span>
+              <span class="text-slate-500 dark:text-slate-400">75%</span>
             </div>
-            <volt-progress [value]="72" />
+            <volt-progress [value]="75" />
           </div>
 
           <div class="grid gap-3 sm:grid-cols-3">
@@ -159,6 +154,13 @@ const STATS = [
   `,
 })
 export default class Home {
+  private readonly catalog = inject(MissionCatalogService);
+
+  readonly missionCount = () => this.catalog.getAll().length;
   readonly features = FEATURES;
-  readonly stats = STATS;
+  readonly stats = [
+    { value: this.missionCount().toString(), label: 'guided missions' },
+    { value: '<1 min', label: 'to first edit' },
+    { value: '100%', label: 'browser based' },
+  ];
 }

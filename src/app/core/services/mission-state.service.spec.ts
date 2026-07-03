@@ -26,7 +26,7 @@ describe('MissionStateService', () => {
 
     expect(service.mission()?.id).toBe(DEMO_MISSION_ID);
     expect(service.currentStepId()).toBe('concept');
-    expect(service.currentStep()?.title).toBe('Concept');
+    expect(service.currentStep()?.title).toBe('What are signals?');
   });
 
   it('navigates to the next and previous steps', () => {
@@ -56,8 +56,8 @@ describe('MissionStateService', () => {
   it('each step starts with the starter code', () => {
     service.selectMission(DEMO_MISSION_ID);
 
-    expect(service.stepCode()['concept']).toContain('signal(0)');
-    expect(service.stepCode()['example']).toContain('signal(0)');
+    expect(service.stepCode()['concept']).toContain('Counter');
+    expect(service.stepCode()['example']).toContain('Counter');
   });
 
   it('reset restores initial state', () => {
@@ -68,7 +68,7 @@ describe('MissionStateService', () => {
     service.resetMission();
 
     expect(service.currentStepId()).toBe('concept');
-    expect(service.stepCode()['concept']).toContain('signal(0)');
+    expect(service.stepCode()['concept']).toContain('Counter');
     expect(service.completed()).toBe(false);
   });
 
@@ -76,16 +76,16 @@ describe('MissionStateService', () => {
     service.selectMission(DEMO_MISSION_ID);
 
     expect(service.progress()).toEqual({
-      percentage: 33,
+      percentage: 17,
       currentStepNumber: 1,
-      totalSteps: 3,
+      totalSteps: 6,
     });
 
     service.selectStep('example');
-    expect(service.progress().percentage).toBe(67);
+    expect(service.progress().percentage).toBe(33);
 
     service.selectStep('practice');
-    expect(service.progress().percentage).toBe(100);
+    expect(service.progress().percentage).toBe(50);
   });
 
   it('does nothing when selecting an unknown mission', () => {

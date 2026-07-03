@@ -1,67 +1,61 @@
 import { ThemeService } from './theme.service';
 
 describe('ThemeService', () => {
-  let listeners: ((event: MediaQueryListEvent) => void)[];
-  let currentMatches: boolean;
-
   beforeEach(() => {
-    listeners = [];
-    currentMatches = false;
-
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: vi.fn().mockImplementation((query: string) => ({
-        matches: currentMatches,
-        media: query,
-        addEventListener: (
-          _event: string,
-          listener: (event: MediaQueryListEvent) => void
-        ) => {
-          listeners.push(listener);
-        },
-        removeEventListener: (
-          _event: string,
-          listener: (event: MediaQueryListEvent) => void
-        ) => {
-          listeners = listeners.filter((cb) => cb !== listener);
-        },
-      })),
-    });
-
+    localStorage.clear();
     document.documentElement.classList.remove('dark');
+    document.documentElement.style.colorScheme = '';
   });
 
   afterEach(() => {
     document.documentElement.classList.remove('dark');
+    document.documentElement.style.colorScheme = '';
+    localStorage.clear();
   });
 
-  it('adds dark class when system prefers dark mode', () => {
-    currentMatches = true;
+  it('defaults to dark mode', () => {
     const service = new ThemeService();
 
+    expect(service.mode()).toBe('dark');
     expect(document.documentElement.classList.contains('dark')).toBe(true);
-    service.ngOnDestroy();
+    expect(document.documentElement.style.colorScheme).toBe('dark');
   });
 
-  it('does not add dark class when system prefers light mode', () => {
-    currentMatches = false;
+  it('applies light mode', () => {
     const service = new ThemeService();
+    service.setMode('light');
 
+    expect(service.mode()).toBe('light');
     expect(document.documentElement.classList.contains('dark')).toBe(false);
-    service.ngOnDestroy();
+    expect(document.documentElement.style.colorScheme).toBe('light');
   });
 
-  it('reacts to system theme changes', () => {
-    currentMatches = false;
+  it('toggles between light and dark', () => {
     const service = new ThemeService();
+    expect(service.mode()).toBe('dark');
 
+    service.toggle();
+    expect(service.mode()).toBe('light');
     expect(document.documentElement.classList.contains('dark')).toBe(false);
 
-    listeners.forEach((listener) =>
-      listener({ matches: true } as MediaQueryListEvent)
-    );
-
+    service.toggle();
+    expect(service.mode()).toBe('dark');
     expect(document.documentElement.classList.contains('dark')).toBe(true);
-    service.ngOnDestroy();
+  });
+
+  it('persists selected mode in localStorage', () => {
+    const service = new ThemeService();
+    service.setMode('light');
+
+    expect(localStorage.getItem('angular-lab:theme')).toBe('light');
+  });
+
+  it('restores saved mode from localStorage', () => {
+    localStorage.setItem('angular-lab:theme', 'light');
+
+    const service = new ThemeService();
+
+    expect(service.mode()).toBe('light');
+    expect(document.documentElement.classList.contains('dark')).toBe(false);
   });
 });
