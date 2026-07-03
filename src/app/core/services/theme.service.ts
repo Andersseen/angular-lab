@@ -1,38 +1,22 @@
-import { Injectable, OnDestroy, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
-export type ThemeMode = 'light' | 'dark' | 'system';
+export type ThemeMode = 'light' | 'dark';
 
 const STORAGE_KEY = 'angular-lab:theme';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ThemeService implements OnDestroy {
-  private readonly mediaQuery: MediaQueryList | undefined;
-  private readonly systemChangeListener: (event: MediaQueryListEvent) => void;
-
-  readonly mode = signal<ThemeMode>('system');
+export class ThemeService {
+  readonly mode = signal<ThemeMode>('dark');
 
   constructor() {
-    this.mediaQuery =
-      typeof window !== 'undefined'
-        ? window.matchMedia('(prefers-color-scheme: dark)')
-        : undefined;
-
-    this.systemChangeListener = () => {
-      if (this.mode() === 'system') {
-        this.apply();
-      }
-    };
-
     this.loadSavedMode();
     this.apply();
-
-    this.mediaQuery?.addEventListener('change', this.systemChangeListener);
   }
 
-  ngOnDestroy(): void {
-    this.mediaQuery?.removeEventListener('change', this.systemChangeListener);
+  toggle(): void {
+    this.setMode(this.mode() === 'light' ? 'dark' : 'light');
   }
 
   setMode(mode: ThemeMode): void {
@@ -41,19 +25,12 @@ export class ThemeService implements OnDestroy {
     this.apply();
   }
 
-  toggle(): void {
-    const current = this.mode();
-    const next: ThemeMode =
-      current === 'light' ? 'dark' : current === 'dark' ? 'system' : 'light';
-    this.setMode(next);
-  }
-
   private loadSavedMode(): void {
     if (typeof localStorage === 'undefined') {
       return;
     }
     const saved = localStorage.getItem(STORAGE_KEY) as ThemeMode | null;
-    if (saved && ['light', 'dark', 'system'].includes(saved)) {
+    if (saved === 'light' || saved === 'dark') {
       this.mode.set(saved);
     }
   }
@@ -71,14 +48,12 @@ export class ThemeService implements OnDestroy {
     }
 
     const root = document.documentElement;
-    const isDark =
-      this.mode() === 'dark' ||
-      (this.mode() === 'system' && !!this.mediaQuery?.matches);
-
-    if (isDark) {
+    if (this.mode() === 'dark') {
       root.classList.add('dark');
+      root.style.colorScheme = 'dark';
     } else {
       root.classList.remove('dark');
+      root.style.colorScheme = 'light';
     }
   }
 }

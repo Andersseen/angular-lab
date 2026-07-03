@@ -3,14 +3,14 @@
 @source '../node_modules/@voltui/components';
 @source '../node_modules/angular-movement';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* Global styles */
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
-  color: #0f172a;
-  background-color: #f8fafc;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -30,11 +30,6 @@ body {
   min-height: 100vh;
 }
 
-body {
-  background-color: inherit;
-  color: inherit;
-}
-
 a {
   font-weight: 500;
   text-decoration: inherit;
@@ -42,13 +37,6 @@ a {
 
 h1 {
   line-height: 1.1;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    color: #f8fafc;
-    background-color: #020617;
-  }
 }
 
 .analog-markdown p {
