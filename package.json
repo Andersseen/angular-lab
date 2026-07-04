@@ -20,7 +20,8 @@
     "install:vertex": "mkdir -p public/vertex-editor && curl -fsSL -o public/vertex-editor/web-editor.min.js https://github.com/Andersseen/vertex/releases/download/web-editor-latest/web-editor.min.js && curl -fsSL -o public/vertex-editor/web-editor-lite.min.js https://github.com/Andersseen/vertex/releases/download/web-editor-latest/web-editor-lite.min.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "preview": "npx serve dist/analog/public"
+    "preview": "npx serve dist/analog/public",
+    "deploy": "pnpm build:prod && pnpm exec wrangler pages deploy dist/analog/public --project-name=angular-lab"
   },
   "private": true,
   "dependencies": {
