@@ -1,11 +1,11 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal } from "@angular/core";
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
-} from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+} from "@angular/forms";
+import { Router, RouterLink } from "@angular/router";
 import {
   VoltButton,
   VoltCard,
@@ -13,13 +13,17 @@ import {
   VoltCardDescription,
   VoltCardHeader,
   VoltCardTitle,
-  VoltInput,
   VoltLabel,
-} from '@voltui/components';
-import { AuthService } from '../core/services/auth.service';
+} from "@voltui/components";
+import { LmnArrowRightEndOnRectangleIcon } from "lumen-icons/arrow-right-end-on-rectangle";
+import { LmnEnvelopeIcon } from "lumen-icons/envelope";
+import { LmnExclamationTriangleIcon } from "lumen-icons/exclamation-triangle";
+import { LmnLockClosedIcon } from "lumen-icons/lock-closed";
+import { LmnRocketLaunchIcon } from "lumen-icons/rocket-launch";
+import { AuthService } from "../core/services/auth.service";
 
 @Component({
-  selector: 'app-login',
+  selector: "app-login",
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -30,16 +34,40 @@ import { AuthService } from '../core/services/auth.service';
     VoltCardDescription,
     VoltCardHeader,
     VoltCardTitle,
-    VoltInput,
     VoltLabel,
+    LmnRocketLaunchIcon,
+    LmnEnvelopeIcon,
+    LmnLockClosedIcon,
+    LmnExclamationTriangleIcon,
+    LmnArrowRightEndOnRectangleIcon,
   ],
   template: `
-    <section class="mx-auto w-full max-w-md px-6 py-12">
-      <volt-card>
+    <section
+      class="app-gradient mx-auto flex min-h-[calc(100vh-12rem)] w-full max-w-md flex-col justify-center px-6 py-12"
+    >
+      <div class="mb-8 text-center">
+        <div
+          class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-violet-500 text-white shadow-lg"
+        >
+          <lmn-rocket-launch [size]="24" />
+        </div>
+        <h1
+          class="text-2xl font-bold tracking-tight text-zinc-950 dark:text-white"
+        >
+          Welcome back
+        </h1>
+        <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
+          Continue your Angular journey
+        </p>
+      </div>
+
+      <volt-card class="border-zinc-200 shadow-xl dark:border-zinc-800">
         <volt-card-header>
           <volt-card-title>Log in</volt-card-title>
           <volt-card-description>
-            Welcome back. Continue your Angular journey.
+            Demo account:
+            <span class="font-medium">demo&#64;angular-lab.dev</span> /
+            <span class="font-medium">Demo1234</span>
           </volt-card-description>
         </volt-card-header>
         <volt-card-content>
@@ -50,32 +78,49 @@ import { AuthService } from '../core/services/auth.service';
           >
             <div class="flex flex-col gap-2">
               <volt-label for="email">Email</volt-label>
-              <input
-                id="email"
-                type="email"
-                volt-input
-                formControlName="email"
-                placeholder="you@example.com"
-                autocomplete="email"
-              />
+              <div class="relative">
+                <span
+                  class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400"
+                >
+                  <lmn-envelope [size]="16" />
+                </span>
+                <input
+                  id="email"
+                  type="email"
+                  volt-input
+                  formControlName="email"
+                  placeholder="you@example.com"
+                  autocomplete="email"
+                  class="pl-9"
+                />
+              </div>
             </div>
 
             <div class="flex flex-col gap-2">
               <volt-label for="password">Password</volt-label>
-              <input
-                id="password"
-                type="password"
-                volt-input
-                formControlName="password"
-                placeholder="••••••••"
-                autocomplete="current-password"
-              />
+              <div class="relative">
+                <span
+                  class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400"
+                >
+                  <lmn-lock-closed [size]="16" />
+                </span>
+                <input
+                  id="password"
+                  type="password"
+                  volt-input
+                  formControlName="password"
+                  placeholder="••••••••"
+                  autocomplete="current-password"
+                  class="pl-9"
+                />
+              </div>
             </div>
 
             @if (error()) {
               <div
-                class="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800 dark:border-rose-900 dark:bg-rose-950 dark:text-rose-100"
+                class="flex items-start gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800 dark:border-rose-900 dark:bg-rose-950 dark:text-rose-100"
               >
+                <lmn-exclamation-triangle [size]="16" class="mt-0.5 shrink-0" />
                 {{ error() }}
               </div>
             }
@@ -85,11 +130,18 @@ import { AuthService } from '../core/services/auth.service';
               class="w-full"
               [disabled]="form.invalid || auth.isLoading()"
             >
-              {{ auth.isLoading() ? 'Logging in...' : 'Log in' }}
+              <span class="flex items-center gap-2">
+                @if (auth.isLoading()) {
+                  Logging in...
+                } @else {
+                  <lmn-arrow-right-end-on-rectangle [size]="16" />
+                  Log in
+                }
+              </span>
             </volt-button>
           </form>
 
-          <p class="mt-4 text-center text-sm text-slate-600 dark:text-slate-300">
+          <p class="mt-4 text-center text-sm text-zinc-600 dark:text-zinc-300">
             Don't have an account?
             <a
               routerLink="/signup"
@@ -110,8 +162,8 @@ export default class Login {
   readonly error = signal<string | null>(null);
 
   readonly form: FormGroup = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]],
+    email: ["", [Validators.required, Validators.email]],
+    password: ["", [Validators.required]],
   });
 
   onSubmit(): void {
@@ -124,7 +176,7 @@ export default class Login {
 
     this.auth.login({ email, password }).subscribe({
       next: () => {
-        void this.router.navigate(['/dashboard']);
+        void this.router.navigate(["/dashboard"]);
       },
       error: (err: string) => {
         this.error.set(err);

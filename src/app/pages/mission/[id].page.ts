@@ -8,12 +8,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 import { VoltButton } from '@voltui/components';
+import { LmnArrowLeftIcon } from 'lumen-icons/arrow-left';
+import { LmnArrowPathIcon } from 'lumen-icons/arrow-path';
+import { LmnArrowRightIcon } from 'lumen-icons/arrow-right';
+import { LmnCheckIcon } from 'lumen-icons/check';
 import { EditorPanel } from '../../components/mission/editor-panel';
 import { MissionCompleted } from '../../components/mission/mission-completed';
 import { MissionHeader } from '../../components/mission/mission-header';
 import { MissionNav } from '../../components/mission/mission-nav';
 import { MissionStep } from '../../components/mission/mission-step';
 import { MissionStateService } from '../../core/services/mission-state.service';
+import { ToastService } from 'quartz-headless';
 
 @Component({
   selector: 'app-mission',
@@ -25,6 +30,10 @@ import { MissionStateService } from '../../core/services/mission-state.service';
     EditorPanel,
     MissionCompleted,
     VoltButton,
+    LmnArrowLeftIcon,
+    LmnArrowRightIcon,
+    LmnArrowPathIcon,
+    LmnCheckIcon,
   ],
   template: `
     <div class="mx-auto w-full max-w-7xl px-6 py-8">
@@ -61,30 +70,46 @@ import { MissionStateService } from '../../core/services/mission-state.service';
               />
             }
 
-            <div class="flex justify-between">
+            <div
+              class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+            >
               <volt-button
                 variant="outline"
                 [disabled]="!hasPrevious() || completed()"
                 (click)="previousStep()"
               >
-                Previous
+                <span class="flex items-center gap-2">
+                  <lmn-arrow-left [size]="14" />
+                  Previous
+                </span>
               </volt-button>
-              <div class="flex gap-3">
+              <div class="flex flex-wrap gap-3">
                 <volt-button
                   variant="outline"
                   [disabled]="completed()"
                   (click)="resetMission()"
                 >
-                  Reset
+                  <span class="flex items-center gap-2">
+                    <lmn-arrow-path [size]="14" />
+                    Reset
+                  </span>
                 </volt-button>
                 @if (isLastStep() && !completed()) {
-                  <volt-button (click)="markCompleted()">Complete</volt-button>
+                  <volt-button (click)="markCompleted()">
+                    <span class="flex items-center gap-2">
+                      <lmn-check [size]="14" />
+                      Complete
+                    </span>
+                  </volt-button>
                 } @else {
                   <volt-button
                     [disabled]="!hasNext() || completed()"
                     (click)="nextStep()"
                   >
-                    Next
+                    <span class="flex items-center gap-2">
+                      Next
+                      <lmn-arrow-right [size]="14" />
+                    </span>
                   </volt-button>
                 }
               </div>
@@ -93,7 +118,7 @@ import { MissionStateService } from '../../core/services/mission-state.service';
         </div>
       } @else {
         <div
-          class="flex h-96 flex-col items-center justify-center gap-4 text-slate-500 dark:text-slate-400"
+          class="flex h-96 flex-col items-center justify-center gap-4 text-zinc-500 dark:text-zinc-400"
         >
           <p class="text-lg">Mission not found.</p>
           <volt-button (click)="goToMissions()">Browse missions</volt-button>
@@ -106,6 +131,7 @@ export default class Mission {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly missionState = inject(MissionStateService);
+  private readonly toast = inject(ToastService);
 
   readonly id = toSignal(
     this.route.paramMap.pipe(map((params) => params.get('id') ?? '')),
@@ -164,6 +190,7 @@ export default class Mission {
 
   markCompleted(): void {
     this.missionState.markCompleted();
+    this.toast.success('Mission completed!', 'Great job');
   }
 
   markCompletedIfLastStep(): void {

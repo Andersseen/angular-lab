@@ -5,6 +5,8 @@ import {
   VoltTabsList,
   VoltTabsTrigger,
 } from '@voltui/components';
+import { LmnCodeBracketIcon } from 'lumen-icons/code-bracket';
+import { LmnEyeIcon } from 'lumen-icons/eye';
 import type { Mission, Step } from '../../core/models/mission.model';
 import { MockPreview } from './mock-preview';
 import { VertexEditor } from '../editor/vertex-editor';
@@ -19,17 +21,31 @@ import { VertexEditor } from '../editor/vertex-editor';
     VoltTabsContent,
     VoltTabsList,
     VoltTabsTrigger,
+    LmnCodeBracketIcon,
+    LmnEyeIcon,
   ],
   template: `
     <volt-tabs value="editor">
-      <volt-tabs-list class="grid w-full grid-cols-2">
-        <volt-tabs-trigger value="editor">Editor</volt-tabs-trigger>
-        <volt-tabs-trigger value="preview">Preview</volt-tabs-trigger>
+      <volt-tabs-list
+        class="grid w-full grid-cols-2 border border-zinc-200 dark:border-zinc-800"
+      >
+        <volt-tabs-trigger value="editor">
+          <span class="flex items-center gap-2">
+            <lmn-code-bracket [size]="14" />
+            Editor
+          </span>
+        </volt-tabs-trigger>
+        <volt-tabs-trigger value="preview">
+          <span class="flex items-center gap-2">
+            <lmn-eye [size]="14" />
+            Preview
+          </span>
+        </volt-tabs-trigger>
       </volt-tabs-list>
 
       <volt-tabs-content value="editor">
         <div
-          class="h-96 overflow-hidden rounded-lg border border-slate-200 dark:border-slate-800"
+          class="h-96 overflow-hidden rounded-xl border border-zinc-200 shadow-sm dark:border-zinc-800"
         >
           <app-vertex-editor
             [language]="'typescript'"

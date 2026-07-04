@@ -39,8 +39,8 @@ importers:
         specifier: ^4.1.4
         version: 4.3.1(vite@8.1.0(@types/node@22.20.0)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.99.0)(terser@5.48.0))
       '@voltui/components':
-        specifier: ^0.3.0
-        version: 0.3.0(529d4b87da6d8b74d880f0157cab57be)
+        specifier: ^0.5.0
+        version: 0.5.0(529d4b87da6d8b74d880f0157cab57be)
       angular-movement:
         specifier: ^0.5.0
         version: 0.5.0(@angular/common@22.0.2(@angular/core@22.0.2(@angular/compiler@22.0.2)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@22.0.2(@angular/compiler@22.0.2)(rxjs@7.8.2)(zone.js@0.15.1))
@@ -2639,8 +2639,8 @@ packages:
   '@vitest/utils@4.1.9':
     resolution: {integrity: sha512-A51o8ymO5PpqlWNnBP9ZHPXDIpuMtTLlGSjN7la4US+LJzoUMyhwjA5QXlm39JexgwHKW4Xjs8Z2d3dLCXOeuA==}
 
-  '@voltui/components@0.3.0':
-    resolution: {integrity: sha512-XM/zWMhHqsUeFql7LZZEA99jDtDItI8YqKP7TJE1cdYI6Ywof8OTaXutiXo+Os5C817YT8qaGJHNzS98rqMAxA==}
+  '@voltui/components@0.5.0':
+    resolution: {integrity: sha512-Kw2RAbsQ/LyKD9nrQRQl0f7eZnz7G/KEDwyztpHakF09HaHvUjeol/svIjNSK+coXl6TB7dsv/Vj/7Oz1JjSfQ==}
     peerDependencies:
       '@angular/common': ^21.2.0
       '@angular/core': ^21.2.0
@@ -7718,7 +7718,7 @@ snapshots:
       convert-source-map: 2.0.0
       tinyrainbow: 3.1.0
 
-  '@voltui/components@0.3.0(529d4b87da6d8b74d880f0157cab57be)':
+  '@voltui/components@0.5.0(529d4b87da6d8b74d880f0157cab57be)':
     dependencies:
       '@angular/common': 22.0.2(@angular/core@22.0.2(@angular/compiler@22.0.2)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2)
       '@angular/core': 22.0.2(@angular/compiler@22.0.2)(rxjs@7.8.2)(zone.js@0.15.1)

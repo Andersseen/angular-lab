@@ -16,6 +16,11 @@ import {
   VoltInput,
   VoltLabel,
 } from '@voltui/components';
+import { LmnEnvelopeIcon } from 'lumen-icons/envelope';
+import { LmnExclamationTriangleIcon } from 'lumen-icons/exclamation-triangle';
+import { LmnLockClosedIcon } from 'lumen-icons/lock-closed';
+import { LmnRocketLaunchIcon } from 'lumen-icons/rocket-launch';
+import { LmnUserIcon } from 'lumen-icons/user';
 import { AuthService } from '../core/services/auth.service';
 
 @Component({
@@ -32,14 +37,35 @@ import { AuthService } from '../core/services/auth.service';
     VoltCardTitle,
     VoltInput,
     VoltLabel,
+    LmnRocketLaunchIcon,
+    LmnUserIcon,
+    LmnEnvelopeIcon,
+    LmnLockClosedIcon,
+    LmnExclamationTriangleIcon,
   ],
   template: `
-    <section class="mx-auto w-full max-w-md px-6 py-12">
-      <volt-card>
+    <section
+      class="app-gradient mx-auto flex min-h-[calc(100vh-12rem)] w-full max-w-md flex-col justify-center px-6 py-12"
+    >
+      <div class="mb-8 text-center">
+        <div
+          class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-violet-500 text-white shadow-lg"
+        >
+          <lmn-rocket-launch [size]="24" />
+        </div>
+        <h1 class="text-2xl font-bold tracking-tight text-zinc-950 dark:text-white">
+          Create account
+        </h1>
+        <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
+          Join Angular Lab and track your progress
+        </p>
+      </div>
+
+      <volt-card class="border-zinc-200 shadow-xl dark:border-zinc-800">
         <volt-card-header>
-          <volt-card-title>Create account</volt-card-title>
+          <volt-card-title>Sign up</volt-card-title>
           <volt-card-description>
-            Join Angular Lab for free and track your progress across missions.
+            Free forever. No credit card required.
           </volt-card-description>
         </volt-card-header>
         <volt-card-content>
@@ -50,47 +76,72 @@ import { AuthService } from '../core/services/auth.service';
           >
             <div class="flex flex-col gap-2">
               <volt-label for="name">Name</volt-label>
-              <input
-                id="name"
-                type="text"
-                volt-input
-                formControlName="name"
-                placeholder="Your name"
-                autocomplete="name"
-              />
+              <div class="relative">
+                <span
+                  class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400"
+                >
+                  <lmn-user [size]="16" />
+                </span>
+                <input
+                  id="name"
+                  type="text"
+                  volt-input
+                  formControlName="name"
+                  placeholder="Your name"
+                  autocomplete="name"
+                  class="pl-9"
+                />
+              </div>
             </div>
 
             <div class="flex flex-col gap-2">
               <volt-label for="email">Email</volt-label>
-              <input
-                id="email"
-                type="email"
-                volt-input
-                formControlName="email"
-                placeholder="you@example.com"
-                autocomplete="email"
-              />
+              <div class="relative">
+                <span
+                  class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400"
+                >
+                  <lmn-envelope [size]="16" />
+                </span>
+                <input
+                  id="email"
+                  type="email"
+                  volt-input
+                  formControlName="email"
+                  placeholder="you@example.com"
+                  autocomplete="email"
+                  class="pl-9"
+                />
+              </div>
             </div>
 
             <div class="flex flex-col gap-2">
               <volt-label for="password">Password</volt-label>
-              <input
-                id="password"
-                type="password"
-                volt-input
-                formControlName="password"
-                placeholder="••••••••"
-                autocomplete="new-password"
-              />
-              <p class="text-xs text-slate-500 dark:text-slate-400">
+              <div class="relative">
+                <span
+                  class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400"
+                >
+                  <lmn-lock-closed [size]="16" />
+                </span>
+                <input
+                  id="password"
+                  type="password"
+                  volt-input
+                  formControlName="password"
+                  placeholder="••••••••"
+                  autocomplete="new-password"
+                  class="pl-9"
+                />
+              </div>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400">
                 At least 8 characters with a letter and a number.
               </p>
             </div>
 
             @if (error()) {
               <div
-                class="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800 dark:border-rose-900 dark:bg-rose-950 dark:text-rose-100"
+                class="flex items-start gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800 dark:border-rose-900 dark:bg-rose-950 dark:text-rose-100"
               >
+                <lmn-exclamation-triangle [size]="16" class="mt-0.5 shrink-0" />
                 {{ error() }}
               </div>
             }
@@ -104,7 +155,7 @@ import { AuthService } from '../core/services/auth.service';
             </volt-button>
           </form>
 
-          <p class="mt-4 text-center text-sm text-slate-600 dark:text-slate-300">
+          <p class="mt-4 text-center text-sm text-zinc-600 dark:text-zinc-300">
             Already have an account?
             <a
               routerLink="/login"
@@ -129,7 +180,11 @@ export default class Signup {
     email: ['', [Validators.required, Validators.email]],
     password: [
       '',
-      [Validators.required, Validators.minLength(8), Validators.pattern(/(?=.*[a-zA-Z])(?=.*[0-9])/)]
+      [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(/(?=.*[a-zA-Z])(?=.*[0-9])/),
+      ],
     ],
   });
 

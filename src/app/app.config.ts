@@ -20,7 +20,7 @@ export const appConfig: ApplicationConfig = {
       easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
     }),
     provideVoltTheme({
-      color: 'glacier',
+      color: 'volt',
       style: 'soft',
     }),
     provideFileRouter(),

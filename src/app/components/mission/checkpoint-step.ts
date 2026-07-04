@@ -6,35 +6,50 @@ import {
   VoltCardHeader,
   VoltCardTitle,
 } from '@voltui/components';
+import { LmnCheckCircleIcon } from 'lumen-icons/check-circle';
+import { LmnXCircleIcon } from 'lumen-icons/x-circle';
 import type { Checkpoint } from '../../core/models/mission.model';
 
 @Component({
   selector: 'app-checkpoint-step',
   standalone: true,
-  imports: [VoltCard, VoltCardContent, VoltCardHeader, VoltCardTitle, VoltButton],
+  imports: [VoltCard, VoltCardContent, VoltCardHeader, VoltCardTitle, VoltButton, LmnCheckCircleIcon, LmnXCircleIcon],
   template: `
     <div class="space-y-6">
       @for (checkpoint of checkpoints(); track checkpoint.question; let i = $index) {
-        <volt-card>
+        <volt-card class="border-zinc-200 dark:border-zinc-800">
           <volt-card-header>
-            <volt-card-title>Question {{ i + 1 }}</volt-card-title>
+            <volt-card-title class="text-base">Question {{ i + 1 }}</volt-card-title>
           </volt-card-header>
           <volt-card-content>
-            <p class="mb-4 text-slate-800 dark:text-slate-100">{{ checkpoint.question }}</p>
+            <p class="mb-4 text-zinc-800 dark:text-zinc-100">{{ checkpoint.question }}</p>
 
             <div class="space-y-2">
               @for (option of checkpoint.options; track option; let o = $index) {
                 <button
                   type="button"
-                  class="w-full rounded-lg border px-4 py-3 text-left text-sm transition-colors"
+                  class="group flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left text-sm transition-all"
                   [class.border-blue-500]="selections()[i] === o"
                   [class.bg-blue-50]="selections()[i] === o"
                   [class.dark:bg-blue-950]="selections()[i] === o"
-                  [class.border-slate-200]="selections()[i] !== o"
-                  [class.dark:border-slate-800]="selections()[i] !== o"
+                  [class.border-zinc-200]="selections()[i] !== o"
+                  [class.dark:border-zinc-800]="selections()[i] !== o"
+                  [class.hover:border-zinc-300]="selections()[i] !== o && !submitted()"
+                  [class.dark:hover:border-zinc-700]="selections()[i] !== o && !submitted()"
                   [class.opacity-60]="submitted() && selections()[i] !== o"
+                  [disabled]="submitted()"
                   (click)="select(i, o)"
                 >
+                  <span
+                    class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs font-semibold"
+                    [class.border-blue-500]="selections()[i] === o"
+                    [class.bg-blue-500]="selections()[i] === o"
+                    [class.text-white]="selections()[i] === o"
+                    [class.border-zinc-300]="selections()[i] !== o"
+                    [class.dark:border-zinc-700]="selections()[i] !== o"
+                  >
+                    {{ optionLetter(o) }}
+                  </span>
                   {{ option }}
                 </button>
               }
@@ -42,7 +57,7 @@ import type { Checkpoint } from '../../core/models/mission.model';
 
             @if (submitted()) {
               <div
-                class="mt-4 rounded-lg border px-4 py-3 text-sm"
+                class="mt-4 rounded-xl border px-4 py-3 text-sm"
                 [class.border-emerald-200]="isCorrect(i)"
                 [class.bg-emerald-50]="isCorrect(i)"
                 [class.text-emerald-800]="isCorrect(i)"
@@ -56,8 +71,14 @@ import type { Checkpoint } from '../../core/models/mission.model';
                 [class.dark:bg-rose-950]="!isCorrect(i)"
                 [class.dark:text-rose-100]="!isCorrect(i)"
               >
-                <p class="font-medium">
-                  {{ isCorrect(i) ? 'Correct!' : 'Not quite.' }}
+                <p class="flex items-center gap-2 font-semibold">
+                  @if (isCorrect(i)) {
+                    <lmn-check-circle [size]="16" />
+                    Correct!
+                  } @else {
+                    <lmn-x-circle [size]="16" />
+                    Not quite.
+                  }
                 </p>
                 <p class="mt-1">{{ checkpoints()[i].explanation }}</p>
               </div>
@@ -103,5 +124,9 @@ export class CheckpointStep {
 
   isCorrect(index: number): boolean {
     return this.selections()[index] === this.checkpoints()[index].correctIndex;
+  }
+
+  optionLetter(index: number): string {
+    return String.fromCharCode(65 + index);
   }
 }

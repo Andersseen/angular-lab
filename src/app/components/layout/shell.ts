@@ -11,7 +11,7 @@ import { LmnRocketLaunchIcon } from 'lumen-icons/rocket-launch';
 import { LmnSquares2x2Icon } from 'lumen-icons/squares-2x2';
 import { LmnSunIcon } from 'lumen-icons/sun';
 import { LmnUserCircleIcon } from 'lumen-icons/user-circle';
-import { TooltipDirective } from 'quartz-headless';
+import { ToastContainerComponent, ToastService, TooltipDirective } from 'quartz-headless';
 import { AuthService } from '../../core/services/auth.service';
 import { ThemeService } from '../../core/services/theme.service';
 
@@ -33,29 +33,35 @@ import { ThemeService } from '../../core/services/theme.service';
     LmnArrowLeftStartOnRectangleIcon,
     LmnUserCircleIcon,
     TooltipDirective,
+    ToastContainerComponent,
   ],
   template: `
     <div
-      class="flex min-h-screen flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100"
+      class="flex min-h-screen flex-col bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100"
     >
       <header
         moveEnter="fade-down"
-        class="sticky top-0 z-20 border-b border-slate-200 bg-white/80 px-6 py-4 backdrop-blur dark:border-slate-800 dark:bg-slate-950/80"
+        class="app-glass sticky top-0 z-20 border-b border-zinc-200 px-6 py-3.5 shadow-sm dark:border-zinc-800"
       >
         <nav class="mx-auto flex max-w-7xl items-center justify-between">
           <a
             routerLink="/"
-            class="flex items-center gap-2 text-2xl font-bold tracking-tight text-blue-600 dark:text-blue-400"
+            class="flex items-center gap-2 text-xl font-bold tracking-tight text-zinc-950 dark:text-white"
           >
-            <lmn-rocket-launch [size]="24" tone="primary" />
+            <span
+              class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-violet-500 text-white shadow-md"
+            >
+              <lmn-rocket-launch [size]="20" />
+            </span>
             Angular Lab
           </a>
-          <div class="flex items-center gap-2">
+
+          <div class="flex items-center gap-1 sm:gap-2">
             <a routerLink="/">
               <volt-button variant="ghost" size="sm">
                 <span class="flex items-center gap-2">
                   <lmn-home [size]="16" />
-                  Home
+                  <span class="hidden sm:inline">Home</span>
                 </span>
               </volt-button>
             </a>
@@ -63,7 +69,7 @@ import { ThemeService } from '../../core/services/theme.service';
               <volt-button variant="ghost" size="sm">
                 <span class="flex items-center gap-2">
                   <lmn-list-bullet [size]="16" />
-                  Missions
+                  <span class="hidden sm:inline">Missions</span>
                 </span>
               </volt-button>
             </a>
@@ -73,7 +79,7 @@ import { ThemeService } from '../../core/services/theme.service';
                 <volt-button variant="ghost" size="sm">
                   <span class="flex items-center gap-2">
                     <lmn-squares-2x2 [size]="16" />
-                    Dashboard
+                    <span class="hidden sm:inline">Dashboard</span>
                   </span>
                 </volt-button>
               </a>
@@ -101,9 +107,9 @@ import { ThemeService } from '../../core/services/theme.service';
 
             @if (auth.isAuthenticated()) {
               <span
-                class="ml-2 hidden items-center gap-1 text-sm font-medium text-slate-700 dark:text-slate-200 sm:inline-flex"
+                class="ml-2 hidden items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-3 py-1 text-xs font-medium text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 sm:inline-flex"
               >
-                <lmn-user-circle [size]="16" />
+                <lmn-user-circle [size]="14" />
                 {{ auth.user()?.name }}
               </span>
 
@@ -111,11 +117,13 @@ import { ThemeService } from '../../core/services/theme.service';
                 variant="ghost"
                 size="sm"
                 class="ml-1"
+                [qzTooltip]="'Log out'"
+                tooltipPlacement="bottom"
                 (click)="logout()"
               >
                 <span class="flex items-center gap-2">
-                  <lmn-arrow-left-start-on-rectangle [size]="16" />
-                  Log out
+                  <lmn-arrow-left-start-on-rectangle [size]="20" />
+                  <span class="hidden sm:inline">Log out</span>
                 </span>
               </volt-button>
             } @else {
@@ -123,7 +131,7 @@ import { ThemeService } from '../../core/services/theme.service';
                 <volt-button variant="outline" size="sm">
                   <span class="flex items-center gap-2">
                     <lmn-arrow-right-end-on-rectangle [size]="16" />
-                    Log in
+                    <span class="hidden sm:inline">Log in</span>
                   </span>
                 </volt-button>
               </a>
@@ -136,10 +144,13 @@ import { ThemeService } from '../../core/services/theme.service';
         <router-outlet />
       </main>
 
+      <qz-toast-container />
+
       <footer
-        class="border-t border-slate-200 px-6 py-6 text-center text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400"
+        class="border-t border-zinc-200 bg-zinc-50 px-6 py-8 text-center text-sm text-zinc-500 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400"
       >
-        Angular Lab — open source learning platform. Licensed under MIT.
+        <p class="font-medium">Angular Lab</p>
+        <p class="mt-1">Open source learning platform · Licensed under MIT</p>
       </footer>
     </div>
   `,
@@ -148,9 +159,11 @@ export class Shell {
   private readonly router = inject(Router);
   readonly theme = inject(ThemeService);
   readonly auth = inject(AuthService);
+  private readonly toast = inject(ToastService);
 
   logout(): void {
     this.auth.logout().subscribe(() => {
+      this.toast.info('You have been logged out.', 'See you soon');
       void this.router.navigate(['/']);
     });
   }
