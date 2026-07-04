@@ -37,7 +37,7 @@ describe('MockPreview', () => {
       componentInputs: { mission: MISSION, step: STEP },
     });
 
-    const button = screen.getByRole('button', { name: '+' });
+    const button = screen.getByRole('button', { name: 'Increment' });
     await user.click(button);
 
     expect(screen.getByText('1')).toBeTruthy();

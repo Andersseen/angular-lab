@@ -1,0 +1,69 @@
+import { Component, input, output } from '@angular/core';
+import { VoltButton } from '@voltui/components';
+import { LmnArrowLeftIcon } from 'lumen-icons/arrow-left';
+import { LmnArrowPathIcon } from 'lumen-icons/arrow-path';
+import { LmnArrowRightIcon } from 'lumen-icons/arrow-right';
+import { LmnCheckIcon } from 'lumen-icons/check';
+
+@Component({
+  selector: 'app-mission-action-bar',
+  standalone: true,
+  imports: [VoltButton, LmnArrowLeftIcon, LmnArrowRightIcon, LmnArrowPathIcon, LmnCheckIcon],
+  template: `
+    <div
+      class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+    >
+      <volt-button
+        variant="outline"
+        [disabled]="!hasPrevious() || completed()"
+        (click)="previous.emit()"
+      >
+        <span class="flex items-center gap-2">
+          <lmn-arrow-left [size]="14" />
+          Previous
+        </span>
+      </volt-button>
+      <div class="flex flex-wrap gap-3">
+        <volt-button
+          variant="outline"
+          [disabled]="completed()"
+          (click)="resetRequested.emit()"
+        >
+          <span class="flex items-center gap-2">
+            <lmn-arrow-path [size]="14" />
+            Reset
+          </span>
+        </volt-button>
+        @if (isLastStep() && !completed()) {
+          <volt-button (click)="complete.emit()">
+            <span class="flex items-center gap-2">
+              <lmn-check [size]="14" />
+              Complete
+            </span>
+          </volt-button>
+        } @else {
+          <volt-button
+            [disabled]="!hasNext() || completed()"
+            (click)="next.emit()"
+          >
+            <span class="flex items-center gap-2">
+              Next
+              <lmn-arrow-right [size]="14" />
+            </span>
+          </volt-button>
+        }
+      </div>
+    </div>
+  `,
+})
+export class MissionActionBar {
+  readonly hasPrevious = input.required<boolean>();
+  readonly hasNext = input.required<boolean>();
+  readonly isLastStep = input.required<boolean>();
+  readonly completed = input.required<boolean>();
+
+  readonly previous = output<void>();
+  readonly next = output<void>();
+  readonly resetRequested = output<void>();
+  readonly complete = output<void>();
+}

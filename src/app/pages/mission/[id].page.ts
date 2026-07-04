@@ -8,12 +8,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 import { VoltButton } from '@voltui/components';
+import { MissionActionBar } from '../../components/mission/mission-action-bar';
 import { EditorPanel } from '../../components/mission/editor-panel';
 import { MissionCompleted } from '../../components/mission/mission-completed';
 import { MissionHeader } from '../../components/mission/mission-header';
 import { MissionNav } from '../../components/mission/mission-nav';
 import { MissionStep } from '../../components/mission/mission-step';
 import { MissionStateService } from '../../core/services/mission-state.service';
+import { ToastService } from 'quartz-headless';
 
 @Component({
   selector: 'app-mission',
@@ -25,6 +27,7 @@ import { MissionStateService } from '../../core/services/mission-state.service';
     EditorPanel,
     MissionCompleted,
     VoltButton,
+    MissionActionBar,
   ],
   template: `
     <div class="mx-auto w-full max-w-7xl px-6 py-8">
@@ -61,39 +64,21 @@ import { MissionStateService } from '../../core/services/mission-state.service';
               />
             }
 
-            <div class="flex justify-between">
-              <volt-button
-                variant="outline"
-                [disabled]="!hasPrevious() || completed()"
-                (click)="previousStep()"
-              >
-                Previous
-              </volt-button>
-              <div class="flex gap-3">
-                <volt-button
-                  variant="outline"
-                  [disabled]="completed()"
-                  (click)="resetMission()"
-                >
-                  Reset
-                </volt-button>
-                @if (isLastStep() && !completed()) {
-                  <volt-button (click)="markCompleted()">Complete</volt-button>
-                } @else {
-                  <volt-button
-                    [disabled]="!hasNext() || completed()"
-                    (click)="nextStep()"
-                  >
-                    Next
-                  </volt-button>
-                }
-              </div>
-            </div>
+            <app-mission-action-bar
+              [hasPrevious]="hasPrevious()"
+              [hasNext]="hasNext()"
+              [isLastStep]="isLastStep()"
+              [completed]="completed()"
+              (previous)="previousStep()"
+              (next)="nextStep()"
+              (resetRequested)="resetMission()"
+              (complete)="markCompleted()"
+            />
           </section>
         </div>
       } @else {
         <div
-          class="flex h-96 flex-col items-center justify-center gap-4 text-slate-500 dark:text-slate-400"
+          class="flex h-96 flex-col items-center justify-center gap-4 text-zinc-500 dark:text-zinc-400"
         >
           <p class="text-lg">Mission not found.</p>
           <volt-button (click)="goToMissions()">Browse missions</volt-button>
@@ -106,6 +91,7 @@ export default class Mission {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly missionState = inject(MissionStateService);
+  private readonly toast = inject(ToastService);
 
   readonly id = toSignal(
     this.route.paramMap.pipe(map((params) => params.get('id') ?? '')),
@@ -164,6 +150,7 @@ export default class Mission {
 
   markCompleted(): void {
     this.missionState.markCompleted();
+    this.toast.success('Mission completed!', 'Great job');
   }
 
   markCompletedIfLastStep(): void {
