@@ -164,7 +164,8 @@ The repository includes `.github/workflows/deploy-cloudflare-pages.yml`. It depl
 
 - `CLOUDFLARE_API_TOKEN`
 - `CLOUDFLARE_ACCOUNT_ID`
-- `CLOUDFLARE_PROJECT_NAME`
+
+The project name is configured directly in the workflow (`angular-lab`).
 
 Add the secrets in your GitHub repository settings under **Settings > Secrets and variables > Actions**.
 
