@@ -1,14 +1,39 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { VoltButton } from '@voltui/components';
 import { MoveEnterDirective } from 'angular-movement';
-import { ThemeService } from '../../core/services/theme.service';
+import { LmnArrowLeftStartOnRectangleIcon } from 'lumen-icons/arrow-left-start-on-rectangle';
+import { LmnArrowRightEndOnRectangleIcon } from 'lumen-icons/arrow-right-end-on-rectangle';
+import { LmnHomeIcon } from 'lumen-icons/home';
+import { LmnListBulletIcon } from 'lumen-icons/list-bullet';
+import { LmnMoonIcon } from 'lumen-icons/moon';
+import { LmnRocketLaunchIcon } from 'lumen-icons/rocket-launch';
+import { LmnSquares2x2Icon } from 'lumen-icons/squares-2x2';
+import { LmnSunIcon } from 'lumen-icons/sun';
+import { LmnUserCircleIcon } from 'lumen-icons/user-circle';
+import { TooltipDirective } from 'quartz-headless';
 import { AuthService } from '../../core/services/auth.service';
+import { ThemeService } from '../../core/services/theme.service';
 
 @Component({
   selector: 'app-shell',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, VoltButton, MoveEnterDirective],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    VoltButton,
+    MoveEnterDirective,
+    LmnHomeIcon,
+    LmnListBulletIcon,
+    LmnRocketLaunchIcon,
+    LmnSquares2x2Icon,
+    LmnMoonIcon,
+    LmnSunIcon,
+    LmnArrowRightEndOnRectangleIcon,
+    LmnArrowLeftStartOnRectangleIcon,
+    LmnUserCircleIcon,
+    TooltipDirective,
+  ],
   template: `
     <div
       class="flex min-h-screen flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100"
@@ -20,21 +45,37 @@ import { AuthService } from '../../core/services/auth.service';
         <nav class="mx-auto flex max-w-7xl items-center justify-between">
           <a
             routerLink="/"
-            class="text-2xl font-bold tracking-tight text-blue-600 dark:text-blue-400"
+            class="flex items-center gap-2 text-2xl font-bold tracking-tight text-blue-600 dark:text-blue-400"
           >
+            <lmn-rocket-launch [size]="24" tone="primary" />
             Angular Lab
           </a>
           <div class="flex items-center gap-2">
             <a routerLink="/">
-              <volt-button variant="ghost" size="sm">Home</volt-button>
+              <volt-button variant="ghost" size="sm">
+                <span class="flex items-center gap-2">
+                  <lmn-home [size]="16" />
+                  Home
+                </span>
+              </volt-button>
             </a>
             <a routerLink="/missions">
-              <volt-button variant="ghost" size="sm">Missions</volt-button>
+              <volt-button variant="ghost" size="sm">
+                <span class="flex items-center gap-2">
+                  <lmn-list-bullet [size]="16" />
+                  Missions
+                </span>
+              </volt-button>
             </a>
 
             @if (auth.isAuthenticated()) {
               <a routerLink="/dashboard">
-                <volt-button variant="ghost" size="sm">Dashboard</volt-button>
+                <volt-button variant="ghost" size="sm">
+                  <span class="flex items-center gap-2">
+                    <lmn-squares-2x2 [size]="16" />
+                    Dashboard
+                  </span>
+                </volt-button>
               </a>
             }
 
@@ -42,52 +83,49 @@ import { AuthService } from '../../core/services/auth.service';
               variant="ghost"
               size="sm"
               class="ml-1"
-              [attr.aria-label]="'Switch to ' + (theme.mode() === 'light' ? 'dark' : 'light') + ' theme'"
+              [attr.aria-label]="
+                'Switch to ' + (theme.mode() === 'light' ? 'dark' : 'light') + ' theme'
+              "
+              [qzTooltip]="
+                'Switch to ' + (theme.mode() === 'light' ? 'dark' : 'light') + ' mode'
+              "
+              tooltipPlacement="bottom"
               (click)="theme.toggle()"
             >
               @if (theme.mode() === 'light') {
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
-                </svg>
+                <lmn-moon [size]="20" ariaLabel="Switch to dark theme" />
               } @else {
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                >
-                  <circle cx="12" cy="12" r="5" />
-                  <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
-                </svg>
+                <lmn-sun [size]="20" ariaLabel="Switch to light theme" />
               }
             </volt-button>
 
             @if (auth.isAuthenticated()) {
               <span
-                class="ml-2 hidden text-sm font-medium text-slate-700 dark:text-slate-200 sm:inline"
+                class="ml-2 hidden items-center gap-1 text-sm font-medium text-slate-700 dark:text-slate-200 sm:inline-flex"
               >
+                <lmn-user-circle [size]="16" />
                 {{ auth.user()?.name }}
               </span>
+
+              <volt-button
+                variant="ghost"
+                size="sm"
+                class="ml-1"
+                (click)="logout()"
+              >
+                <span class="flex items-center gap-2">
+                  <lmn-arrow-left-start-on-rectangle [size]="16" />
+                  Log out
+                </span>
+              </volt-button>
             } @else {
               <a routerLink="/login">
-                <volt-button variant="outline" size="sm">Log in</volt-button>
+                <volt-button variant="outline" size="sm">
+                  <span class="flex items-center gap-2">
+                    <lmn-arrow-right-end-on-rectangle [size]="16" />
+                    Log in
+                  </span>
+                </volt-button>
               </a>
             }
           </div>
@@ -107,6 +145,13 @@ import { AuthService } from '../../core/services/auth.service';
   `,
 })
 export class Shell {
+  private readonly router = inject(Router);
   readonly theme = inject(ThemeService);
   readonly auth = inject(AuthService);
+
+  logout(): void {
+    this.auth.logout().subscribe(() => {
+      void this.router.navigate(['/']);
+    });
+  }
 }

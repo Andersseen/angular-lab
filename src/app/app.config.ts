@@ -5,6 +5,7 @@ import {
 import {
   ApplicationConfig,
   provideBrowserGlobalErrorListeners,
+  provideZonelessChangeDetection,
 } from '@angular/core';
 import { provideFileRouter, requestContextInterceptor } from '@analogjs/router';
 import { provideMovement } from 'angular-movement';
@@ -12,6 +13,7 @@ import { provideVoltTheme } from '@voltui/components';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideZonelessChangeDetection(),
     provideBrowserGlobalErrorListeners(),
     provideMovement({
       duration: 320,
