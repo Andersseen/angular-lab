@@ -6,13 +6,14 @@ Roadmap divided into phases. Each phase is designed to be tackled in a **single 
 
 - ✅ **Phase 01 — Foundation**, **Phase 02 — Learning Engine**, **Phase 03 — Playground** (sandboxed execution, `previewMode`, `dom-playground`): done.
 - ✅ **Auth (unplanned extra)**: Pages Functions + D1, session cookies, auth guard, dashboard shell, demo user seed.
-- 🕐 **Phase 04 — Server-side progress sync**: NOT started. Next up.
+- ✅ **Phase 04 — Server-side progress sync**: done.
+- 🕐 **Phase 05 — Real content (mission library)**: Next up.
 
 > Details of what shipped live in `context.md`; this file tracks only what's next.
 
 ---
 
-## Phase 04 — Server-side progress sync
+## Phase 04 — Server-side progress sync ✅
 
 **Goal:** persist mission progress to D1 for logged-in users; guests keep localStorage.
 

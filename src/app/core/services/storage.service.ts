@@ -55,6 +55,28 @@ export class StorageService {
     }
   }
 
+  /** Lists stored keys that belong to this app, with the prefix stripped. */
+  keys(): string[] {
+    const storage = this.storage;
+    if (!storage) {
+      return [];
+    }
+
+    try {
+      const prefix = `${STORAGE_KEY_PREFIX}:`;
+      const keys: string[] = [];
+      for (let index = 0; index < storage.length; index += 1) {
+        const key = storage.key(index);
+        if (key?.startsWith(prefix)) {
+          keys.push(key.slice(prefix.length));
+        }
+      }
+      return keys;
+    } catch {
+      return [];
+    }
+  }
+
   private buildKey(key: string): string {
     return `${STORAGE_KEY_PREFIX}:${key}`;
   }

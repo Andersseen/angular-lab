@@ -57,6 +57,19 @@ export interface MissionState {
   readonly currentStepId: string;
   readonly stepCode: Readonly<Record<string, string>>;
   readonly completed: boolean;
+  readonly completedAt?: number | null;
+  /** Last-modified timestamp used for sync conflict resolution (see specs/progress.md). */
+  readonly updatedAt?: number;
+}
+
+/** Progress entry as exchanged with `GET/PUT /api/progress`. */
+export interface ProgressEntry {
+  readonly missionId: string;
+  readonly currentStepId: string;
+  readonly stepCode: Record<string, string>;
+  readonly completed: boolean;
+  readonly completedAt?: number | null;
+  readonly updatedAt: number;
 }
 
 export interface MissionProgress {

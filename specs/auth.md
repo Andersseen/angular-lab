@@ -59,6 +59,7 @@ Both states are free. Authentication exists to capture user data and enable futu
 | POST | `/api/auth/login` | Start session for existing user |
 | POST | `/api/auth/logout` | End current session |
 | GET | `/api/auth/me` | Return current user or null |
+| GET/PUT | `/api/progress` | Read/upsert mission progress (see `specs/progress.md`) |
 
 ## Error Handling
 
@@ -75,6 +76,5 @@ See `migrations/0001_init.sql` for the canonical schema.
 
 - Email verification.
 - Password reset.
-- Cloud sync of mission progress.
 - Newsletter subscription preference.
 - Social login (Google/GitHub).

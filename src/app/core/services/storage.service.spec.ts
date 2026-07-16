@@ -14,9 +14,18 @@ describe('StorageService', () => {
     const removeItem = vi.fn((key: string) => {
       delete store[key];
     });
+    const key = vi.fn((index: number) => Object.keys(store)[index] ?? null);
 
     Object.defineProperty(window, 'localStorage', {
-      value: { getItem, setItem, removeItem },
+      value: {
+        getItem,
+        setItem,
+        removeItem,
+        key,
+        get length() {
+          return Object.keys(store).length;
+        },
+      },
       writable: true,
       configurable: true,
     });
@@ -51,6 +60,14 @@ describe('StorageService', () => {
     service.removeItem('to-remove');
 
     expect(service.getItem<string>('to-remove')).toBeUndefined();
+  });
+
+  it('lists only Angular Lab storage keys without the prefix', () => {
+    service.setItem('mission:one', { id: 1 });
+    service.setItem('theme', 'dark');
+    store['other-app:key'] = 'value';
+
+    expect(service.keys()).toEqual(['mission:one', 'theme']);
   });
 
   it('returns undefined when localStorage throws on get', () => {
