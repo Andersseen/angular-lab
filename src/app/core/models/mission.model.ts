@@ -1,10 +1,10 @@
 export type StepType =
-  | 'concept'
-  | 'example'
-  | 'practice'
-  | 'comparison'
-  | 'checkpoint'
-  | 'summary';
+  | "concept"
+  | "example"
+  | "practice"
+  | "comparison"
+  | "checkpoint"
+  | "summary";
 
 export interface Checkpoint {
   readonly question: string;
@@ -38,12 +38,14 @@ export interface Mission {
   readonly id: string;
   readonly title: string;
   readonly description: string;
-  readonly difficulty: 'beginner' | 'intermediate' | 'advanced';
+  readonly difficulty: "beginner" | "intermediate" | "advanced";
   readonly durationMinutes: number;
   readonly track: string;
   readonly tags: readonly string[];
   readonly steps: readonly Step[];
   readonly starterCode: string;
+  /** Preview behavior: 'live' runs the code for real; 'mock' (default) shows a simulated UI. */
+  readonly previewMode?: "live" | "mock";
 }
 
 export interface StepState {
@@ -55,6 +57,19 @@ export interface MissionState {
   readonly currentStepId: string;
   readonly stepCode: Readonly<Record<string, string>>;
   readonly completed: boolean;
+  readonly completedAt?: number | null;
+  /** Last-modified timestamp used for sync conflict resolution (see specs/progress.md). */
+  readonly updatedAt?: number;
+}
+
+/** Progress entry as exchanged with `GET/PUT /api/progress`. */
+export interface ProgressEntry {
+  readonly missionId: string;
+  readonly currentStepId: string;
+  readonly stepCode: Record<string, string>;
+  readonly completed: boolean;
+  readonly completedAt?: number | null;
+  readonly updatedAt: number;
 }
 
 export interface MissionProgress {

@@ -52,3 +52,6 @@ Thumbs.db
 /playwright/.cache/
 /blob-report/
 
+# Wrangler (local D1 state and dev build artifacts)
+/.wrangler/
+

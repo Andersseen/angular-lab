@@ -6,6 +6,7 @@ import type {
   Step,
 } from '../models/mission.model';
 import { MissionCatalogService } from './mission-catalog.service';
+import { ProgressSyncService } from './progress-sync.service';
 import { StorageService } from './storage.service';
 
 function buildInitialState(mission: Mission): MissionState {
@@ -16,6 +17,8 @@ function buildInitialState(mission: Mission): MissionState {
       mission.steps.map((step) => [step.id, mission.starterCode])
     ),
     completed: false,
+    completedAt: null,
+    updatedAt: 0,
   };
 }
 
@@ -24,12 +27,14 @@ function buildInitialState(mission: Mission): MissionState {
 })
 export class MissionStateService {
   private readonly catalog = inject(MissionCatalogService);
+  private readonly progressSync = inject(ProgressSyncService);
   private readonly storage = inject(StorageService);
 
   readonly mission = signal<Mission | undefined>(undefined);
   readonly currentStepId = signal<string>('');
   readonly stepCode = signal<Record<string, string>>({});
   readonly completed = signal<boolean>(false);
+  readonly completedAt = signal<number | null>(null);
 
   readonly currentStep = computed<Step | undefined>(() => {
     const mission = this.mission();
@@ -85,6 +90,7 @@ export class MissionStateService {
     this.currentStepId.set(state.currentStepId || mission.steps[0]?.id || '');
     this.stepCode.set({ ...state.stepCode });
     this.completed.set(state.completed ?? false);
+    this.completedAt.set(state.completedAt ?? null);
   }
 
   selectStep(stepId: string): void {
@@ -132,10 +138,14 @@ export class MissionStateService {
     this.currentStepId.set(initial.currentStepId);
     this.stepCode.set({ ...initial.stepCode });
     this.completed.set(false);
+    this.completedAt.set(null);
     this.persist();
   }
 
   markCompleted(): void {
+    if (!this.completed()) {
+      this.completedAt.set(Date.now());
+    }
     this.completed.set(true);
     this.persist();
   }
@@ -150,7 +160,10 @@ export class MissionStateService {
       currentStepId: this.currentStepId(),
       stepCode: { ...this.stepCode() },
       completed: this.completed(),
+      completedAt: this.completedAt(),
+      updatedAt: Date.now(),
     };
     this.storage.setItem(`mission:${mission.id}`, state);
+    this.progressSync.queueLocalChange(state);
   }
 }

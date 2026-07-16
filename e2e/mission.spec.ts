@@ -15,13 +15,17 @@ test('mission page lets learner switch steps and shows editor', async ({
   await expect(stepNav.getByRole('button', { name: /add double count/i })).toBeVisible();
 
   await stepNav.getByRole('button', { name: /living counter/i }).click();
-  await expect(page.getByText('A living counter', { exact: true })).toBeVisible();
+  await expect(
+    page.locator('volt-card-title').getByText('A living counter', { exact: true })
+  ).toBeVisible();
 
   await page.getByRole('tab', { name: /editor/i }).click();
   await expect(page.locator('vertex-editor')).toBeVisible();
 
   await page.getByRole('button', { name: /next/i }).click();
-  await expect(page.getByText('Add double count', { exact: true })).toBeVisible();
+  await expect(
+    page.locator('volt-card-title').getByText('Add double count', { exact: true })
+  ).toBeVisible();
 });
 
 test('mission catalog lists missions', async ({ page }) => {

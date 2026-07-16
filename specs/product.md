@@ -34,6 +34,7 @@ Angular Lab is an interactive learning platform that teaches learners how to bui
 - Execution happens in a sandboxed context that prevents access to the host page.
 - Errors are captured and displayed in plain language.
 - Successful execution updates a live preview panel.
+- Playground missions run self-contained TypeScript/HTML snippets for real; missions that require a full framework runtime use a clearly labeled simulated preview instead (see `specs/playground.md`).
 
 ### Browser Storage
 

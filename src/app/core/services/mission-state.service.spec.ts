@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { MissionStateService } from './mission-state.service';
+import { ProgressSyncService } from './progress-sync.service';
 import { StorageService } from './storage.service';
 
 const DEMO_MISSION_ID = 'reactive-signals';
@@ -7,10 +8,16 @@ const DEMO_MISSION_ID = 'reactive-signals';
 describe('MissionStateService', () => {
   let service: MissionStateService;
   let storage: StorageService;
+  let progressSync: { queueLocalChange: ReturnType<typeof vi.fn> };
 
   beforeEach(() => {
+    progressSync = { queueLocalChange: vi.fn() };
     TestBed.configureTestingModule({
-      providers: [MissionStateService, StorageService],
+      providers: [
+        MissionStateService,
+        StorageService,
+        { provide: ProgressSyncService, useValue: progressSync },
+      ],
     });
     service = TestBed.inject(MissionStateService);
     storage = TestBed.inject(StorageService);
@@ -50,7 +57,16 @@ describe('MissionStateService', () => {
     service.updateCode(editedCode);
 
     expect(service.stepCode()['concept']).toBe(editedCode);
-    expect(storage.getItem<{ stepCode: Record<string, string> }>(`mission:${DEMO_MISSION_ID}`)?.stepCode['concept']).toBe(editedCode);
+    const stored = storage.getItem<{
+      stepCode: Record<string, string>;
+      updatedAt: number;
+    }>(`mission:${DEMO_MISSION_ID}`);
+
+    expect(stored?.stepCode['concept']).toBe(editedCode);
+    expect(stored?.updatedAt).toEqual(expect.any(Number));
+    expect(progressSync.queueLocalChange).toHaveBeenCalledWith(
+      expect.objectContaining({ missionId: DEMO_MISSION_ID })
+    );
   });
 
   it('each step starts with the starter code', () => {
@@ -70,6 +86,19 @@ describe('MissionStateService', () => {
     expect(service.currentStepId()).toBe('concept');
     expect(service.stepCode()['concept']).toContain('Counter');
     expect(service.completed()).toBe(false);
+    expect(service.completedAt()).toBeNull();
+  });
+
+  it('stores completion timestamps', () => {
+    service.selectMission(DEMO_MISSION_ID);
+
+    service.markCompleted();
+
+    const stored = storage.getItem<{ completed: boolean; completedAt: number }>(
+      `mission:${DEMO_MISSION_ID}`
+    );
+    expect(stored?.completed).toBe(true);
+    expect(stored?.completedAt).toEqual(expect.any(Number));
   });
 
   it('calculates progress correctly', () => {
