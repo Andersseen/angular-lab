@@ -4,28 +4,11 @@ Roadmap divided into phases. Each phase is designed to be tackled in a **single 
 
 ## Where we are (verified 2026-07-16)
 
-- ✅ **Phase 01 — Foundation**: tooling, Vitest + Playwright, ESLint, CI/CD, Cloudflare Pages deploy, specs, MIT license. Done.
-- ✅ **Phase 02 — Learning Engine**: mission catalog (4 placeholder missions), step navigation, all 6 step types rendered, signal-based state, localStorage progress, reset. Done. 44/44 unit tests pass.
-- ✅ **Auth (unplanned extra)**: Cloudflare Pages Functions + D1 (signup/login/logout/me), PBKDF2 hashing, session cookies, auth guard, dashboard shell, demo user seed.
-- ✅ **Phase 03 — Playground**: sandboxed iframe execution (`allow-scripts`, `srcdoc` + `postMessage`), lazy in-browser TS transpile, friendly errors, `previewMode` flag per mission, `dom-playground` mission running end to end + E2E. Done. 75/75 unit tests pass.
+- ✅ **Phase 01 — Foundation**, **Phase 02 — Learning Engine**, **Phase 03 — Playground** (sandboxed execution, `previewMode`, `dom-playground`): done.
+- ✅ **Auth (unplanned extra)**: Pages Functions + D1, session cookies, auth guard, dashboard shell, demo user seed.
 - 🕐 **Phase 04 — Server-side progress sync**: NOT started. Next up.
 
----
-
-## Phase 03 — Playground (real code execution) ✅ DONE
-
-**Goal:** replace the mock preview with real sandboxed in-browser code execution. Existing prompt: `prompts/phase-03-playground.md`.
-
-**What shipped**
-- Sandboxed execution of learner code: persistent `<iframe sandbox="allow-scripts">` (no `allow-same-origin`) with a fixed `srcdoc` runner + `postMessage` protocol (`src/app/core/playground/runner-doc.ts`).
-- `CodeExecutorService` (`src/app/core/services/code-executor.service.ts`): lazy `typescript` transpile (separate ~3.5 MB chunk, loaded only for live missions), ping/pong readiness handshake, timeout, friendly errors (`src/app/core/playground/friendly-error.ts`).
-- `LivePreview` panel replacing `MockPreview` when a mission sets `previewMode: 'live'`; mock remains the fallback (`src/app/components/mission/editor-panel.ts`).
-- Self-contained snippets only: import/export rejected up front with a plain-language message.
-- New mission `dom-playground` (Fundamentals) exercises real execution end to end; E2E in `e2e/playground.spec.ts`. Spec: `specs/playground.md`.
-
-**Deferred / watch list**
-- The 4 Angular-code missions stay on `MockPreview` — real Angular JIT execution in an `allow-scripts`-only sandbox is not feasible without heavy vendoring; WebContainers (COOP/COEP) remains the evaluation path if real framework execution becomes a requirement.
-- TypeScript chunk (~3.5 MB raw / ~1 MB gzip) loads on first live-preview run only; acceptable for now, revisit in Phase 07 performance pass.
+> Details of what shipped live in `context.md`; this file tracks only what's next.
 
 ---
 
@@ -34,6 +17,7 @@ Roadmap divided into phases. Each phase is designed to be tackled in a **single 
 **Goal:** persist mission progress to D1 for logged-in users; guests keep localStorage.
 
 **Deliverables**
+
 - New D1 migration: `progress` table (user_id, mission_id, step index, code per step, completed_at, updated_at).
 - Pages Functions: `GET/PUT /api/progress` (session-cookie authenticated, reuse `_cookies.ts` helpers).
 - `ProgressSyncService`: on login, merge local → remote (remote wins on conflict by `updated_at`); write-through on step changes (debounced).
@@ -41,6 +25,7 @@ Roadmap divided into phases. Each phase is designed to be tackled in a **single 
 - Logout keeps local copy so guest mode still works.
 
 **Acceptance criteria**
+
 - Complete a step logged-in on browser A → visible on browser B after login.
 - Guest flow unchanged; no network calls when logged out.
 - Update `specs/auth.md` + new `specs/progress.md`; run `pnpm db:migrate`.
@@ -54,12 +39,14 @@ Roadmap divided into phases. Each phase is designed to be tackled in a **single 
 **Goal:** replace the 4 placeholder missions with a real curriculum.
 
 **Deliverables**
+
 - Extract mission data out of `mission-catalog.service.ts` into content files (e.g. `src/content/missions/*.ts` or JSON) loaded lazily; keep the service API stable.
 - Curriculum: 3 tracks (Fundamentals / Reactivity with Signals / Routing & Data) × 4–6 missions each, following `specs/learning-model.md` step mix.
 - Each practice step gets real starter code + expected behavior runnable in the Phase 03 playground.
 - Difficulty + estimated time metadata surfaced in catalog cards and `track-filter.ts`.
 
 **Acceptance criteria**
+
 - ≥12 missions; every mission completable end to end with real execution.
 - Catalog filter by track/difficulty works; deep links `/mission/:id` work for all.
 - Content lives outside component/service code (contributors add missions without touching engine code); document the flow in `context.md` §"Adding a New Mission".
@@ -71,6 +58,7 @@ Roadmap divided into phases. Each phase is designed to be tackled in a **single 
 **Goal:** make auth production-grade on the Cloudflare free tier.
 
 **Deliverables**
+
 - Password reset via email (Cloudflare Email Routing / Email Service; store one-time tokens in D1 with expiry).
 - Email verification on signup (soft-block: unverified users keep access, banner prompts).
 - Rate limiting on `login`/`signup` (per-IP counter in D1 or Turnstile on the forms).
@@ -78,6 +66,7 @@ Roadmap divided into phases. Each phase is designed to be tackled in a **single 
 - Account deletion (GDPR-style: cascade delete sessions + progress).
 
 **Acceptance criteria**
+
 - Reset flow works end to end locally with `wrangler pages dev`.
 - Brute-force attempt (>N tries/min) gets 429.
 - Update `specs/auth.md`; new migration files; E2E happy-path test for reset.
@@ -89,6 +78,7 @@ Roadmap divided into phases. Each phase is designed to be tackled in a **single 
 **Goal:** quality pass before promoting the platform publicly.
 
 **Deliverables**
+
 - SEO: per-route meta tags/titles, Open Graph, sitemap, robots.txt (Analog route meta).
 - Accessibility audit: keyboard-only mission completion, focus management on step change, ARIA on checkpoint quiz, color-contrast check in both themes.
 - Performance: route-level code splitting check, editor script lazy-load (only on mission pages instead of global `index.html`), Lighthouse ≥90 on landing and catalog.
@@ -96,6 +86,7 @@ Roadmap divided into phases. Each phase is designed to be tackled in a **single 
 - E2E coverage: full guest journey + full auth journey in CI.
 
 **Acceptance criteria**
+
 - Lighthouse (mobile) ≥90 perf / ≥95 a11y on `/` and `/missions`.
 - Playwright suite covers: browse → complete mission (guest), signup → progress sync → logout.
 
