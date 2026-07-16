@@ -78,7 +78,14 @@ export function buildRunnerDoc(): string {
 
         window.addEventListener('message', function (event) {
           var data = event.data;
-          if (!data || data.source !== PARENT_SOURCE || data.type !== 'run') {
+          if (!data || data.source !== PARENT_SOURCE) {
+            return;
+          }
+          if (data.type === 'ping') {
+            post({ type: 'ready' });
+            return;
+          }
+          if (data.type !== 'run') {
             return;
           }
           currentId = data.id;

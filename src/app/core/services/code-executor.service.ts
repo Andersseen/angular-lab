@@ -180,6 +180,13 @@ export class CodeExecutorService implements OnDestroy {
       const waiters = this.readyWaiters.get(iframe) ?? [];
       waiters.push(waiter);
       this.readyWaiters.set(iframe, waiters);
+
+      // The sandbox answers `ping` with `ready`, so readiness works no
+      // matter whether it loaded before or after we started waiting.
+      iframe.contentWindow?.postMessage(
+        { source: PLAYGROUND_PARENT_SOURCE, type: 'ping' },
+        '*'
+      );
     });
   }
 

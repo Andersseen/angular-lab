@@ -9,6 +9,7 @@ import { LmnCodeBracketIcon } from 'lumen-icons/code-bracket';
 import { LmnEyeIcon } from 'lumen-icons/eye';
 import type { Mission, Step } from '../../core/models/mission.model';
 import { MockPreview } from './mock-preview';
+import { LivePreview } from './live-preview';
 import { VertexEditor } from '../editor/vertex-editor';
 
 @Component({
@@ -17,6 +18,7 @@ import { VertexEditor } from '../editor/vertex-editor';
   imports: [
     VertexEditor,
     MockPreview,
+    LivePreview,
     VoltTabs,
     VoltTabsContent,
     VoltTabsList,
@@ -57,7 +59,11 @@ import { VertexEditor } from '../editor/vertex-editor';
       </volt-tabs-content>
 
       <volt-tabs-content value="preview">
-        <app-mock-preview [mission]="mission()" [step]="step()" />
+        @if (mission().previewMode === 'live') {
+          <app-live-preview [code]="code()" />
+        } @else {
+          <app-mock-preview [mission]="mission()" [step]="step()" />
+        }
       </volt-tabs-content>
     </volt-tabs>
   `,

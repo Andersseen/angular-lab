@@ -7,29 +7,25 @@ Roadmap divided into phases. Each phase is designed to be tackled in a **single 
 - ✅ **Phase 01 — Foundation**: tooling, Vitest + Playwright, ESLint, CI/CD, Cloudflare Pages deploy, specs, MIT license. Done.
 - ✅ **Phase 02 — Learning Engine**: mission catalog (4 placeholder missions), step navigation, all 6 step types rendered, signal-based state, localStorage progress, reset. Done. 44/44 unit tests pass.
 - ✅ **Auth (unplanned extra)**: Cloudflare Pages Functions + D1 (signup/login/logout/me), PBKDF2 hashing, session cookies, auth guard, dashboard shell, demo user seed.
-- 🕐 **Phase 03 — Playground**: NOT started. Preview is still `MockPreview` (fake UI). This is the biggest gap between the product spec and reality.
+- ✅ **Phase 03 — Playground**: sandboxed iframe execution (`allow-scripts`, `srcdoc` + `postMessage`), lazy in-browser TS transpile, friendly errors, `previewMode` flag per mission, `dom-playground` mission running end to end + E2E. Done. 75/75 unit tests pass.
+- 🕐 **Phase 04 — Server-side progress sync**: NOT started. Next up.
 
 ---
 
-## Phase 03 — Playground (real code execution)
+## Phase 03 — Playground (real code execution) ✅ DONE
 
 **Goal:** replace the mock preview with real sandboxed in-browser code execution. Existing prompt: `prompts/phase-03-playground.md`.
 
-**Deliverables**
-- Sandboxed execution of learner code (sandboxed `<iframe>` with `srcdoc` + `postMessage`; evaluate WebContainers only if iframe approach proves insufficient — WebContainers require COOP/COEP headers, which Cloudflare Pages supports via `_headers` file).
-- Live preview panel replacing `MockPreview` in `editor-panel.ts` (keep `MockPreview` as fallback per mission via a flag).
-- Error capture → plain-language messages shown in the panel.
-- Reset-example behavior preserved.
-- TypeScript/HTML execution first (transpile with `typescript` in a web worker or use plain JS missions initially).
-- At least one mission using real execution end to end; E2E test for it.
+**What shipped**
+- Sandboxed execution of learner code: persistent `<iframe sandbox="allow-scripts">` (no `allow-same-origin`) with a fixed `srcdoc` runner + `postMessage` protocol (`src/app/core/playground/runner-doc.ts`).
+- `CodeExecutorService` (`src/app/core/services/code-executor.service.ts`): lazy `typescript` transpile (separate ~3.5 MB chunk, loaded only for live missions), ping/pong readiness handshake, timeout, friendly errors (`src/app/core/playground/friendly-error.ts`).
+- `LivePreview` panel replacing `MockPreview` when a mission sets `previewMode: 'live'`; mock remains the fallback (`src/app/components/mission/editor-panel.ts`).
+- Self-contained snippets only: import/export rejected up front with a plain-language message.
+- New mission `dom-playground` (Fundamentals) exercises real execution end to end; E2E in `e2e/playground.spec.ts`. Spec: `specs/playground.md`.
 
-**Acceptance criteria**
-- Learner edits code in Vertex Editor → preview updates without full page reload.
-- Runtime errors appear as friendly messages, not console-only.
-- Sandbox cannot touch the host page (`allow-scripts` only, no `allow-same-origin`).
-- All existing tests still pass; new tests for the executor service.
-
-**Key files:** `src/app/components/mission/editor-panel.ts`, `mock-preview.ts`, new `src/app/core/services/code-executor.service.ts`, `specs/product.md` (Code Execution section).
+**Deferred / watch list**
+- The 4 Angular-code missions stay on `MockPreview` — real Angular JIT execution in an `allow-scripts`-only sandbox is not feasible without heavy vendoring; WebContainers (COOP/COEP) remains the evaluation path if real framework execution becomes a requirement.
+- TypeScript chunk (~3.5 MB raw / ~1 MB gzip) loads on first live-preview run only; acceptable for now, revisit in Phase 07 performance pass.
 
 ---
 

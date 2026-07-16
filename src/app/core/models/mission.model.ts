@@ -1,10 +1,10 @@
 export type StepType =
-  | 'concept'
-  | 'example'
-  | 'practice'
-  | 'comparison'
-  | 'checkpoint'
-  | 'summary';
+  | "concept"
+  | "example"
+  | "practice"
+  | "comparison"
+  | "checkpoint"
+  | "summary";
 
 export interface Checkpoint {
   readonly question: string;
@@ -38,12 +38,14 @@ export interface Mission {
   readonly id: string;
   readonly title: string;
   readonly description: string;
-  readonly difficulty: 'beginner' | 'intermediate' | 'advanced';
+  readonly difficulty: "beginner" | "intermediate" | "advanced";
   readonly durationMinutes: number;
   readonly track: string;
   readonly tags: readonly string[];
   readonly steps: readonly Step[];
   readonly starterCode: string;
+  /** Preview behavior: 'live' runs the code for real; 'mock' (default) shows a simulated UI. */
+  readonly previewMode?: "live" | "mock";
 }
 
 export interface StepState {
