@@ -2,12 +2,13 @@
 
 Roadmap divided into phases. Each phase is designed to be tackled in a **single fresh AI session**: start the session by reading `context.md`, then the phase section below (plus its prompt in `prompts/` if one exists). Do not start a phase until the previous one is merged.
 
-## Where we are (verified 2026-07-16)
+## Where we are (verified 2026-07-17)
 
 - ✅ **Phase 01 — Foundation**, **Phase 02 — Learning Engine**, **Phase 03 — Playground** (sandboxed execution, `previewMode`, `dom-playground`): done.
 - ✅ **Auth (unplanned extra)**: Pages Functions + D1, session cookies, auth guard, dashboard shell, demo user seed.
 - ✅ **Phase 04 — Server-side progress sync**: done.
-- 🕐 **Phase 05 — Real content (mission library)**: Next up.
+- ✅ **Phase 05 — Real content (mission library)**: done — 12 missions in `src/content/missions/`, 3 tracks, 8 live previews, track + difficulty filters.
+- 🕐 **Phase 06 — Auth hardening & account lifecycle**: Next up.
 
 > Details of what shipped live in `context.md`; this file tracks only what's next.
 
@@ -35,7 +36,7 @@ Roadmap divided into phases. Each phase is designed to be tackled in a **single 
 
 ---
 
-## Phase 05 — Real content (mission library)
+## Phase 05 — Real content (mission library) ✅
 
 **Goal:** replace the 4 placeholder missions with a real curriculum.
 

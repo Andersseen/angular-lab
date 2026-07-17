@@ -34,14 +34,20 @@ export interface Step {
   readonly comparison?: Comparison;
 }
 
+export type Difficulty = "beginner" | "intermediate" | "advanced";
+
 export interface Mission {
   readonly id: string;
   readonly title: string;
   readonly description: string;
-  readonly difficulty: "beginner" | "intermediate" | "advanced";
+  /** One sentence: what the learner can do after finishing (missions spec front matter). */
+  readonly goal?: string;
+  readonly difficulty: Difficulty;
   readonly durationMinutes: number;
   readonly track: string;
   readonly tags: readonly string[];
+  /** Mission ids the learner should complete first; surfaced in the catalog. */
+  readonly prerequisites?: readonly string[];
   readonly steps: readonly Step[];
   readonly starterCode: string;
   /** Preview behavior: 'live' runs the code for real; 'mock' (default) shows a simulated UI. */

@@ -1,5 +1,6 @@
 import { provideRouter } from '@angular/router';
 import { render, screen } from '@testing-library/angular';
+import userEvent from '@testing-library/user-event';
 import Missions from './missions.page';
 import { MissionCatalogService } from '../core/services/mission-catalog.service';
 
@@ -21,30 +22,44 @@ const MOCK_MISSIONS = [
     description: 'Learn routing.',
     difficulty: 'intermediate' as const,
     durationMinutes: 20,
-    track: 'Routing',
+    track: 'Routing & Data',
     tags: ['router'],
     steps: [],
     starterCode: '',
   },
 ];
 
+function renderMissions() {
+  return render(Missions, {
+    providers: [
+      provideRouter([]),
+      {
+        provide: MissionCatalogService,
+        useValue: {
+          getAll: () => MOCK_MISSIONS,
+          getTracks: () => ['Fundamentals', 'Routing & Data'],
+        },
+      },
+    ],
+  });
+}
+
 describe('Missions page', () => {
   it('renders the mission catalog', async () => {
-    await render(Missions, {
-      providers: [
-        provideRouter([]),
-        {
-          provide: MissionCatalogService,
-          useValue: {
-            getAll: () => MOCK_MISSIONS,
-            getTracks: () => ['Fundamentals', 'Routing'],
-          },
-        },
-      ],
-    });
+    await renderMissions();
 
     expect(screen.getByRole('heading', { name: /missions/i })).toBeTruthy();
     expect(screen.getByText(/reactive signals/i)).toBeTruthy();
     expect(screen.getByText(/modern angular routing/i)).toBeTruthy();
+  });
+
+  it('filters missions by difficulty level', async () => {
+    const user = userEvent.setup();
+    await renderMissions();
+
+    await user.click(screen.getByRole('button', { name: /intermediate/i }));
+
+    expect(screen.getByText(/modern angular routing/i)).toBeTruthy();
+    expect(screen.queryByText(/reactive signals/i)).toBeNull();
   });
 });
