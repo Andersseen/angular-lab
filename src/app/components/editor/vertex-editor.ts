@@ -9,6 +9,7 @@ import {
   OnInit,
   viewChild,
 } from '@angular/core';
+import { loadVertexEditorScript } from './vertex-editor-loader';
 
 interface VertexEditorChangeDetail {
   value?: string;
@@ -23,8 +24,8 @@ declare global {
 /**
  * Angular wrapper for the Vertex Editor web component.
  *
- * The underlying `<vertex-editor>` custom element is loaded from
- * `/vertex-editor/web-editor.min.js` in `index.html`.
+ * The underlying `<vertex-editor>` custom element script is loaded on demand
+ * (see `vertex-editor-loader.ts`) so pages without an editor never pay for it.
  */
 @Component({
   selector: 'app-vertex-editor',
@@ -72,6 +73,7 @@ export class VertexEditor implements OnInit, OnDestroy {
     }
 
     try {
+      await loadVertexEditorScript();
       await customElements.whenDefined('vertex-editor');
     } catch {
       return;

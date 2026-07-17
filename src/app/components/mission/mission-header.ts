@@ -85,7 +85,10 @@ const DIFFICULTY_CONFIG: Record<string, { label: string; classes: string; icon: 
               {{ progress().percentage }}%
             </span>
           </div>
-          <volt-progress [value]="progress().percentage" />
+          <volt-progress
+            [value]="progress().percentage"
+            [attr.aria-label]="'Mission progress: ' + progress().percentage + '%'"
+          />
         </div>
       </div>
     </header>

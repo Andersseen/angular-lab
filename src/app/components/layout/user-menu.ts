@@ -30,6 +30,7 @@ import { TooltipDirective } from 'quartz-headless';
         variant="ghost"
         size="sm"
         class="ml-1"
+        aria-label="Log out"
         [qzTooltip]="'Log out'"
         tooltipPlacement="bottom"
         (click)="logout.emit()"
@@ -40,8 +41,8 @@ import { TooltipDirective } from 'quartz-headless';
         </span>
       </volt-button>
     } @else {
-      <a routerLink="/login">
-        <volt-button variant="outline" size="sm">
+      <a routerLink="/login" aria-label="Log in">
+        <volt-button variant="outline" size="sm" aria-label="Log in">
           <span class="flex items-center gap-2">
             <lmn-arrow-right-end-on-rectangle [size]="16" />
             <span class="hidden sm:inline">Log in</span>

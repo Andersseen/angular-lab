@@ -1,4 +1,5 @@
 import { Component, inject, signal } from "@angular/core";
+import type { RouteMeta } from "@analogjs/router";
 import {
   FormBuilder,
   FormGroup,
@@ -21,6 +22,10 @@ import { LmnExclamationTriangleIcon } from "lumen-icons/exclamation-triangle";
 import { LmnLockClosedIcon } from "lumen-icons/lock-closed";
 import { LmnRocketLaunchIcon } from "lumen-icons/rocket-launch";
 import { AuthService } from "../core/services/auth.service";
+
+export const routeMeta: RouteMeta = {
+  title: "Log in — Angular Lab",
+};
 
 @Component({
   selector: "app-login",

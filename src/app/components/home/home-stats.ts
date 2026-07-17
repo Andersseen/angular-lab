@@ -30,7 +30,7 @@ import { LmnListBulletIcon } from 'lumen-icons/list-bullet';
           <span class="font-medium">Platform readiness</span>
           <span class="text-zinc-500 dark:text-zinc-400">75%</span>
         </div>
-        <volt-progress [value]="75" />
+        <volt-progress [value]="75" aria-label="Platform readiness: 75%" />
       </div>
 
       <div class="grid gap-3 sm:grid-cols-3">

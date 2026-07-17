@@ -98,7 +98,11 @@ import { ProgressSyncService } from '../../core/services/progress-sync.service';
                     {{ item.percentage }}%
                   </span>
                 </div>
-                <volt-progress class="mt-3" [value]="item.percentage" />
+                <volt-progress
+                  class="mt-3"
+                  [value]="item.percentage"
+                  [attr.aria-label]="item.title + ' progress: ' + item.percentage + '%'"
+                />
               </a>
             }
           </div>

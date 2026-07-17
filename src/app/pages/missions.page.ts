@@ -1,4 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import type { RouteMeta } from '@analogjs/router';
 import { MOVEMENT_DIRECTIVES } from 'angular-movement';
 import { DifficultyFilter } from '../components/mission/difficulty-filter';
 import { MissionCard } from '../components/mission/mission-card';
@@ -6,6 +7,23 @@ import { MissionsHeader } from '../components/mission/missions-header';
 import { TrackFilter } from '../components/mission/track-filter';
 import type { Difficulty } from '../core/models/mission.model';
 import { MissionCatalogService } from '../core/services/mission-catalog.service';
+
+export const routeMeta: RouteMeta = {
+  title: 'Missions — Angular Lab',
+  meta: [
+    {
+      name: 'description',
+      content:
+        'Browse guided Angular missions across Fundamentals, Reactivity with Signals, and Routing & Data — filter by track and difficulty.',
+    },
+    { property: 'og:title', content: 'Missions — Angular Lab' },
+    {
+      property: 'og:description',
+      content: 'Browse guided Angular missions across three tracks.',
+    },
+    { property: 'og:type', content: 'website' },
+  ],
+};
 
 const DIFFICULTY_ORDER: Record<Difficulty, number> = {
   beginner: 0,
