@@ -1,4 +1,11 @@
-import { Component, input, output } from '@angular/core';
+import {
+  afterRenderEffect,
+  Component,
+  ElementRef,
+  input,
+  output,
+  viewChild,
+} from '@angular/core';
 import {
   VoltCard,
   VoltCardContent,
@@ -73,7 +80,9 @@ const TYPE_ICONS: Record<string, string> = {
           </span>
           <span class="capitalize">{{ step().type }}</span>
         </div>
-        <volt-card-title class="text-xl">{{ step().title }}</volt-card-title>
+        <volt-card-title #stepTitle tabindex="-1" class="text-xl outline-none">{{
+          step().title
+        }}</volt-card-title>
       </volt-card-header>
       <volt-card-content>
         <p
@@ -122,6 +131,18 @@ export class MissionStep {
   readonly currentStepNumber = input.required<number>();
   readonly totalSteps = input.required<number>();
   readonly allCorrect = output<void>();
+
+  private readonly stepTitle = viewChild('stepTitle', { read: ElementRef });
+
+  constructor() {
+    afterRenderEffect(() => {
+      const step = this.step();
+      const heading = this.stepTitle()?.nativeElement as HTMLElement | undefined;
+      if (step && heading) {
+        heading.focus({ preventScroll: true });
+      }
+    });
+  }
 
   typeIcon(type: string): string {
     return TYPE_ICONS[type] ?? 'light-bulb';

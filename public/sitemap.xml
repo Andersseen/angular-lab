@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://angular-lab.pages.dev/</loc></url>
+  <url><loc>https://angular-lab.pages.dev/missions</loc></url>
+  <url><loc>https://angular-lab.pages.dev/mission/dom-playground</loc></url>
+  <url><loc>https://angular-lab.pages.dev/mission/events-and-state</loc></url>
+  <url><loc>https://angular-lab.pages.dev/mission/reactive-signals</loc></url>
+  <url><loc>https://angular-lab.pages.dev/mission/component-communication</loc></url>
+  <url><loc>https://angular-lab.pages.dev/mission/derived-values</loc></url>
+  <url><loc>https://angular-lab.pages.dev/mission/effect-sync</loc></url>
+  <url><loc>https://angular-lab.pages.dev/mission/list-search</loc></url>
+  <url><loc>https://angular-lab.pages.dev/mission/dependency-injection</loc></url>
+  <url><loc>https://angular-lab.pages.dev/mission/modern-routing</loc></url>
+  <url><loc>https://angular-lab.pages.dev/mission/form-validation</loc></url>
+  <url><loc>https://angular-lab.pages.dev/mission/async-data</loc></url>
+  <url><loc>https://angular-lab.pages.dev/mission/data-table-sort</loc></url>
+</urlset>

@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import type { RouteMeta } from '@analogjs/router';
 import {
   FormBuilder,
   FormGroup,
@@ -19,6 +20,10 @@ import { LmnExclamationTriangleIcon } from 'lumen-icons/exclamation-triangle';
 import { LmnKeyIcon } from 'lumen-icons/key';
 import { LmnLockClosedIcon } from 'lumen-icons/lock-closed';
 import { AuthService } from '../core/services/auth.service';
+
+export const routeMeta: RouteMeta = {
+  title: 'Reset password — Angular Lab',
+};
 
 @Component({
   selector: 'app-reset-password',

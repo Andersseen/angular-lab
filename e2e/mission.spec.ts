@@ -35,3 +35,83 @@ test('mission catalog lists missions', async ({ page }) => {
   await expect(page.getByText(/reactive signals/i)).toBeVisible();
   await expect(page.getByText(/modern angular routing/i)).toBeVisible();
 });
+
+test('guest can browse to a mission and complete it end to end', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await page.getByRole('link', { name: 'Missions', exact: true }).click();
+  await expect(page).toHaveURL(/\/missions$/);
+
+  await page
+    .locator('a[routerlink="/mission/dom-playground"]')
+    .first()
+    .click();
+  await expect(page).toHaveURL(/\/mission\/dom-playground$/);
+  await expect(
+    page.getByRole('heading', { name: /dom playground/i })
+  ).toBeVisible();
+
+  // concept -> example -> practice -> comparison -> checkpoint
+  for (let i = 0; i < 4; i++) {
+    await page.getByRole('button', { name: /^next$/i }).click();
+  }
+  await expect(
+    page.locator('volt-card-title').getByText('Quick check', { exact: true })
+  ).toBeVisible();
+
+  await page.getByRole('radio', { name: /inside the provided/i }).click();
+  await page
+    .getByRole('radio', { name: /friendly plain-language message/i })
+    .click();
+  await page
+    .getByRole('radio', { name: /templates remove boilerplate/i })
+    .click();
+  await page.getByRole('button', { name: /check answers/i }).click();
+  await expect(page.getByText(/^correct!$/i).first()).toBeVisible();
+
+  // checkpoint -> summary
+  await page.getByRole('button', { name: /^next$/i }).click();
+  await page.getByRole('button', { name: /^complete$/i }).click();
+
+  await expect(
+    page.locator('volt-card-title').getByText('Mission completed!', { exact: true })
+  ).toBeVisible();
+});
+
+test('learner can complete a checkpoint using only the keyboard', async ({
+  page,
+}) => {
+  await page.goto('/mission/dom-playground');
+
+  for (let i = 0; i < 4; i++) {
+    await page.getByRole('button', { name: /^next$/i }).focus();
+    await page.keyboard.press('Enter');
+  }
+  await expect(
+    page.locator('volt-card-title').getByText('Quick check', { exact: true })
+  ).toBeVisible();
+
+  const questions = [
+    /inside the provided/i,
+    /friendly plain-language message/i,
+    /templates remove boilerplate/i,
+  ];
+  for (const optionName of questions) {
+    await page.getByRole('radio', { name: optionName }).focus();
+    await page.keyboard.press('Space');
+  }
+
+  await page.getByRole('button', { name: /check answers/i }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByText(/^correct!$/i).first()).toBeVisible();
+
+  await page.getByRole('button', { name: /^next$/i }).focus();
+  await page.keyboard.press('Enter');
+  await page.getByRole('button', { name: /^complete$/i }).focus();
+  await page.keyboard.press('Enter');
+
+  await expect(
+    page.locator('volt-card-title').getByText('Mission completed!', { exact: true })
+  ).toBeVisible();
+});

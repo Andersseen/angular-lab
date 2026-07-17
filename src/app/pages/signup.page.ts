@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import type { RouteMeta } from '@analogjs/router';
 import {
   FormBuilder,
   FormGroup,
@@ -22,6 +23,10 @@ import { LmnLockClosedIcon } from 'lumen-icons/lock-closed';
 import { LmnRocketLaunchIcon } from 'lumen-icons/rocket-launch';
 import { LmnUserIcon } from 'lumen-icons/user';
 import { AuthService } from '../core/services/auth.service';
+
+export const routeMeta: RouteMeta = {
+  title: 'Sign up — Angular Lab',
+};
 
 @Component({
   selector: 'app-signup',

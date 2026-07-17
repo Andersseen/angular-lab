@@ -4,7 +4,8 @@ import {
   effect,
   inject,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import type { RouteMeta } from '@analogjs/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 import { VoltButton } from '@voltui/components';
@@ -14,8 +15,30 @@ import { MissionCompleted } from '../../components/mission/mission-completed';
 import { MissionHeader } from '../../components/mission/mission-header';
 import { MissionNav } from '../../components/mission/mission-nav';
 import { MissionStep } from '../../components/mission/mission-step';
+import { MissionCatalogService } from '../../core/services/mission-catalog.service';
 import { MissionStateService } from '../../core/services/mission-state.service';
 import { ToastService } from 'quartz-headless';
+
+function resolveMission(route: ActivatedRouteSnapshot) {
+  return inject(MissionCatalogService).getById(route.paramMap.get('id') ?? '');
+}
+
+export const routeMeta: RouteMeta = {
+  title: (route) => {
+    const mission = resolveMission(route);
+    return mission ? `${mission.title} — Angular Lab` : 'Mission — Angular Lab';
+  },
+  meta: (route) => {
+    const mission = resolveMission(route);
+    const description = mission?.description ?? 'An interactive Angular learning mission.';
+    return [
+      { name: 'description', content: description },
+      { property: 'og:title', content: mission ? mission.title : 'Angular Lab Mission' },
+      { property: 'og:description', content: description },
+      { property: 'og:type', content: 'article' },
+    ];
+  },
+};
 
 @Component({
   selector: 'app-mission',

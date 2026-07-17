@@ -1,4 +1,5 @@
 import { Component, effect, inject } from '@angular/core';
+import type { RouteMeta } from '@analogjs/router';
 import { Router } from '@angular/router';
 import {
   VoltTabs,
@@ -13,6 +14,11 @@ import { ProfileTab } from '../components/dashboard/profile-tab';
 import { ProgressTab } from '../components/dashboard/progress-tab';
 import { SettingsTab } from '../components/dashboard/settings-tab';
 import { AuthService } from '../core/services/auth.service';
+
+export const routeMeta: RouteMeta = {
+  title: 'Dashboard — Angular Lab',
+  meta: [{ name: 'robots', content: 'noindex' }],
+};
 
 @Component({
   selector: 'app-dashboard',

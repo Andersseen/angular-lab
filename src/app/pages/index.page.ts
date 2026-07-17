@@ -1,8 +1,27 @@
 import { Component, inject } from '@angular/core';
+import type { RouteMeta } from '@analogjs/router';
 import { HomeFeatures } from '../components/home/home-features';
 import { HomeHero } from '../components/home/home-hero';
 import { HomeStats } from '../components/home/home-stats';
 import { MissionCatalogService } from '../core/services/mission-catalog.service';
+
+export const routeMeta: RouteMeta = {
+  title: 'Angular Lab — Learn Modern Angular by Doing',
+  meta: [
+    {
+      name: 'description',
+      content:
+        'Interactive Angular Lab: guided missions, live in-browser code editing, and instant previews. Learn signals, reactivity, and routing by doing.',
+    },
+    { property: 'og:title', content: 'Angular Lab' },
+    {
+      property: 'og:description',
+      content:
+        'Interactive missions and a live code playground for learning modern Angular.',
+    },
+    { property: 'og:type', content: 'website' },
+  ],
+};
 
 const FEATURES = [
   {

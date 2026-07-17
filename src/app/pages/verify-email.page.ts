@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import type { RouteMeta } from '@analogjs/router';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
   VoltButton,
@@ -12,6 +13,10 @@ import { LmnArrowPathIcon } from 'lumen-icons/arrow-path';
 import { LmnCheckCircleIcon } from 'lumen-icons/check-circle';
 import { LmnXCircleIcon } from 'lumen-icons/x-circle';
 import { AuthService } from '../core/services/auth.service';
+
+export const routeMeta: RouteMeta = {
+  title: 'Verify email — Angular Lab',
+};
 
 type VerifyState = 'pending' | 'success' | 'error';
 

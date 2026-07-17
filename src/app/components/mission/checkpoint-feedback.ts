@@ -8,6 +8,7 @@ import { LmnXCircleIcon } from 'lumen-icons/x-circle';
   imports: [LmnCheckCircleIcon, LmnXCircleIcon],
   template: `
     <div
+      role="status"
       class="mt-4 rounded-xl border px-4 py-3 text-sm"
       [class.border-emerald-200]="correct()"
       [class.bg-emerald-50]="correct()"

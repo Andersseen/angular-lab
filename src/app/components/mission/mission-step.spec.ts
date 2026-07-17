@@ -49,7 +49,7 @@ describe('MissionStep', () => {
       componentOutputs: { allCorrect: { emit: allCorrect } as never },
     });
 
-    await user.click(screen.getByRole('button', { name: /count\(\)/i }));
+    await user.click(screen.getByRole('radio', { name: /count\(\)/i }));
     await user.click(screen.getByRole('button', { name: /check answers/i }));
 
     expect(allCorrect).toHaveBeenCalled();
