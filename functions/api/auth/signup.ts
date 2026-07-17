@@ -1,6 +1,14 @@
 import type { PagesFunction } from '@cloudflare/workers-types';
 import { hashPassword, generateSessionId } from './_crypto';
 import { setSessionCookie, SESSION_MAX_AGE_SECONDS } from './_cookies';
+import { checkRateLimit, tooManyRequests } from './_rate-limit';
+import { generateToken, hashToken } from './_tokens';
+import {
+  isLocalRequest,
+  requestOrigin,
+  sendEmail,
+  type EmailEnv,
+} from './_email';
 
 interface SignupBody {
   email?: string;
@@ -8,9 +16,11 @@ interface SignupBody {
   name?: string;
 }
 
-interface Env {
+interface Env extends EmailEnv {
   DB: D1Database;
 }
+
+const VERIFY_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 function validateInput(body: SignupBody): string | null {
   const email = body.email?.trim() ?? '';
@@ -40,6 +50,11 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
   const { request, env } = context;
 
   try {
+    const limit = await checkRateLimit(env, 'signup', request, 5, 900);
+    if (limit.limited) {
+      return tooManyRequests(limit.retryAfterSeconds);
+    }
+
     const body = (await request.json()) as SignupBody;
     const validationError = validateInput(body);
     if (validationError) {
@@ -86,18 +101,37 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       .bind(sessionId, userId, expiresAt, now)
       .run();
 
-    return new Response(
-      JSON.stringify({
-        user: { id: userId, email, name },
-      }),
-      {
-        status: 201,
-        headers: {
-          'Content-Type': 'application/json',
-          'Set-Cookie': setSessionCookie(request, sessionId, expiresAt),
-        },
-      }
-    );
+    // Send an email-verification link. Access is not blocked until verified.
+    const verifyToken = generateToken();
+    const verifyHash = await hashToken(verifyToken);
+    await env.DB.prepare(
+      `INSERT INTO email_verification_tokens (token_hash, user_id, expires_at, used, created_at)
+       VALUES (?, ?, ?, 0, ?)`
+    )
+      .bind(verifyHash, userId, now + VERIFY_TTL_MS, now)
+      .run();
+
+    const verifyLink = `${requestOrigin(request)}/verify-email?token=${verifyToken}`;
+    await sendEmail(env, {
+      to: email,
+      subject: 'Verify your Angular Lab email',
+      text: `Welcome to Angular Lab! Confirm your email with this link (valid for 24 hours):\n${verifyLink}`,
+    });
+
+    const responseBody: Record<string, unknown> = {
+      user: { id: userId, email, name, emailVerified: false },
+    };
+    if (isLocalRequest(request)) {
+      responseBody['devLink'] = verifyLink;
+    }
+
+    return new Response(JSON.stringify(responseBody), {
+      status: 201,
+      headers: {
+        'Content-Type': 'application/json',
+        'Set-Cookie': setSessionCookie(request, sessionId, expiresAt),
+      },
+    });
   } catch (error) {
     console.error('Signup error:', error);
     return new Response(

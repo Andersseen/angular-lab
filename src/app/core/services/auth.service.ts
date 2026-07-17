@@ -2,6 +2,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 import type {
+  AuthActionResponse,
   AuthError,
   AuthResponse,
   LoginCredentials,
@@ -76,6 +77,62 @@ export class AuthService {
       catchError(() => {
         this.user.set(null);
         return of(undefined);
+      })
+    );
+  }
+
+  logoutEverywhere(): Observable<void> {
+    return this.http.post<void>(this.apiUrl('/logout-all'), {}).pipe(
+      tap(() => this.user.set(null)),
+      catchError(() => {
+        this.user.set(null);
+        return of(undefined);
+      })
+    );
+  }
+
+  requestPasswordReset(email: string): Observable<AuthActionResponse> {
+    return this.http
+      .post<AuthActionResponse>(this.apiUrl('/request-reset'), { email })
+      .pipe(catchError(() => of({ ok: true })));
+  }
+
+  resetPassword(token: string, password: string): Observable<AuthActionResponse> {
+    return this.http
+      .post<AuthActionResponse>(this.apiUrl('/reset'), { token, password })
+      .pipe(
+        catchError((error) => {
+          throw this.extractError(error);
+        })
+      );
+  }
+
+  verifyEmail(token: string): Observable<AuthActionResponse> {
+    return this.http
+      .post<AuthActionResponse>(this.apiUrl('/verify-email'), { token })
+      .pipe(
+        tap(() => this.fetchCurrentUser().subscribe()),
+        catchError((error) => {
+          throw this.extractError(error);
+        })
+      );
+  }
+
+  resendVerification(): Observable<AuthActionResponse> {
+    return this.http
+      .post<AuthActionResponse>(this.apiUrl('/resend-verification'), {})
+      .pipe(
+        catchError((error) => {
+          throw this.extractError(error);
+        })
+      );
+  }
+
+  deleteAccount(): Observable<void> {
+    return this.http.post<void>(this.apiUrl('/delete-account'), {}).pipe(
+      tap(() => this.user.set(null)),
+      catchError((error) => {
+        throw this.extractError(error);
       })
     );
   }

@@ -8,7 +8,8 @@ Roadmap divided into phases. Each phase is designed to be tackled in a **single 
 - ✅ **Auth (unplanned extra)**: Pages Functions + D1, session cookies, auth guard, dashboard shell, demo user seed.
 - ✅ **Phase 04 — Server-side progress sync**: done.
 - ✅ **Phase 05 — Real content (mission library)**: done — 12 missions in `src/content/missions/`, 3 tracks, 8 live previews, track + difficulty filters.
-- 🕐 **Phase 06 — Auth hardening & account lifecycle**: Next up.
+- ✅ **Phase 06 — Auth hardening & account lifecycle**: done — password reset + email verification (D1 tokens, provider-agnostic email seam), per-IP rate limiting, sliding-expiry sessions + "log out everywhere", account deletion.
+- 🕐 **Phase 07 — Production polish**: Next up.
 
 > Details of what shipped live in `context.md`; this file tracks only what's next.
 
@@ -55,7 +56,7 @@ Roadmap divided into phases. Each phase is designed to be tackled in a **single 
 
 ---
 
-## Phase 06 — Auth hardening & account lifecycle
+## Phase 06 — Auth hardening & account lifecycle ✅
 
 **Goal:** make auth production-grade on the Cloudflare free tier.
 
