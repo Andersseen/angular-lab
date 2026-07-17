@@ -5,6 +5,7 @@ import { ToastContainerComponent, ToastService } from 'quartz-headless';
 import { AuthService } from '../../core/services/auth.service';
 import { ThemeService } from '../../core/services/theme.service';
 import { AppLogo } from './app-logo';
+import { EmailVerificationBanner } from './email-verification-banner';
 import { NavLinks } from './nav-links';
 import { ThemeToggle } from './theme-toggle';
 import { UserMenu } from './user-menu';
@@ -19,6 +20,7 @@ import { UserMenu } from './user-menu';
     NavLinks,
     ThemeToggle,
     UserMenu,
+    EmailVerificationBanner,
     ToastContainerComponent,
   ],
   template: `
@@ -43,6 +45,8 @@ import { UserMenu } from './user-menu';
           </div>
         </nav>
       </header>
+
+      <app-email-verification-banner />
 
       <main class="flex-1">
         <router-outlet />

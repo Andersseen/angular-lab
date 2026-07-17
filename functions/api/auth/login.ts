@@ -1,6 +1,7 @@
 import type { PagesFunction } from '@cloudflare/workers-types';
 import { verifyPassword, generateSessionId } from './_crypto';
 import { setSessionCookie, SESSION_MAX_AGE_SECONDS } from './_cookies';
+import { checkRateLimit, tooManyRequests } from './_rate-limit';
 
 interface LoginBody {
   email?: string;
@@ -15,6 +16,16 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
   const { request, env } = context;
 
   try {
+    const limit = await checkRateLimit(env, 'login', request, 10, 900);
+    if (limit.limited) {
+      return tooManyRequests(limit.retryAfterSeconds);
+    }
+
+    // Opportunistic cleanup of expired sessions.
+    await env.DB.prepare('DELETE FROM sessions WHERE expires_at < ?')
+      .bind(Date.now())
+      .run();
+
     const body = (await request.json()) as LoginBody;
     const email = body.email?.trim().toLowerCase() ?? '';
     const password = body.password ?? '';

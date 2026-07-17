@@ -5,7 +5,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
-import { Router, RouterLink } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import {
   VoltButton,
   VoltCard,
@@ -71,6 +71,13 @@ import { AuthService } from "../core/services/auth.service";
           </volt-card-description>
         </volt-card-header>
         <volt-card-content>
+          @if (resetDone()) {
+            <div
+              class="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100"
+            >
+              Your password was updated. Log in with your new password.
+            </div>
+          }
           <form
             [formGroup]="form"
             (ngSubmit)="onSubmit()"
@@ -116,6 +123,14 @@ import { AuthService } from "../core/services/auth.service";
               </div>
             </div>
 
+            <div class="-mt-2 text-right">
+              <a
+                routerLink="/forgot-password"
+                class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+                >Forgot password?</a
+              >
+            </div>
+
             @if (error()) {
               <div
                 class="flex items-start gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800 dark:border-rose-900 dark:bg-rose-950 dark:text-rose-100"
@@ -157,9 +172,13 @@ import { AuthService } from "../core/services/auth.service";
 export default class Login {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   readonly auth = inject(AuthService);
 
   readonly error = signal<string | null>(null);
+  readonly resetDone = signal(
+    this.route.snapshot.queryParamMap.get("reset") === "1"
+  );
 
   readonly form: FormGroup = this.fb.group({
     email: ["", [Validators.required, Validators.email]],

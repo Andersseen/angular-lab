@@ -86,4 +86,70 @@ describe('AuthService', () => {
 
     expect(service.user()).toBeNull();
   });
+
+  it('requests a password reset', () => {
+    httpMock.expectOne('/api/auth/me').flush({ user: null });
+
+    let response: { message?: string } | undefined;
+    service
+      .requestPasswordReset('ada@example.com')
+      .subscribe((res) => (response = res));
+
+    const req = httpMock.expectOne('/api/auth/request-reset');
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual({ email: 'ada@example.com' });
+    req.flush({ ok: true, message: 'Sent' });
+
+    expect(response?.message).toBe('Sent');
+  });
+
+  it('resets the password with a token', () => {
+    httpMock.expectOne('/api/auth/me').flush({ user: null });
+
+    service.resetPassword('tok123', 'Newpass1').subscribe();
+
+    const req = httpMock.expectOne('/api/auth/reset');
+    expect(req.request.body).toEqual({ token: 'tok123', password: 'Newpass1' });
+    req.flush({ ok: true });
+  });
+
+  it('verifies email and refetches the user', () => {
+    httpMock.expectOne('/api/auth/me').flush({ user: MOCK_USER });
+
+    service.verifyEmail('vtok').subscribe();
+
+    const req = httpMock.expectOne('/api/auth/verify-email');
+    expect(req.request.body).toEqual({ token: 'vtok' });
+    req.flush({ ok: true });
+
+    // Success triggers a refetch of the current user.
+    httpMock
+      .expectOne('/api/auth/me')
+      .flush({ user: { ...MOCK_USER, emailVerified: true } });
+    expect(service.user()?.emailVerified).toBe(true);
+  });
+
+  it('logs out everywhere and clears user', () => {
+    httpMock.expectOne('/api/auth/me').flush({ user: MOCK_USER });
+
+    service.logoutEverywhere().subscribe();
+
+    const req = httpMock.expectOne('/api/auth/logout-all');
+    expect(req.request.method).toBe('POST');
+    req.flush({ ok: true });
+
+    expect(service.user()).toBeNull();
+  });
+
+  it('deletes the account and clears user', () => {
+    httpMock.expectOne('/api/auth/me').flush({ user: MOCK_USER });
+
+    service.deleteAccount().subscribe();
+
+    const req = httpMock.expectOne('/api/auth/delete-account');
+    expect(req.request.method).toBe('POST');
+    req.flush({ ok: true });
+
+    expect(service.user()).toBeNull();
+  });
 });
