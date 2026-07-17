@@ -66,6 +66,14 @@ const DIFFICULTY_STYLES: Record<string, string> = {
             <lmn-clock [size]="12" />
             {{ mission().durationMinutes }} min
           </span>
+          @if (mission().previewMode === 'live') {
+            <span>·</span>
+            <span
+              class="inline-flex items-center gap-1 font-semibold text-emerald-600 dark:text-emerald-400"
+            >
+              Live
+            </span>
+          }
         </div>
         <volt-card-title class="text-xl">{{ mission().title }}</volt-card-title>
         <volt-card-description>

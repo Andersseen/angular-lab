@@ -57,10 +57,21 @@ A mission can be in one of the following states:
 - The preview updates automatically when code changes.
 - If the code contains an error, the preview displays a friendly message.
 - The preview must be isolated from the rest of the application.
+- A mission either runs the learner's real code in the sandbox (a live preview) or shows a representative, clearly labeled simulated result.
+- A live preview requires the mission's example to be self-contained so it can run on its own.
+- The catalog marks live missions so learners know which ones execute their real code.
 
 ## Mission Catalog Rules
 
 - Missions are grouped by track.
 - Missions within a track are ordered by difficulty.
-- Learners can filter missions by difficulty and topic.
+- Learners can filter the catalog by track and by difficulty level, independently.
+- When no mission matches the active filters, the catalog shows a clear empty-state message.
 - Completed missions are visually marked.
+
+## Curriculum Scope
+
+- The catalog spans three tracks: Fundamentals, Reactivity with Signals, and Routing & Data.
+- Each track offers several missions ordered from beginner to advanced.
+- A mission may list prerequisite missions the learner should complete first.
+- Wherever a concept can be exercised with self-contained code, the mission runs it as a live preview so the learner completes it with real execution.
