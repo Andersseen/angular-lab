@@ -2,14 +2,15 @@
 
 Roadmap divided into phases. Each phase is designed to be tackled in a **single fresh AI session**: start the session by reading `context.md`, then the phase section below (plus its prompt in `prompts/` if one exists). Do not start a phase until the previous one is merged.
 
-## Where we are (verified 2026-07-17)
+## Where we are (verified 2026-07-18)
 
 - ✅ **Phase 01 — Foundation**, **Phase 02 — Learning Engine**, **Phase 03 — Playground** (sandboxed execution, `previewMode`, `dom-playground`): done.
 - ✅ **Auth (unplanned extra)**: Pages Functions + D1, session cookies, auth guard, dashboard shell, demo user seed.
 - ✅ **Phase 04 — Server-side progress sync**: done.
 - ✅ **Phase 05 — Real content (mission library)**: done — 12 missions in `src/content/missions/`, 3 tracks, 8 live previews, track + difficulty filters.
 - ✅ **Phase 06 — Auth hardening & account lifecycle**: done — password reset + email verification (D1 tokens, provider-agnostic email seam), per-IP rate limiting, sliding-expiry sessions + "log out everywhere", account deletion.
-- 🕐 **Phase 07 — Production polish**: Next up.
+- ✅ **Phase 07 — Production polish**: done — SEO meta/OG, generated robots+sitemap, editor lazy-load, analytics seam, global error handler, 404 page, a11y fixes (Lighthouse a11y 100 in both themes), full E2E journeys green.
+- 🕐 **Phase 08 — UI identity & componentization refactor**: planned — see `UI-PLAN.md`.
 
 > Details of what shipped live in `context.md`; this file tracks only what's next.
 
@@ -93,9 +94,36 @@ Roadmap divided into phases. Each phase is designed to be tackled in a **single 
 - Lighthouse (mobile) ≥90 perf / ≥95 a11y on `/` and `/missions`.
 - Playwright suite covers: browse → complete mission (guest), signup → progress sync → logout.
 
+**Status (closed 2026-07-19):** all four close-out items done; lint ✓, unit 98/98 ✓, E2E 14/14 ✓.
+
+1. **button-name** ✓ — `nav-links.ts` / `user-menu.ts` responsive labels moved from `hidden sm:inline` to `sr-only sm:not-sr-only`, so icon-only nav/user-menu buttons keep an accessible name on narrow viewports.
+2. **Color contrast (dark theme)** ✓ — dropped the broken `.dark[data-color=volt] { --primary-foreground: #09090b }` override so dark inherits Volt's white foreground; the pinned `--primary: #2351de` now pairs at ~6.3:1 in both themes. (Phase 08's semantic token layer supersedes this one-off.)
+3. **Re-audit** ✓ — Lighthouse (mobile): `/` a11y **100 in light and dark** (SEO 100, Best Practices 96); `/login` (dark) a11y **100**.
+4. **E2E green** ✓ — `pnpm test:e2e` = 14/14, stable across repeated runs. Fixed pre-existing broken/flaky specs committed with `57257b1`: stale `a[routerlink="…"]` selector → `a[href="…"]` (Angular `RouterLink` reflects `href`, not `routerlink`); rapid step / keyboard navigation now asserts each transition instead of blind-looping; the anchored `/^correct!$/i` checkpoint-feedback locator (never matched the icon+text `<p>`) → substring; the ambiguous `/log out/i` selector (also matched "Log out everywhere") → exact `'Log out'`; and `workers: 1` + one local retry so the suite stops contending over the shared local D1 / per-IP rate-limit buckets.
+
 ---
 
-## Phase 08 — Engagement (optional, only if explicitly requested)
+## Phase 08 — UI identity & componentization refactor
+
+**Goal:** give the platform a distinctive, professional visual identity and pay down UI duplication. Full plan, palette, token architecture, and component inventory live in **`UI-PLAN.md`** — read that file before starting this phase.
+
+**Summary of deliverables** (details in `UI-PLAN.md`)
+
+- Semantic design-token layer (Tailwind v4 `@theme`) replacing scattered raw `zinc-*` / `blue-*` / `emerald-*` utilities; new brand palette, AA-validated in both themes.
+- Shared UI primitives (`src/app/components/ui/`): form field, alert/banner, auth layout, page header, stat tile, confirm dialog, empty state.
+- Auth pages refactor: 5 pages (~870 lines of near-duplicate inline UI) rebuilt on the primitives; each page becomes a thin orchestrator.
+- Typography + motion identity: mono-accent type system, standardized `angular-movement` durations/easings.
+
+**Acceptance criteria**
+
+- No page/component over ~150 lines of template+class (pages are thin orchestrators).
+- No hard-coded palette utilities outside the token layer in migrated code.
+- Lighthouse a11y ≥95 in **both** themes on `/`, `/missions`, `/login`; all unit + E2E tests stay green.
+- Visual identity is consistent: one palette, one type scale, one motion vocabulary.
+
+---
+
+## Phase 09 — Engagement (optional, only if explicitly requested)
 
 Gamification was intentionally out of scope until now (`specs/contribution-principles.md`). Candidate scope: streaks, badges per track, shareable completion cards, mission ratings. **Do not start without an explicit prompt from the owner.**
 

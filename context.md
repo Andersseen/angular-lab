@@ -9,10 +9,10 @@ This file is the primary context source for future AI sessions working on Angula
 - **License:** MIT
 - **Repository:** github.com/Andersseen/angular-lab
 
-## Current Status (verified 2026-07-17)
+## Current Status (verified 2026-07-19)
 
-- **Phases 01–06** ✅ complete (Foundation, Learning Engine, Playground, Server-side progress sync, Real content / mission library, Auth hardening & account lifecycle). Next up: **Phase 07 (Production polish)**. See `PLAN.md` for phases 07–08.
-- Unit tests: **21 files / 93 tests, all passing** (`pnpm test:unit`, ~3s). E2E: 5 Playwright specs (`home`, `mission`, `auth`, `auth-hardening`, `playground`), **10 tests passing**.
+- **Phases 01–07** ✅ complete (Foundation, Learning Engine, Playground, Server-side progress sync, Real content / mission library, Auth hardening & account lifecycle, Production polish). Next up: **Phase 08 (UI identity & componentization refactor)** — read `UI-PLAN.md` before starting.
+- Unit tests: **24 files / 98 tests, all passing** (`pnpm test:unit`, ~3s). E2E: 6 Playwright specs (`home`, `mission`, `auth`, `auth-hardening`, `not-found`, `playground`), **14 tests passing** (`pnpm test:e2e`). The E2E suite runs **single-worker**: all tests share one local D1 (SQLite) database and per-IP auth rate-limit buckets, so parallel workers cause write contention / rate-limit collisions (see Decision 13).
 - Missions in catalog: **12 across 3 tracks** (Fundamentals, Reactivity with Signals, Routing & Data). **8 are `previewMode: 'live'`** (real sandboxed execution: `dom-playground`, `events-and-state`, `derived-values`, `effect-sync`, `list-search`, `form-validation`, `async-data`, `data-table-sort`); the 4 Angular-framework missions (`reactive-signals`, `component-communication`, `dependency-injection`, `modern-routing`) stay on mock preview. Content lives in `src/content/missions/*.ts`, aggregated by `src/content/missions/index.ts`.
 - Playground is live: sandboxed iframe (`allow-scripts`, no `allow-same-origin`) + `postMessage`, TS transpiled in-browser (lazy `typescript` chunk, ~3.5 MB, loaded only for live missions). Spec: `specs/playground.md`.
 - Auth is live and hardened (Phase 06): Pages Functions + D1, seeded demo user (`migrations/0002_seed_demo_user.sql`), password reset + email verification (one-time D1 tokens, provider-agnostic email seam), per-IP rate limiting on login/signup/reset/resend, sliding-expiry sessions + "log out everywhere", and account deletion. Schema in `migrations/0004_auth_hardening.sql`.
@@ -134,6 +134,11 @@ angular-lab/
    - Rate limiting (`_rate-limit.ts`): fixed-window per-IP counters in D1, keyed by `action:ip:windowIndex`, `CF-Connecting-IP` for the IP; login 10 / signup·reset·resend 5 per 15 min → 429 with `Retry-After`. E2E clears `auth_rate_limits` in `global-setup` and isolates buckets via a unique `CF-Connecting-IP` per test.
    - Sessions: `me` applies sliding expiry (extend to full 7 days once a session ages past a day, ≤1 write/day) and returns `emailVerified`; login opportunistically deletes expired sessions; `logout-all` and reset delete all of a user's sessions. Account deletion (`delete-account`) explicitly batch-deletes progress/sessions/tokens/user (D1 does not enforce FK cascade).
    - Frontend: `/forgot-password`, `/reset-password`, `/verify-email` pages; a shell-wide verification banner (`email-verification-banner.ts`) with resend; dashboard settings gained "log out everywhere" + confirm-gated account deletion; login shows a "Forgot password?" link and a post-reset notice.
+
+13. **Production polish & accessibility (Phase 07)**
+   - Shipped in `57257b1`: per-route SEO meta/OG (Analog route meta), generated `robots.txt` + `sitemap.xml` (`scripts/generate-seo-assets.mjs`, run by `build:prod`), Vertex editor lazy-load (loaded on mission pages, not global `index.html`), a privacy-friendly analytics seam, a global `ErrorHandler`, and a friendly 404 page (`pages/[...not-found].page.ts`).
+   - Two a11y fixes closed the phase (verified via Lighthouse mobile, a11y **100 in both themes** on `/` and `/login`): responsive nav/user-menu labels use `sr-only sm:not-sr-only` (not `hidden`) so icon-only buttons keep an accessible name on narrow viewports; and the dark-theme primary pair was fixed by **removing** the `.dark[data-color=volt] { --primary-foreground: #09090b }` override so the pinned `--primary: #2351de` inherits Volt's white foreground (~6.3:1). **Phase 08 replaces these `styles.css` one-offs with a semantic token layer.**
+   - **E2E runs single-worker** (`playwright.config.ts` `workers: 1`, plus one local retry): the suite shares one local D1 (SQLite) + per-IP rate-limit buckets, so parallel workers cause write contention / rate-limit collisions; `global-setup.ts` also clears `auth_rate_limits` per run. When writing E2E: Angular `RouterLink` reflects `href` (there is no `routerlink` DOM attribute), disambiguate substring names (`'Log out'` also matched "Log out everywhere"), and assert each step transition rather than blind-looping `Next` — rapid navigation races the live-preview step re-renders.
 
 ## Conventions
 

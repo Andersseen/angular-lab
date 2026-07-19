@@ -10,8 +10,14 @@ export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
   forbidOnly: !!process.env['CI'],
-  retries: process.env['CI'] ? 2 : 0,
-  workers: process.env['CI'] ? 1 : undefined,
+  // One local retry absorbs transient local-server/browser hiccups
+  // (e.g. ERR_NETWORK_IO_SUSPENDED) without masking real failures; CI retries more.
+  retries: process.env['CI'] ? 2 : 1,
+  // All tests share one local D1 (SQLite) database and per-IP auth rate-limit
+  // buckets, so they must run serially: parallel workers cause write contention
+  // and rate-limit-bucket collisions that make the auth flows flaky. CI already
+  // runs single-worker; pin local to match.
+  workers: 1,
   reporter: 'list',
   use: {
     baseURL: 'http://localhost:8788',
