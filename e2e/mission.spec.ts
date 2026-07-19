@@ -44,7 +44,7 @@ test('guest can browse to a mission and complete it end to end', async ({
   await expect(page).toHaveURL(/\/missions$/);
 
   await page
-    .locator('a[routerlink="/mission/dom-playground"]')
+    .locator('a[href="/mission/dom-playground"]')
     .first()
     .click();
   await expect(page).toHaveURL(/\/mission\/dom-playground$/);
@@ -52,13 +52,21 @@ test('guest can browse to a mission and complete it end to end', async ({
     page.getByRole('heading', { name: /dom playground/i })
   ).toBeVisible();
 
-  // concept -> example -> practice -> comparison -> checkpoint
-  for (let i = 0; i < 4; i++) {
+  // concept -> example -> practice -> comparison -> checkpoint.
+  // Assert each step renders before advancing so the run does not race ahead
+  // of the live-preview mission's step transitions.
+  const stepTitles = [
+    'A real counter',
+    'Add a Decrement button',
+    'Imperative DOM vs declarative templates',
+    'Quick check',
+  ];
+  for (const title of stepTitles) {
     await page.getByRole('button', { name: /^next$/i }).click();
+    await expect(
+      page.locator('volt-card-title').getByText(title, { exact: true })
+    ).toBeVisible();
   }
-  await expect(
-    page.locator('volt-card-title').getByText('Quick check', { exact: true })
-  ).toBeVisible();
 
   await page.getByRole('radio', { name: /inside the provided/i }).click();
   await page
@@ -68,7 +76,7 @@ test('guest can browse to a mission and complete it end to end', async ({
     .getByRole('radio', { name: /templates remove boilerplate/i })
     .click();
   await page.getByRole('button', { name: /check answers/i }).click();
-  await expect(page.getByText(/^correct!$/i).first()).toBeVisible();
+  await expect(page.getByText('Correct!').first()).toBeVisible();
 
   // checkpoint -> summary
   await page.getByRole('button', { name: /^next$/i }).click();
@@ -84,13 +92,21 @@ test('learner can complete a checkpoint using only the keyboard', async ({
 }) => {
   await page.goto('/mission/dom-playground');
 
-  for (let i = 0; i < 4; i++) {
+  // Advance one step per keypress, asserting each transition so the loop does
+  // not press Enter faster than the step content re-renders.
+  const stepTitles = [
+    'A real counter',
+    'Add a Decrement button',
+    'Imperative DOM vs declarative templates',
+    'Quick check',
+  ];
+  for (const title of stepTitles) {
     await page.getByRole('button', { name: /^next$/i }).focus();
     await page.keyboard.press('Enter');
+    await expect(
+      page.locator('volt-card-title').getByText(title, { exact: true })
+    ).toBeVisible();
   }
-  await expect(
-    page.locator('volt-card-title').getByText('Quick check', { exact: true })
-  ).toBeVisible();
 
   const questions = [
     /inside the provided/i,
@@ -98,13 +114,15 @@ test('learner can complete a checkpoint using only the keyboard', async ({
     /templates remove boilerplate/i,
   ];
   for (const optionName of questions) {
-    await page.getByRole('radio', { name: optionName }).focus();
+    const radio = page.getByRole('radio', { name: optionName });
+    await radio.focus();
     await page.keyboard.press('Space');
+    await expect(radio).toBeChecked();
   }
 
   await page.getByRole('button', { name: /check answers/i }).focus();
   await page.keyboard.press('Enter');
-  await expect(page.getByText(/^correct!$/i).first()).toBeVisible();
+  await expect(page.getByText('Correct!').first()).toBeVisible();
 
   await page.getByRole('button', { name: /^next$/i }).focus();
   await page.keyboard.press('Enter');

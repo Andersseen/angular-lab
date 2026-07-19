@@ -48,18 +48,13 @@
  * `.dark[data-color=volt]` (see node_modules/@voltui/components/themes.css),
  * so an override must match that selector's specificity to win the cascade.
  *
- * Light --primary (#3e73ff) is under the 4.5:1 AA contrast threshold against
- * white --primary-foreground text; darken it slightly to pass.
- * Dark --primary (#6e9aff) is deliberately light against the near-black
- * background and only reaches 2.7:1 against white text — keep the brighter
- * accent but flip the paired foreground to dark text, which reaches ~7.3:1.
+ * We pin --primary to #2351de in both themes; Volt's default
+ * --primary-foreground is white (oklch(1 0 0)) in both, and white on #2351de
+ * is 6.3:1 — comfortably ≥AA — so no foreground override is needed. (Phase 08
+ * replaces this one-off with a semantic token layer.)
  */
 :root[data-color="volt"] {
   --primary: #2351de;
-}
-
-.dark[data-color="volt"] {
-  --primary-foreground: #09090b;
 }
 
 * {

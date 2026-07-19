@@ -34,7 +34,10 @@ test('user can log in and log out', async ({ page }) => {
   await expect(page).toHaveURL(/\/dashboard$/);
 
   // Log out
-  await page.locator('main').getByRole('button', { name: /log out/i }).click();
+  await page
+    .locator('main')
+    .getByRole('button', { name: 'Log out', exact: true })
+    .click();
   await expect(page).toHaveURL(/\/$/);
 
   // Log in
@@ -59,8 +62,19 @@ test('progress syncs across a logout/login cycle', async ({ page }) => {
   await expect(page).toHaveURL(/\/dashboard$/);
 
   await page.goto('/mission/dom-playground');
-  for (let i = 0; i < 4; i++) {
+  // Assert each step renders before advancing so the run does not race ahead of
+  // the live-preview mission's step transitions.
+  const stepTitles = [
+    'A real counter',
+    'Add a Decrement button',
+    'Imperative DOM vs declarative templates',
+    'Quick check',
+  ];
+  for (const title of stepTitles) {
     await page.getByRole('button', { name: /^next$/i }).click();
+    await expect(
+      page.locator('volt-card-title').getByText(title, { exact: true })
+    ).toBeVisible();
   }
   await page.getByRole('radio', { name: /inside the provided/i }).click();
   await page
@@ -77,7 +91,10 @@ test('progress syncs across a logout/login cycle', async ({ page }) => {
   ).toBeVisible();
 
   await page.goto('/dashboard');
-  await page.locator('main').getByRole('button', { name: /log out/i }).click();
+  await page
+    .locator('main')
+    .getByRole('button', { name: 'Log out', exact: true })
+    .click();
   await expect(page).toHaveURL(/\/$/);
 
   await page.goto('/login');

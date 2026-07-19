@@ -14,7 +14,7 @@ import { LmnSquares2x2Icon } from 'lumen-icons/squares-2x2';
       <volt-button variant="ghost" size="sm" aria-label="Home">
         <span class="flex items-center gap-2">
           <lmn-home [size]="16" />
-          <span class="hidden sm:inline">Home</span>
+          <span class="sr-only sm:not-sr-only">Home</span>
         </span>
       </volt-button>
     </a>
@@ -22,7 +22,7 @@ import { LmnSquares2x2Icon } from 'lumen-icons/squares-2x2';
       <volt-button variant="ghost" size="sm" aria-label="Missions">
         <span class="flex items-center gap-2">
           <lmn-list-bullet [size]="16" />
-          <span class="hidden sm:inline">Missions</span>
+          <span class="sr-only sm:not-sr-only">Missions</span>
         </span>
       </volt-button>
     </a>
@@ -32,7 +32,7 @@ import { LmnSquares2x2Icon } from 'lumen-icons/squares-2x2';
         <volt-button variant="ghost" size="sm" aria-label="Dashboard">
           <span class="flex items-center gap-2">
             <lmn-squares-2x2 [size]="16" />
-            <span class="hidden sm:inline">Dashboard</span>
+            <span class="sr-only sm:not-sr-only">Dashboard</span>
           </span>
         </volt-button>
       </a>

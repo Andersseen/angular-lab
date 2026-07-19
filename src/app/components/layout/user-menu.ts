@@ -37,7 +37,7 @@ import { TooltipDirective } from 'quartz-headless';
       >
         <span class="flex items-center gap-2">
           <lmn-arrow-left-start-on-rectangle [size]="20" />
-          <span class="hidden sm:inline">Log out</span>
+          <span class="sr-only sm:not-sr-only">Log out</span>
         </span>
       </volt-button>
     } @else {
@@ -45,7 +45,7 @@ import { TooltipDirective } from 'quartz-headless';
         <volt-button variant="outline" size="sm" aria-label="Log in">
           <span class="flex items-center gap-2">
             <lmn-arrow-right-end-on-rectangle [size]="16" />
-            <span class="hidden sm:inline">Log in</span>
+            <span class="sr-only sm:not-sr-only">Log in</span>
           </span>
         </volt-button>
       </a>
