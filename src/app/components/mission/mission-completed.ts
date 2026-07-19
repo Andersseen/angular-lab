@@ -17,26 +17,26 @@ import type { Mission } from '../../core/models/mission.model';
   imports: [VoltCard, VoltCardContent, VoltCardHeader, VoltCardTitle, VoltButton, LmnCheckBadgeIcon, LmnRocketLaunchIcon, LmnArrowPathIcon],
   template: `
     <volt-card
-      class="overflow-hidden border-success/30"
+      class="overflow-hidden border-al-success/30"
     >
       <div
         class="h-1.5 w-full bg-gradient-brand"
       ></div>
       <volt-card-header>
         <div
-          class="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-success/10 text-success"
+          class="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-al-success/10 text-al-success"
         >
           <lmn-check-badge [size]="24" />
         </div>
-        <volt-card-title class="text-2xl text-success">
+        <volt-card-title class="text-2xl text-al-success">
           Mission completed!
         </volt-card-title>
       </volt-card-header>
       <volt-card-content>
-        <p class="text-lg text-ink">
+        <p class="text-lg text-al-ink">
           You finished <strong>{{ mission().title }}</strong>.
         </p>
-        <p class="mt-2 text-ink-muted">
+        <p class="mt-2 text-al-ink-muted">
           Estimated time: {{ mission().durationMinutes }} minutes · Track:
           {{ mission().track }}
         </p>

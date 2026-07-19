@@ -7,13 +7,13 @@ import { VoltButton } from '@voltui/components';
   imports: [VoltButton],
   template: `
     <div class="w-full max-w-sm">
-      <p class="mb-3 text-sm font-medium text-ink">
+      <p class="mb-3 text-sm font-medium text-al-ink">
         Tasks
       </p>
       <ul class="mb-4 space-y-2">
         @for (item of items(); track item) {
           <li
-            class="rounded-lg bg-surface px-3 py-2 text-sm text-ink"
+            class="rounded-lg bg-al-surface px-3 py-2 text-sm text-al-ink"
           >
             {{ item }}
           </li>
@@ -23,7 +23,7 @@ import { VoltButton } from '@voltui/components';
         <input
           type="text"
           placeholder="New task..."
-          class="flex-1 rounded-lg border border-line bg-surface-raised px-3 py-2 text-sm text-ink placeholder:text-ink-muted"
+          class="flex-1 rounded-lg border border-al-line bg-al-surface-raised px-3 py-2 text-sm text-al-ink placeholder:text-al-ink-muted"
           [value]="draft()"
           (input)="draftChange.emit($any($event).target.value)"
           (keydown.enter)="addTask.emit()"

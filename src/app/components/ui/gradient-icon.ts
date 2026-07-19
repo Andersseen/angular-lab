@@ -10,7 +10,7 @@ const SIZE_CLASSES: Record<IconSize, string> = {
 
 /**
  * Rounded electric brand→accent gradient tile that frames a projected icon.
- * Purely presentational; the icon colour uses `text-brand-ink` so it stays
+ * Purely presentational; the icon colour uses `text-al-brand-ink` so it stays
  * legible across the gradient in both themes.
  */
 @Component({
@@ -19,7 +19,7 @@ const SIZE_CLASSES: Record<IconSize, string> = {
   imports: [],
   template: `
     <span
-      class="inline-flex items-center justify-center bg-gradient-brand text-brand-ink shadow-lg"
+      class="inline-flex items-center justify-center bg-gradient-brand text-al-brand-ink shadow-lg"
       [class]="sizeClasses()"
     >
       <ng-content />

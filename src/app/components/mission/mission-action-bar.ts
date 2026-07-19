@@ -11,7 +11,7 @@ import { LmnCheckIcon } from 'lumen-icons/check';
   imports: [VoltButton, LmnArrowLeftIcon, LmnArrowRightIcon, LmnArrowPathIcon, LmnCheckIcon],
   template: `
     <div
-      class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-surface-raised p-4 shadow-sm"
+      class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-al-line bg-al-surface-raised p-4 shadow-sm"
     >
       <volt-button
         variant="outline"

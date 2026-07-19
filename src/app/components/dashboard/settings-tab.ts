@@ -30,7 +30,7 @@ import { ConfirmDialog } from '../ui/confirm-dialog';
   ],
   template: `
     <div class="flex flex-col gap-6">
-      <volt-card class="border-line">
+      <volt-card class="border-al-line">
         <volt-card-header>
           <volt-card-title>Account settings</volt-card-title>
           <volt-card-description>
@@ -43,10 +43,10 @@ import { ConfirmDialog } from '../ui/confirm-dialog';
             class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
           >
             <div>
-              <p class="text-sm font-medium text-ink">
+              <p class="text-sm font-medium text-al-ink">
                 Log out of all devices
               </p>
-              <p class="text-sm text-ink-muted">
+              <p class="text-sm text-al-ink-muted">
                 End every active session, including this one.
               </p>
             </div>
@@ -64,9 +64,9 @@ import { ConfirmDialog } from '../ui/confirm-dialog';
         </volt-card-content>
       </volt-card>
 
-      <volt-card class="border-danger/40">
+      <volt-card class="border-al-danger/40">
         <volt-card-header>
-          <volt-card-title class="text-danger">Danger zone</volt-card-title>
+          <volt-card-title class="text-al-danger">Danger zone</volt-card-title>
           <volt-card-description>
             Deleting your account removes your profile and all saved progress.
             This cannot be undone.

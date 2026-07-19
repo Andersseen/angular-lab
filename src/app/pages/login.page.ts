@@ -85,7 +85,7 @@ export const routeMeta: RouteMeta = {
         <div class="-mt-2 text-right">
           <a
             routerLink="/forgot-password"
-            class="text-sm font-medium text-brand hover:underline"
+            class="text-sm font-medium text-al-brand hover:underline"
             >Forgot password?</a
           >
         </div>
@@ -110,9 +110,9 @@ export const routeMeta: RouteMeta = {
         </volt-button>
       </form>
 
-      <p class="mt-4 text-center text-sm text-ink-muted">
+      <p class="mt-4 text-center text-sm text-al-ink-muted">
         Don't have an account?
-        <a routerLink="/signup" class="font-medium text-brand hover:underline"
+        <a routerLink="/signup" class="font-medium text-al-brand hover:underline"
           >Sign up</a
         >
       </p>

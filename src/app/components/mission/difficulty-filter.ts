@@ -11,7 +11,7 @@ import type { Difficulty } from '../../core/models/mission.model';
   template: `
     <div class="flex flex-wrap items-center gap-2">
       <span
-        class="mr-1 text-xs font-semibold uppercase tracking-wide text-ink-muted"
+        class="mr-1 text-xs font-semibold uppercase tracking-wide text-al-ink-muted"
       >
         Level
       </span>
@@ -53,7 +53,7 @@ export class DifficultyFilter {
 
   pillClasses(active: boolean): string {
     return active
-      ? 'bg-brand text-brand-ink shadow-md'
-      : 'bg-surface-raised text-ink hover:bg-surface border border-line';
+      ? 'bg-al-brand text-al-brand-ink shadow-md'
+      : 'bg-al-surface-raised text-al-ink hover:bg-al-surface border border-al-line';
   }
 }

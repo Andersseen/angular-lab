@@ -6,9 +6,10 @@
 /*
  * ── Phase 08 semantic design-token layer ────────────────────────────────────
  * Single source of truth for the "Angular Lab" identity. Components should use
- * the semantic utilities (bg-surface, bg-surface-raised, text-ink,
- * text-ink-muted, border-line, bg-brand / text-brand-ink, bg-accent, and the
- * status trios) — never raw palette utilities. Raw hex values live only here.
+ * the semantic utilities (bg-al-surface, bg-al-surface-raised, text-al-ink,
+ * text-al-ink-muted, border-al-line, bg-al-brand / text-al-brand-ink,
+ * bg-al-accent, and the status trios) — never raw palette utilities. Raw hex
+ * values live only here.
  *
  * Every text/background pair is ≥AA in both themes (WCAG 2.1, small text 4.5:1),
  * including each status colour used as text on its own 10% tint (the badge /
@@ -22,27 +23,37 @@
  * fill + near-black text. Light accent (#0c6a84) and warning (#92400e) are
  * deeper than the §3 candidates so they clear AA on their own tints too.
  *
- * The raw custom properties are namespaced `--al-*` on purpose: Volt's theme
- * defines --surface / --success / --warning on `:root[data-color=volt]`, which
- * outranks a plain `:root`, so unprefixed names get silently overridden by
- * Volt's palette. Do not drop the prefix.
+ * The `al-` namespace is load-bearing on BOTH levels — do not drop it:
+ *
+ *  1. Custom properties. Volt's theme defines --surface / --success / --warning
+ *     on `:root[data-color=volt]`, which outranks a plain `:root`, so
+ *     unprefixed names get silently overridden by Volt's palette.
+ *  2. Tailwind colour names. Volt's own components are built out of utility
+ *     classes (`hover:bg-accent` ×36, `bg-surface` ×24, `bg-success`,
+ *     `bg-warning`). Naming a theme colour `accent` re-points those classes at
+ *     our palette while Volt keeps using its own `--accent-foreground` for the
+ *     text — which is exactly how ghost-button hover ended up as white on
+ *     bright cyan. Prefixed names leave Volt's internals untouched.
+ *
+ * Note that `:hover` states are invisible to Lighthouse/axe, so hover pairs
+ * have to be checked by hand.
  */
 @theme inline {
-  --color-surface: var(--al-surface);
-  --color-surface-raised: var(--al-surface-raised);
-  --color-ink: var(--al-ink);
-  --color-ink-muted: var(--al-ink-muted);
-  --color-line: var(--al-line);
-  --color-brand: var(--al-brand);
-  --color-brand-ink: var(--al-brand-ink);
-  --color-accent: var(--al-accent);
-  --color-accent-ink: var(--al-accent-ink);
-  --color-success: var(--al-success);
-  --color-success-ink: var(--al-success-ink);
-  --color-warning: var(--al-warning);
-  --color-warning-ink: var(--al-warning-ink);
-  --color-danger: var(--al-danger);
-  --color-danger-ink: var(--al-danger-ink);
+  --color-al-surface: var(--al-surface);
+  --color-al-surface-raised: var(--al-surface-raised);
+  --color-al-ink: var(--al-ink);
+  --color-al-ink-muted: var(--al-ink-muted);
+  --color-al-line: var(--al-line);
+  --color-al-brand: var(--al-brand);
+  --color-al-brand-ink: var(--al-brand-ink);
+  --color-al-accent: var(--al-accent);
+  --color-al-accent-ink: var(--al-accent-ink);
+  --color-al-success: var(--al-success);
+  --color-al-success-ink: var(--al-success-ink);
+  --color-al-warning: var(--al-warning);
+  --color-al-warning-ink: var(--al-warning-ink);
+  --color-al-danger: var(--al-danger);
+  --color-al-danger-ink: var(--al-danger-ink);
 }
 
 :root {

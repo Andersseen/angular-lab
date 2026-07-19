@@ -11,19 +11,19 @@ const DIFFICULTY_CONFIG: Record<string, { label: string; classes: string; icon: 
   beginner: {
     label: 'Beginner',
     classes:
-      'border-success/30 bg-success/10 text-success',
+      'border-al-success/30 bg-al-success/10 text-al-success',
     icon: 'sparkles',
   },
   intermediate: {
     label: 'Intermediate',
     classes:
-      'border-warning/40 bg-warning/10 text-warning',
+      'border-al-warning/40 bg-al-warning/10 text-al-warning',
     icon: 'bolt',
   },
   advanced: {
     label: 'Advanced',
     classes:
-      'border-danger/30 bg-danger/10 text-danger',
+      'border-al-danger/30 bg-al-danger/10 text-al-danger',
     icon: 'fire',
   },
 };
@@ -38,12 +38,12 @@ const DIFFICULTY_CONFIG: Record<string, { label: string; classes: string; icon: 
         <div class="flex flex-col gap-3">
           <div class="flex flex-wrap items-center gap-3">
             <span
-              class="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface-raised px-3 py-1 text-xs font-semibold text-ink"
+              class="inline-flex items-center gap-1.5 rounded-full border border-al-line bg-al-surface-raised px-3 py-1 text-xs font-semibold text-al-ink"
             >
               <lmn-list-bullet [size]="12" />
               {{ mission().track }}
             </span>
-            <h1 class="text-3xl font-bold tracking-tight text-ink md:text-4xl">
+            <h1 class="text-3xl font-bold tracking-tight text-al-ink md:text-4xl">
               {{ mission().title }}
             </h1>
             <span
@@ -64,10 +64,10 @@ const DIFFICULTY_CONFIG: Record<string, { label: string; classes: string; icon: 
               {{ difficultyConfig().label }}
             </span>
           </div>
-          <p class="max-w-2xl text-lg leading-relaxed text-ink-muted">
+          <p class="max-w-2xl text-lg leading-relaxed text-al-ink-muted">
             {{ mission().description }}
           </p>
-          <p class="inline-flex items-center gap-3 text-sm text-ink-muted">
+          <p class="inline-flex items-center gap-3 text-sm text-al-ink-muted">
             <span class="inline-flex items-center gap-1.5">
               <lmn-clock [size]="14" />
               {{ mission().durationMinutes }} min
@@ -81,7 +81,7 @@ const DIFFICULTY_CONFIG: Record<string, { label: string; classes: string; icon: 
         <div class="min-w-56">
           <div class="mb-2 flex items-center justify-between text-sm">
             <span class="font-medium">Mission progress</span>
-            <span class="text-ink-muted">
+            <span class="text-al-ink-muted">
               {{ progress().percentage }}%
             </span>
           </div>
@@ -104,7 +104,7 @@ export class MissionHeader {
       DIFFICULTY_CONFIG[difficulty] ?? {
         label: difficulty,
         classes:
-          'border-line bg-surface text-ink',
+          'border-al-line bg-al-surface text-al-ink',
         icon: 'sparkles',
       }
     );

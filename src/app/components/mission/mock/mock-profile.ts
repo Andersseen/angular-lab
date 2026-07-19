@@ -8,14 +8,14 @@ import { LmnUserCircleIcon } from 'lumen-icons/user-circle';
   template: `
     <div class="text-center">
       <div
-        class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-brand text-2xl font-bold text-brand-ink shadow-lg"
+        class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-brand text-2xl font-bold text-al-brand-ink shadow-lg"
       >
         <lmn-user-circle [size]="32" />
       </div>
-      <p class="mt-4 text-lg font-semibold text-ink">
+      <p class="mt-4 text-lg font-semibold text-al-ink">
         User {{ userId() }}
       </p>
-      <p class="text-sm text-ink-muted">Mock profile page</p>
+      <p class="text-sm text-al-ink-muted">Mock profile page</p>
     </div>
   `,
 })

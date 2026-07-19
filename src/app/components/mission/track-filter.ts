@@ -47,7 +47,7 @@ export class TrackFilter {
 
   pillClasses(active: boolean): string {
     return active
-      ? 'bg-brand text-brand-ink shadow-md'
-      : 'bg-surface-raised text-ink hover:bg-surface border border-line';
+      ? 'bg-al-brand text-al-brand-ink shadow-md'
+      : 'bg-al-surface-raised text-al-ink hover:bg-al-surface border border-al-line';
   }
 }

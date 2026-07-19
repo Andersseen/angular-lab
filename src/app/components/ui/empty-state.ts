@@ -12,16 +12,16 @@ import { GradientIcon } from './gradient-icon';
   imports: [GradientIcon],
   template: `
     <div
-      class="app-blueprint flex flex-col items-center justify-center rounded-2xl border border-line px-6 py-16 text-center"
+      class="app-blueprint flex flex-col items-center justify-center rounded-2xl border border-al-line px-6 py-16 text-center"
     >
       <div class="mb-5 flex justify-center">
         <app-gradient-icon size="lg">
           <ng-content select="[data-slot=icon]" />
         </app-gradient-icon>
       </div>
-      <h2 class="text-xl font-semibold text-ink">{{ title() }}</h2>
+      <h2 class="text-xl font-semibold text-al-ink">{{ title() }}</h2>
       @if (message()) {
-        <p class="mt-2 max-w-sm text-sm text-ink-muted">{{ message() }}</p>
+        <p class="mt-2 max-w-sm text-sm text-al-ink-muted">{{ message() }}</p>
       }
       <div class="mt-6 empty:hidden">
         <ng-content select="[data-slot=action]" />

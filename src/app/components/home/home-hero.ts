@@ -16,19 +16,19 @@ import { LmnSparklesIcon } from 'lumen-icons/sparkles';
       class="max-w-3xl"
     >
       <div
-        class="app-glass inline-flex items-center gap-2 rounded-full border border-line px-3 py-1 font-mono text-xs font-semibold uppercase tracking-wide text-ink-muted shadow-sm"
+        class="app-glass inline-flex items-center gap-2 rounded-full border border-al-line px-3 py-1 font-mono text-xs font-semibold uppercase tracking-wide text-al-ink-muted shadow-sm"
       >
         <lmn-sparkles [size]="12" />
         Angular 22 demo lab
       </div>
 
       <h1
-        class="mt-6 text-5xl font-extrabold tracking-tight text-ink sm:text-6xl lg:text-7xl"
+        class="mt-6 text-5xl font-extrabold tracking-tight text-al-ink sm:text-6xl lg:text-7xl"
       >
         Learn Angular
         <span class="text-gradient-brand block">by doing</span>
       </h1>
-      <p class="mt-6 max-w-2xl text-lg leading-8 text-ink-muted">
+      <p class="mt-6 max-w-2xl text-lg leading-8 text-al-ink-muted">
         Guided missions, editable examples, and instant browser previews. No
         setup, no backend, just code.
       </p>

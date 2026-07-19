@@ -12,7 +12,7 @@ import { AuthService } from '../../core/services/auth.service';
     @if (show()) {
       <div
         role="status"
-        class="border-b border-warning/40 bg-warning/10 px-6 py-2.5 text-sm text-warning"
+        class="border-b border-al-warning/40 bg-al-warning/10 px-6 py-2.5 text-sm text-al-warning"
       >
         <div class="mx-auto flex max-w-7xl items-center gap-3">
           <lmn-envelope [size]="16" class="shrink-0" />
@@ -29,7 +29,7 @@ import { AuthService } from '../../core/services/auth.service';
           </button>
           <button
             type="button"
-            class="rounded p-1 hover:bg-warning/10"
+            class="rounded p-1 hover:bg-al-warning/10"
             aria-label="Dismiss"
             (click)="dismiss()"
           >

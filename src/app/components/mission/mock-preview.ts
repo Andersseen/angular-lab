@@ -28,17 +28,17 @@ interface MockState {
   ],
   template: `
     <div
-      class="flex h-96 flex-col rounded-xl border border-line bg-surface-raised shadow-sm"
+      class="flex h-96 flex-col rounded-xl border border-al-line bg-al-surface-raised shadow-sm"
     >
       <div
-        class="flex items-center justify-between border-b border-line px-4 py-2"
+        class="flex items-center justify-between border-b border-al-line px-4 py-2"
       >
         <span
-          class="text-xs font-semibold uppercase tracking-wide text-ink-muted"
+          class="text-xs font-semibold uppercase tracking-wide text-al-ink-muted"
         >
           Mock preview
         </span>
-        <span class="text-xs text-ink-muted">
+        <span class="text-xs text-al-ink-muted">
           Live execution coming soon
         </span>
       </div>

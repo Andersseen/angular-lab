@@ -88,9 +88,9 @@ export const routeMeta: RouteMeta = {
         </form>
       }
 
-      <p class="mt-4 text-center text-sm text-ink-muted">
+      <p class="mt-4 text-center text-sm text-al-ink-muted">
         Remembered it?
-        <a routerLink="/login" class="font-medium text-brand hover:underline"
+        <a routerLink="/login" class="font-medium text-al-brand hover:underline"
           >Back to log in</a
         >
       </p>

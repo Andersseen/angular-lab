@@ -13,14 +13,14 @@ import { CheckpointFeedback } from './checkpoint-feedback';
   standalone: true,
   imports: [VoltCard, VoltCardContent, VoltCardHeader, VoltCardTitle, CheckpointFeedback],
   template: `
-    <volt-card class="border-line">
+    <volt-card class="border-al-line">
       <volt-card-header>
         <volt-card-title class="text-base">Question {{ index() + 1 }}</volt-card-title>
       </volt-card-header>
       <volt-card-content>
         <p
           [id]="'checkpoint-question-' + index()"
-          class="mb-4 text-ink"
+          class="mb-4 text-al-ink"
         >
           {{ checkpoint().question }}
         </p>
@@ -80,20 +80,20 @@ export class CheckpointQuestion {
     const base =
       'group flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left text-sm transition-all';
     if (this.selectedOption() === optionIndex) {
-      return `${base} border-brand bg-brand/10`;
+      return `${base} border-al-brand bg-al-brand/10`;
     }
     if (this.submitted()) {
-      return `${base} border-line opacity-60`;
+      return `${base} border-al-line opacity-60`;
     }
-    return `${base} border-line hover:border-brand`;
+    return `${base} border-al-line hover:border-al-brand`;
   }
 
   optionLetterClasses(optionIndex: number): string {
     const base =
       'flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs font-semibold';
     return this.selectedOption() === optionIndex
-      ? `${base} border-brand bg-brand text-brand-ink`
-      : `${base} border-line`;
+      ? `${base} border-al-brand bg-al-brand text-al-brand-ink`
+      : `${base} border-al-line`;
   }
 
   rovingTabIndex(optionIndex: number): number {

@@ -104,9 +104,9 @@ export const routeMeta: RouteMeta = {
         </volt-button>
       </form>
 
-      <p class="mt-4 text-center text-sm text-ink-muted">
+      <p class="mt-4 text-center text-sm text-al-ink-muted">
         Already have an account?
-        <a routerLink="/login" class="font-medium text-brand hover:underline"
+        <a routerLink="/login" class="font-medium text-al-brand hover:underline"
           >Log in</a
         >
       </p>

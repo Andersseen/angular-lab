@@ -38,7 +38,7 @@ const TYPE_ICONS: Record<string, string> = {
         >
           @if (currentStepId() === step.id) {
             <span
-              class="absolute inset-y-0 left-0 w-1 rounded-l-xl bg-brand"
+              class="absolute inset-y-0 left-0 w-1 rounded-l-xl bg-al-brand"
             ></span>
           }
           <span [class]="stepLabelClasses(step.id)">
@@ -66,7 +66,7 @@ const TYPE_ICONS: Record<string, string> = {
             </span>
             Step {{ i + 1 }}
           </span>
-          <span class="block font-semibold text-ink">
+          <span class="block font-semibold text-al-ink">
             {{ step.title }}
           </span>
         </button>
@@ -87,15 +87,15 @@ export class MissionNav {
     const base =
       'group relative rounded-xl border px-4 py-3 text-left transition-all';
     return this.currentStepId() === stepId
-      ? `${base} border-brand bg-brand/10`
-      : `${base} border-line hover:border-brand hover:bg-surface`;
+      ? `${base} border-al-brand bg-al-brand/10`
+      : `${base} border-al-line hover:border-al-brand hover:bg-al-surface`;
   }
 
   stepLabelClasses(stepId: string): string {
     const base =
       'mb-1 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide';
     return this.currentStepId() === stepId
-      ? `${base} text-brand`
-      : `${base} text-ink-muted`;
+      ? `${base} text-al-brand`
+      : `${base} text-al-ink-muted`;
   }
 }

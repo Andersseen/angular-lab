@@ -7,17 +7,17 @@ import { LmnXCircleIcon } from 'lumen-icons/x-circle';
 type AlertVariant = 'info' | 'success' | 'warning' | 'danger';
 
 const CONTAINER_CLASSES: Record<AlertVariant, string> = {
-  info: 'border-brand/30 bg-brand/10',
-  success: 'border-success/30 bg-success/10',
-  warning: 'border-warning/40 bg-warning/10',
-  danger: 'border-danger/30 bg-danger/10',
+  info: 'border-al-brand/30 bg-al-brand/10',
+  success: 'border-al-success/30 bg-al-success/10',
+  warning: 'border-al-warning/40 bg-al-warning/10',
+  danger: 'border-al-danger/30 bg-al-danger/10',
 };
 
 const ICON_CLASSES: Record<AlertVariant, string> = {
-  info: 'text-brand',
-  success: 'text-success',
-  warning: 'text-warning',
-  danger: 'text-danger',
+  info: 'text-al-brand',
+  success: 'text-al-success',
+  warning: 'text-al-warning',
+  danger: 'text-al-danger',
 };
 
 /**
@@ -57,7 +57,7 @@ const ICON_CLASSES: Record<AlertVariant, string> = {
           }
         }
       </span>
-      <div class="min-w-0 text-ink">
+      <div class="min-w-0 text-al-ink">
         @if (title()) {
           <p class="font-semibold">{{ title() }}</p>
         }

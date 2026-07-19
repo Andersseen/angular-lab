@@ -18,15 +18,15 @@ import { StatTile } from '../ui/stat-tile';
   ],
   template: `
     <aside
-      class="app-glass rounded-2xl border border-line p-6 shadow-xl"
+      class="app-glass rounded-2xl border border-al-line p-6 shadow-xl"
       aria-label="Demo platform snapshot"
     >
       <div
-        class="flex items-center justify-between gap-4 border-b border-line pb-5"
+        class="flex items-center justify-between gap-4 border-b border-al-line pb-5"
       >
         <div>
-          <p class="text-sm font-medium text-ink-muted">Available missions</p>
-          <h2 class="font-mono text-3xl font-bold text-ink">
+          <p class="text-sm font-medium text-al-ink-muted">Available missions</p>
+          <h2 class="font-mono text-3xl font-bold text-al-ink">
             {{ missionCount() }}
           </h2>
         </div>
@@ -35,8 +35,8 @@ import { StatTile } from '../ui/stat-tile';
 
       <div class="py-6">
         <div class="mb-2 flex items-center justify-between text-sm">
-          <span class="font-medium text-ink">Platform readiness</span>
-          <span class="font-mono text-ink-muted">75%</span>
+          <span class="font-medium text-al-ink">Platform readiness</span>
+          <span class="font-mono text-al-ink-muted">75%</span>
         </div>
         <volt-progress [value]="75" aria-label="Platform readiness: 75%" />
       </div>
