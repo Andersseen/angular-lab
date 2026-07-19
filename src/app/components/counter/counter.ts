@@ -11,21 +11,21 @@ import { Component, signal } from '@angular/core';
       <div class="flex gap-2">
         <button
           type="button"
-          class="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          class="rounded bg-brand px-4 py-2 text-brand-ink transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-brand"
           (click)="increment()"
         >
           Increment
         </button>
         <button
           type="button"
-          class="rounded bg-slate-600 px-4 py-2 text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400"
+          class="rounded border border-line bg-surface-raised px-4 py-2 text-ink transition-colors hover:bg-surface focus:outline-none focus:ring-2 focus:ring-brand"
           (click)="decrement()"
         >
           Decrement
         </button>
         <button
           type="button"
-          class="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400"
+          class="rounded bg-danger px-4 py-2 text-danger-ink transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-danger"
           (click)="reset()"
         >
           Reset

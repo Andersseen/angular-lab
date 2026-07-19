@@ -3,8 +3,75 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Global design tokens */
+/*
+ * ── Phase 08 semantic design-token layer ────────────────────────────────────
+ * Single source of truth for the "Angular Lab" identity. Components should use
+ * the semantic utilities (bg-surface, bg-surface-raised, text-ink,
+ * text-ink-muted, border-line, bg-brand / text-brand-ink, bg-accent, and the
+ * status trios) — never raw palette utilities. Raw hex values live only here.
+ *
+ * Every text/background pair is ≥AA in both themes (WCAG 2.1, small text 4.5:1),
+ * including each status colour used as text on its own 10% tint (the badge /
+ * alert pattern), which is the tightest pair in the system:
+ *   ink / surface          17.3 L · 17.7 D      brand   on brand/10    5.2 L · 5.8 D
+ *   ink-muted / surface     6.1 L ·  7.5 D      accent  on accent/10   5.1 L · 9.2 D
+ *   ink-muted / raised      6.3 L ·  7.1 D      success on success/10  4.6 L · 8.7 D
+ *   brand-ink / brand       6.3 L ·  6.5 D      warning on warning/10  5.8 L · 9.9 D
+ *   brand / surface (link)  6.0 L ·  6.5 D      danger  on danger/10   5.1 L · 6.4 D
+ * Status fills flip their ink: light = deep fill + white text; dark = bright
+ * fill + near-black text. Light accent (#0c6a84) and warning (#92400e) are
+ * deeper than the §3 candidates so they clear AA on their own tints too.
+ *
+ * The raw custom properties are namespaced `--al-*` on purpose: Volt's theme
+ * defines --surface / --success / --warning on `:root[data-color=volt]`, which
+ * outranks a plain `:root`, so unprefixed names get silently overridden by
+ * Volt's palette. Do not drop the prefix.
+ */
+@theme inline {
+  --color-surface: var(--al-surface);
+  --color-surface-raised: var(--al-surface-raised);
+  --color-ink: var(--al-ink);
+  --color-ink-muted: var(--al-ink-muted);
+  --color-line: var(--al-line);
+  --color-brand: var(--al-brand);
+  --color-brand-ink: var(--al-brand-ink);
+  --color-accent: var(--al-accent);
+  --color-accent-ink: var(--al-accent-ink);
+  --color-success: var(--al-success);
+  --color-success-ink: var(--al-success-ink);
+  --color-warning: var(--al-warning);
+  --color-warning-ink: var(--al-warning-ink);
+  --color-danger: var(--al-danger);
+  --color-danger-ink: var(--al-danger-ink);
+}
+
 :root {
+  /* Semantic palette — light */
+  --al-surface: #fafafc;
+  --al-surface-raised: #ffffff;
+  --al-ink: #16161d;
+  --al-ink-muted: #5c5f6e;
+  --al-line: #e4e5ec;
+  --al-brand: #4f46e5;
+  --al-brand-ink: #ffffff;
+  --al-accent: #0c6a84;
+  --al-accent-ink: #ffffff;
+  --al-success: #047857;
+  --al-success-ink: #ffffff;
+  --al-warning: #92400e;
+  --al-warning-ink: #ffffff;
+  --al-danger: #be123c;
+  --al-danger-ink: #ffffff;
+
+  /* Legacy --app-* aliases (body + .app-glass) mapped onto the tokens so the
+     app adopts the new neutrals until components migrate off them (Stage C). */
+  --app-bg: var(--al-surface);
+  --app-fg: var(--al-ink);
+  --app-muted: var(--al-ink-muted);
+  --app-card: var(--al-surface-raised);
+  --app-border: var(--al-line);
+  --app-ring: var(--al-ink-muted);
+
   font-family:
     Inter,
     ui-sans-serif,
@@ -25,40 +92,77 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-
-  --app-bg: #fafafa;
-  --app-fg: #18181b;
-  --app-muted: #71717a;
-  --app-card: #ffffff;
-  --app-border: #e4e4e7;
-  --app-ring: #a1a1aa;
 }
 
 .dark {
-  --app-bg: #09090b;
-  --app-fg: #fafafa;
-  --app-muted: #a1a1aa;
-  --app-card: #18181b;
-  --app-border: #27272a;
-  --app-ring: #52525b;
+  /* Semantic palette — dark (primary design target) */
+  --al-surface: #0b0d12;
+  --al-surface-raised: #12141c;
+  --al-ink: #f4f4f8;
+  --al-ink-muted: #9da0b0;
+  --al-line: #232734;
+  --al-brand: #818cf8;
+  --al-brand-ink: #0b0d12;
+  --al-accent: #22d3ee;
+  --al-accent-ink: #0b0d12;
+  --al-success: #34d399;
+  --al-success-ink: #0b0d12;
+  --al-warning: #fbbf24;
+  --al-warning-ink: #0b0d12;
+  --al-danger: #fb7185;
+  --al-danger-ink: #0b0d12;
 }
 
 /*
- * Volt UI's theme sets --primary via `:root[data-color=volt]` /
- * `.dark[data-color=volt]` (see node_modules/@voltui/components/themes.css),
- * so an override must match that selector's specificity to win the cascade.
- *
- * We pin --primary to #2351de in both themes; Volt's default
- * --primary-foreground is white (oklch(1 0 0)) in both, and white on #2351de
- * is 6.3:1 — comfortably ≥AA — so no foreground override is needed. (Phase 08
- * replaces this one-off with a semantic token layer.)
+ * Volt UI reads --primary / --primary-foreground; map them onto the brand
+ * tokens so every Volt component (buttons, badges, focus rings) inherits the
+ * identity in both themes. :root[data-color=volt] matches Volt's own rule's
+ * specificity and wins by source order. Replaces the old #2351de one-off.
  */
-:root[data-color="volt"] {
-  --primary: #2351de;
+:root[data-color="volt"],
+.dark[data-color="volt"] {
+  --primary: var(--al-brand);
+  --primary-foreground: var(--al-brand-ink);
+}
+
+/*
+ * Motion vocabulary — one set of durations/easing for the whole app:
+ * fast = hover/press, base = enter/reveal, slow = page-level hero only.
+ * (angular-movement is configured to the same 320ms / expo-out base.)
+ */
+:root {
+  --motion-fast: 120ms;
+  --motion-base: 320ms;
+  --motion-slow: 500ms;
+  --motion-ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {
   box-sizing: border-box;
+}
+
+/*
+ * One brand focus ring for every interactive element. Programmatic focus
+ * targets (tabindex="-1", e.g. the step heading focused on step change) are
+ * excluded: they exist for screen-reader announcement, not visual indication.
+ */
+:where(a, button, input, select, textarea, summary, [tabindex]):not(
+    [tabindex="-1"]
+  ):focus-visible {
+  outline: 2px solid var(--al-brand);
+  outline-offset: 2px;
+}
+
+/* Honour reduced-motion globally, including library animations. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 html,
@@ -92,27 +196,42 @@ h6 {
   text-align: left;
 }
 
-/* Subtle mesh gradient background for hero sections */
-.app-gradient {
-  background:
-    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.1) 0px, transparent 50%),
-    var(--app-bg);
+/*
+ * Blueprint texture — a faint graph-paper grid that fades to plain surface
+ * toward the edges, for hero / empty-state backgrounds in both themes. Replaces
+ * the old radial-blob background; the .app-gradient name is kept so existing
+ * pages inherit the new look until they migrate (Stage C), with .app-blueprint
+ * as the canonical alias going forward.
+ */
+.app-gradient,
+.app-blueprint {
+  --blueprint-line: color-mix(in oklab, var(--al-line) 65%, transparent);
+  background-color: var(--al-surface);
+  background-image:
+    radial-gradient(135% 80% at 50% -20%, transparent 42%, var(--al-surface) 82%),
+    linear-gradient(to right, var(--blueprint-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--blueprint-line) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    28px 28px,
+    28px 28px;
+  background-position: center top;
 }
 
-.dark .app-gradient {
-  background:
-    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.18) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.14) 0px, transparent 50%),
-    var(--app-bg);
+/* Electric brand → accent gradient (logo mark, hero headline accent, badges). */
+.bg-gradient-brand {
+  background-image: linear-gradient(120deg, var(--al-brand), var(--al-accent));
 }
 
-/* Glass card utility */
+.text-gradient-brand {
+  background-image: linear-gradient(120deg, var(--al-brand), var(--al-accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Glass card utility, now token-driven. */
 .app-glass {
-  background: rgba(255, 255, 255, 0.7);
+  background: color-mix(in oklab, var(--al-surface-raised) 72%, transparent);
   backdrop-filter: blur(12px);
-}
-
-.dark .app-glass {
-  background: rgba(24, 24, 27, 0.7);
 }

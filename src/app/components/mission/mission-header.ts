@@ -11,19 +11,19 @@ const DIFFICULTY_CONFIG: Record<string, { label: string; classes: string; icon: 
   beginner: {
     label: 'Beginner',
     classes:
-      'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-300',
+      'border-success/30 bg-success/10 text-success',
     icon: 'sparkles',
   },
   intermediate: {
     label: 'Intermediate',
     classes:
-      'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-300',
+      'border-warning/40 bg-warning/10 text-warning',
     icon: 'bolt',
   },
   advanced: {
     label: 'Advanced',
     classes:
-      'border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-900 dark:bg-rose-950 dark:text-rose-300',
+      'border-danger/30 bg-danger/10 text-danger',
     icon: 'fire',
   },
 };
@@ -38,12 +38,12 @@ const DIFFICULTY_CONFIG: Record<string, { label: string; classes: string; icon: 
         <div class="flex flex-col gap-3">
           <div class="flex flex-wrap items-center gap-3">
             <span
-              class="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-3 py-1 text-xs font-semibold text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200"
+              class="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface-raised px-3 py-1 text-xs font-semibold text-ink"
             >
               <lmn-list-bullet [size]="12" />
               {{ mission().track }}
             </span>
-            <h1 class="text-3xl font-bold tracking-tight text-zinc-950 dark:text-white md:text-4xl">
+            <h1 class="text-3xl font-bold tracking-tight text-ink md:text-4xl">
               {{ mission().title }}
             </h1>
             <span
@@ -64,10 +64,10 @@ const DIFFICULTY_CONFIG: Record<string, { label: string; classes: string; icon: 
               {{ difficultyConfig().label }}
             </span>
           </div>
-          <p class="max-w-2xl text-lg leading-relaxed text-zinc-600 dark:text-zinc-300">
+          <p class="max-w-2xl text-lg leading-relaxed text-ink-muted">
             {{ mission().description }}
           </p>
-          <p class="inline-flex items-center gap-3 text-sm text-zinc-500 dark:text-zinc-400">
+          <p class="inline-flex items-center gap-3 text-sm text-ink-muted">
             <span class="inline-flex items-center gap-1.5">
               <lmn-clock [size]="14" />
               {{ mission().durationMinutes }} min
@@ -81,7 +81,7 @@ const DIFFICULTY_CONFIG: Record<string, { label: string; classes: string; icon: 
         <div class="min-w-56">
           <div class="mb-2 flex items-center justify-between text-sm">
             <span class="font-medium">Mission progress</span>
-            <span class="text-zinc-500 dark:text-zinc-400">
+            <span class="text-ink-muted">
               {{ progress().percentage }}%
             </span>
           </div>
@@ -104,7 +104,7 @@ export class MissionHeader {
       DIFFICULTY_CONFIG[difficulty] ?? {
         label: difficulty,
         classes:
-          'border-zinc-200 bg-zinc-50 text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300',
+          'border-line bg-surface text-ink',
         icon: 'sparkles',
       }
     );

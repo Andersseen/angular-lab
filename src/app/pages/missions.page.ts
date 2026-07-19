@@ -1,10 +1,12 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import type { RouteMeta } from '@analogjs/router';
 import { MOVEMENT_DIRECTIVES } from 'angular-movement';
+import { LmnMagnifyingGlassIcon } from 'lumen-icons/magnifying-glass';
 import { DifficultyFilter } from '../components/mission/difficulty-filter';
 import { MissionCard } from '../components/mission/mission-card';
 import { MissionsHeader } from '../components/mission/missions-header';
 import { TrackFilter } from '../components/mission/track-filter';
+import { EmptyState } from '../components/ui/empty-state';
 import type { Difficulty } from '../core/models/mission.model';
 import { MissionCatalogService } from '../core/services/mission-catalog.service';
 
@@ -40,6 +42,8 @@ const DIFFICULTY_ORDER: Record<Difficulty, number> = {
     TrackFilter,
     DifficultyFilter,
     MissionCard,
+    EmptyState,
+    LmnMagnifyingGlassIcon,
   ],
   template: `
     <section
@@ -73,11 +77,12 @@ const DIFFICULTY_ORDER: Record<Difficulty, number> = {
           }
         </div>
       } @else {
-        <p
-          class="rounded-xl border border-dashed border-zinc-300 px-6 py-12 text-center text-sm text-zinc-500 dark:border-zinc-700 dark:text-zinc-400"
+        <app-empty-state
+          title="No missions match"
+          message="No missions match this filter yet. Try a different track or difficulty."
         >
-          No missions match this filter yet.
-        </p>
+          <lmn-magnifying-glass data-slot="icon" [size]="32" />
+        </app-empty-state>
       }
     </section>
   `,

@@ -12,6 +12,7 @@ import { ToastService } from 'quartz-headless';
 import { LmnArrowRightEndOnRectangleIcon } from 'lumen-icons/arrow-right-end-on-rectangle';
 import { LmnTrashIcon } from 'lumen-icons/trash';
 import { AuthService } from '../../core/services/auth.service';
+import { ConfirmDialog } from '../ui/confirm-dialog';
 
 @Component({
   selector: 'app-settings-tab',
@@ -23,12 +24,13 @@ import { AuthService } from '../../core/services/auth.service';
     VoltCardDescription,
     VoltCardHeader,
     VoltCardTitle,
+    ConfirmDialog,
     LmnArrowRightEndOnRectangleIcon,
     LmnTrashIcon,
   ],
   template: `
     <div class="flex flex-col gap-6">
-      <volt-card class="border-zinc-200 dark:border-zinc-800">
+      <volt-card class="border-line">
         <volt-card-header>
           <volt-card-title>Account settings</volt-card-title>
           <volt-card-description>
@@ -41,10 +43,10 @@ import { AuthService } from '../../core/services/auth.service';
             class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
           >
             <div>
-              <p class="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+              <p class="text-sm font-medium text-ink">
                 Log out of all devices
               </p>
-              <p class="text-sm text-zinc-500 dark:text-zinc-400">
+              <p class="text-sm text-ink-muted">
                 End every active session, including this one.
               </p>
             </div>
@@ -62,55 +64,38 @@ import { AuthService } from '../../core/services/auth.service';
         </volt-card-content>
       </volt-card>
 
-      <volt-card class="border-rose-200 dark:border-rose-900">
+      <volt-card class="border-danger/40">
         <volt-card-header>
-          <volt-card-title class="text-rose-700 dark:text-rose-300">
-            Danger zone
-          </volt-card-title>
+          <volt-card-title class="text-danger">Danger zone</volt-card-title>
           <volt-card-description>
             Deleting your account removes your profile and all saved progress.
             This cannot be undone.
           </volt-card-description>
         </volt-card-header>
         <volt-card-content>
-          @if (!confirmingDelete()) {
-            <volt-button
-              variant="destructive"
-              [disabled]="busy()"
-              (click)="confirmingDelete.set(true)"
-            >
-              <span class="flex items-center gap-2">
-                <lmn-trash [size]="16" />
-                Delete account
-              </span>
-            </volt-button>
-          } @else {
-            <div
-              class="flex flex-col gap-3 rounded-xl border border-rose-200 bg-rose-50 p-4 dark:border-rose-900 dark:bg-rose-950"
-            >
-              <p class="text-sm font-medium text-rose-800 dark:text-rose-100">
-                Are you sure? This permanently deletes your account.
-              </p>
-              <div class="flex gap-2">
-                <volt-button
-                  variant="destructive"
-                  [disabled]="busy()"
-                  (click)="deleteAccount()"
-                >
-                  {{ busy() ? 'Deleting…' : 'Yes, delete my account' }}
-                </volt-button>
-                <volt-button
-                  variant="outline"
-                  [disabled]="busy()"
-                  (click)="confirmingDelete.set(false)"
-                >
-                  Cancel
-                </volt-button>
-              </div>
-            </div>
-          }
+          <volt-button
+            variant="destructive"
+            [disabled]="busy()"
+            (click)="confirmingDelete.set(true)"
+          >
+            <span class="flex items-center gap-2">
+              <lmn-trash [size]="16" />
+              Delete account
+            </span>
+          </volt-button>
         </volt-card-content>
       </volt-card>
+
+      <app-confirm-dialog
+        [open]="confirmingDelete()"
+        title="Delete account?"
+        message="This permanently deletes your account and all saved progress. This cannot be undone."
+        confirmLabel="Yes, delete my account"
+        variant="danger"
+        [busy]="busy()"
+        (confirm)="deleteAccount()"
+        (dismiss)="confirmingDelete.set(false)"
+      />
     </div>
   `,
 })
@@ -141,7 +126,11 @@ export class SettingsTab {
       },
       error: () => {
         this.busy.set(false);
-        this.toast.error('Could not delete the account. Please try again.', 'Oops');
+        this.confirmingDelete.set(false);
+        this.toast.error(
+          'Could not delete the account. Please try again.',
+          'Oops'
+        );
       },
     });
   }

@@ -25,11 +25,11 @@ import { UserMenu } from './user-menu';
   ],
   template: `
     <div
-      class="flex min-h-screen flex-col bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100"
+      class="flex min-h-screen flex-col bg-surface text-ink"
     >
       <header
         moveEnter="fade-down"
-        class="app-glass sticky top-0 z-20 border-b border-zinc-200 px-6 py-3.5 shadow-sm dark:border-zinc-800"
+        class="app-glass sticky top-0 z-20 border-b border-line px-6 py-3.5 shadow-sm"
       >
         <nav class="mx-auto flex max-w-7xl items-center justify-between">
           <app-logo />
@@ -55,7 +55,7 @@ import { UserMenu } from './user-menu';
       <qz-toast-container />
 
       <footer
-        class="border-t border-zinc-200 bg-zinc-50 px-6 py-8 text-center text-sm text-zinc-500 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400"
+        class="border-t border-line bg-surface px-6 py-8 text-center text-sm text-ink-muted"
       >
         <p class="font-medium">Angular Lab</p>
         <p class="mt-1">Open source learning platform · Licensed under MIT</p>

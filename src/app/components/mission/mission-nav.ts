@@ -32,31 +32,16 @@ const TYPE_ICONS: Record<string, string> = {
       @for (step of steps(); track step.id; let i = $index) {
         <button
           type="button"
-          class="group relative rounded-xl border px-4 py-3 text-left transition-all"
-          [class.border-blue-500]="currentStepId() === step.id"
-          [class.bg-blue-50]="currentStepId() === step.id"
-          [class.dark:bg-blue-950]="currentStepId() === step.id"
-          [class.border-zinc-200]="currentStepId() !== step.id"
-          [class.dark:border-zinc-800]="currentStepId() !== step.id"
-          [class.hover:border-zinc-300]="currentStepId() !== step.id"
-          [class.dark:hover:border-zinc-700]="currentStepId() !== step.id"
-          [class.hover:bg-zinc-50]="currentStepId() !== step.id"
-          [class.dark:hover:bg-zinc-900]="currentStepId() !== step.id"
+          [class]="stepClasses(step.id)"
           [attr.aria-current]="currentStepId() === step.id ? 'step' : null"
           (click)="selectStep.emit(step.id)"
         >
           @if (currentStepId() === step.id) {
             <span
-              class="absolute inset-y-0 left-0 w-1 rounded-l-xl bg-blue-500"
+              class="absolute inset-y-0 left-0 w-1 rounded-l-xl bg-brand"
             ></span>
           }
-          <span
-            class="mb-1 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide"
-            [class.text-blue-600]="currentStepId() === step.id"
-            [class.dark:text-blue-300]="currentStepId() === step.id"
-            [class.text-zinc-500]="currentStepId() !== step.id"
-            [class.dark:text-zinc-400]="currentStepId() !== step.id"
-          >
+          <span [class]="stepLabelClasses(step.id)">
             <span class="inline-flex h-5 w-5 items-center justify-center rounded-md bg-current/10">
               @switch (typeIcon(step.type)) {
                 @case ('light-bulb') {
@@ -81,7 +66,7 @@ const TYPE_ICONS: Record<string, string> = {
             </span>
             Step {{ i + 1 }}
           </span>
-          <span class="block font-semibold text-zinc-900 dark:text-zinc-100">
+          <span class="block font-semibold text-ink">
             {{ step.title }}
           </span>
         </button>
@@ -96,5 +81,21 @@ export class MissionNav {
 
   typeIcon(type: string): string {
     return TYPE_ICONS[type] ?? 'light-bulb';
+  }
+
+  stepClasses(stepId: string): string {
+    const base =
+      'group relative rounded-xl border px-4 py-3 text-left transition-all';
+    return this.currentStepId() === stepId
+      ? `${base} border-brand bg-brand/10`
+      : `${base} border-line hover:border-brand hover:bg-surface`;
+  }
+
+  stepLabelClasses(stepId: string): string {
+    const base =
+      'mb-1 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide';
+    return this.currentStepId() === stepId
+      ? `${base} text-brand`
+      : `${base} text-ink-muted`;
   }
 }

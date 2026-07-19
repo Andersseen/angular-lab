@@ -13,14 +13,14 @@ import { CheckpointFeedback } from './checkpoint-feedback';
   standalone: true,
   imports: [VoltCard, VoltCardContent, VoltCardHeader, VoltCardTitle, CheckpointFeedback],
   template: `
-    <volt-card class="border-zinc-200 dark:border-zinc-800">
+    <volt-card class="border-line">
       <volt-card-header>
         <volt-card-title class="text-base">Question {{ index() + 1 }}</volt-card-title>
       </volt-card-header>
       <volt-card-content>
         <p
           [id]="'checkpoint-question-' + index()"
-          class="mb-4 text-zinc-800 dark:text-zinc-100"
+          class="mb-4 text-ink"
         >
           {{ checkpoint().question }}
         </p>
@@ -37,27 +37,12 @@ import { CheckpointFeedback } from './checkpoint-feedback';
               role="radio"
               [attr.aria-checked]="selectedOption() === o"
               [tabIndex]="rovingTabIndex(o)"
-              class="group flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left text-sm transition-all"
-              [class.border-blue-500]="selectedOption() === o"
-              [class.bg-blue-50]="selectedOption() === o"
-              [class.dark:bg-blue-950]="selectedOption() === o"
-              [class.border-zinc-200]="selectedOption() !== o"
-              [class.dark:border-zinc-800]="selectedOption() !== o"
-              [class.hover:border-zinc-300]="selectedOption() !== o && !submitted()"
-              [class.dark:hover:border-zinc-700]="selectedOption() !== o && !submitted()"
-              [class.opacity-60]="submitted() && selectedOption() !== o"
+              [class]="optionClasses(o)"
               [disabled]="submitted()"
               (click)="optionSelect.emit(o)"
               (keydown)="onKeydown($event)"
             >
-              <span
-                class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs font-semibold"
-                [class.border-blue-500]="selectedOption() === o"
-                [class.bg-blue-500]="selectedOption() === o"
-                [class.text-white]="selectedOption() === o"
-                [class.border-zinc-300]="selectedOption() !== o"
-                [class.dark:border-zinc-700]="selectedOption() !== o"
-              >
+              <span [class]="optionLetterClasses(o)">
                 {{ optionLetter(o) }}
               </span>
               {{ option }}
@@ -89,6 +74,26 @@ export class CheckpointQuestion {
 
   optionLetter(index: number): string {
     return String.fromCharCode(65 + index);
+  }
+
+  optionClasses(optionIndex: number): string {
+    const base =
+      'group flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left text-sm transition-all';
+    if (this.selectedOption() === optionIndex) {
+      return `${base} border-brand bg-brand/10`;
+    }
+    if (this.submitted()) {
+      return `${base} border-line opacity-60`;
+    }
+    return `${base} border-line hover:border-brand`;
+  }
+
+  optionLetterClasses(optionIndex: number): string {
+    const base =
+      'flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs font-semibold';
+    return this.selectedOption() === optionIndex
+      ? `${base} border-brand bg-brand text-brand-ink`
+      : `${base} border-line`;
   }
 
   rovingTabIndex(optionIndex: number): number {

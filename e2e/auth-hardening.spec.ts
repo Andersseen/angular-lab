@@ -18,9 +18,9 @@ test('user can reset their password and log in with the new one', async ({
 
   // Sign up, then log out so we can prove the reset → login flow.
   await page.goto('/signup');
-  await page.getByRole('textbox', { name: 'Your name' }).fill('Reset Tester');
-  await page.getByRole('textbox', { name: 'you@example.com' }).fill(email);
-  await page.getByRole('textbox', { name: '••••••••' }).fill(oldPassword);
+  await page.getByRole('textbox', { name: 'Name' }).fill('Reset Tester');
+  await page.getByRole('textbox', { name: 'Email' }).fill(email);
+  await page.getByRole('textbox', { name: 'Password' }).fill(oldPassword);
   await page.locator('main').getByRole('button', { name: /sign up/i }).click();
   await expect(page).toHaveURL(/\/dashboard$/);
 
@@ -29,7 +29,7 @@ test('user can reset their password and log in with the new one', async ({
 
   // Request a reset link. On localhost the endpoint echoes the link.
   await page.goto('/forgot-password');
-  await page.getByRole('textbox', { name: 'you@example.com' }).fill(email);
+  await page.getByRole('textbox', { name: 'Email' }).fill(email);
   await page.getByRole('button', { name: /send reset link/i }).click();
 
   const devLink = page.getByTestId('dev-reset-link');
@@ -39,14 +39,14 @@ test('user can reset their password and log in with the new one', async ({
 
   // Follow the link and choose a new password.
   await page.goto(href!);
-  await page.getByRole('textbox', { name: '••••••••' }).fill(newPassword);
+  await page.getByRole('textbox', { name: 'New password' }).fill(newPassword);
   await page.getByRole('button', { name: /update password/i }).click();
   await expect(page).toHaveURL(/\/login/);
   await expect(page.getByText(/password was updated/i)).toBeVisible();
 
   // The new password works.
-  await page.getByRole('textbox', { name: 'you@example.com' }).fill(email);
-  await page.getByRole('textbox', { name: '••••••••' }).fill(newPassword);
+  await page.getByRole('textbox', { name: 'Email' }).fill(email);
+  await page.getByRole('textbox', { name: 'Password' }).fill(newPassword);
   await page.locator('main').getByRole('button', { name: /log in/i }).click();
   await expect(page).toHaveURL(/\/dashboard$/);
 });

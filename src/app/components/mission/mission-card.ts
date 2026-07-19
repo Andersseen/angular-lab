@@ -17,12 +17,9 @@ import { LmnListBulletIcon } from 'lumen-icons/list-bullet';
 import type { Mission } from '../../core/models/mission.model';
 
 const DIFFICULTY_STYLES: Record<string, string> = {
-  beginner:
-    'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-300',
-  intermediate:
-    'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-300',
-  advanced:
-    'border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-900 dark:bg-rose-950 dark:text-rose-300',
+  beginner: 'border-success/30 bg-success/10 text-success',
+  intermediate: 'border-warning/40 bg-warning/10 text-warning',
+  advanced: 'border-danger/30 bg-danger/10 text-danger',
 };
 
 @Component({
@@ -47,18 +44,14 @@ const DIFFICULTY_STYLES: Record<string, string> = {
     <volt-card
       [move]="'fade-up'"
       [moveDelay]="delay()"
-      class="group flex flex-col overflow-hidden border-zinc-200 transition-all hover:-translate-y-1 hover:shadow-xl dark:border-zinc-800"
+      class="group flex flex-col overflow-hidden border-line transition-all hover:-translate-y-1 hover:shadow-xl"
     >
-      <div
-        class="h-1.5 w-full bg-gradient-to-r from-blue-500 to-violet-500"
-      ></div>
+      <div class="bg-gradient-brand h-1.5 w-full"></div>
       <volt-card-header>
         <div
-          class="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400"
+          class="mb-2 flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wide text-ink-muted"
         >
-          <span
-            class="rounded-md border border-zinc-200 bg-zinc-50 px-2 py-0.5 dark:border-zinc-800 dark:bg-zinc-900"
-          >
+          <span class="rounded-md border border-line bg-surface px-2 py-0.5">
             {{ mission().track }}
           </span>
           <span>·</span>
@@ -67,9 +60,8 @@ const DIFFICULTY_STYLES: Record<string, string> = {
             {{ mission().durationMinutes }} min
           </span>
           @if (mission().previewMode === 'live') {
-            <span>·</span>
             <span
-              class="inline-flex items-center gap-1 font-semibold text-emerald-600 dark:text-emerald-400"
+              class="inline-flex items-center gap-1 rounded-full border border-accent/50 px-2 py-0.5 text-accent"
             >
               Live
             </span>
@@ -94,7 +86,7 @@ const DIFFICULTY_STYLES: Record<string, string> = {
         </div>
 
         <div
-          class="mt-5 flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400"
+          class="mt-5 flex items-center gap-2 font-mono text-xs text-ink-muted"
         >
           <lmn-list-bullet [size]="14" />
           {{ mission().steps.length }} steps

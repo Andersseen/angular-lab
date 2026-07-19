@@ -8,9 +8,9 @@ test('guest can sign up and access dashboard', async ({ page }) => {
   await expect(page.getByText('Create account', { exact: true })).toBeVisible();
 
   const email = uniqueEmail();
-  await page.getByRole('textbox', { name: 'Your name' }).fill('E2E Tester');
-  await page.getByRole('textbox', { name: 'you@example.com' }).fill(email);
-  await page.getByRole('textbox', { name: '••••••••' }).fill('Password123');
+  await page.getByRole('textbox', { name: 'Name' }).fill('E2E Tester');
+  await page.getByRole('textbox', { name: 'Email' }).fill(email);
+  await page.getByRole('textbox', { name: 'Password' }).fill('Password123');
 
   const submit = page.locator('main').getByRole('button', { name: /sign up/i });
   await expect(submit).toBeEnabled();
@@ -27,9 +27,9 @@ test('user can log in and log out', async ({ page }) => {
 
   // Sign up first
   await page.goto('/signup');
-  await page.getByRole('textbox', { name: 'Your name' }).fill('Logout Tester');
-  await page.getByRole('textbox', { name: 'you@example.com' }).fill(email);
-  await page.getByRole('textbox', { name: '••••••••' }).fill(password);
+  await page.getByRole('textbox', { name: 'Name' }).fill('Logout Tester');
+  await page.getByRole('textbox', { name: 'Email' }).fill(email);
+  await page.getByRole('textbox', { name: 'Password' }).fill(password);
   await page.locator('main').getByRole('button', { name: /sign up/i }).click();
   await expect(page).toHaveURL(/\/dashboard$/);
 
@@ -42,8 +42,8 @@ test('user can log in and log out', async ({ page }) => {
 
   // Log in
   await page.goto('/login');
-  await page.getByRole('textbox', { name: 'you@example.com' }).fill(email);
-  await page.getByRole('textbox', { name: '••••••••' }).fill(password);
+  await page.getByRole('textbox', { name: 'Email' }).fill(email);
+  await page.getByRole('textbox', { name: 'Password' }).fill(password);
   await page.locator('main').getByRole('button', { name: /log in/i }).click();
 
   await expect(page).toHaveURL(/\/dashboard$/);
@@ -55,9 +55,9 @@ test('progress syncs across a logout/login cycle', async ({ page }) => {
   const password = 'Password123';
 
   await page.goto('/signup');
-  await page.getByRole('textbox', { name: 'Your name' }).fill('Sync Tester');
-  await page.getByRole('textbox', { name: 'you@example.com' }).fill(email);
-  await page.getByRole('textbox', { name: '••••••••' }).fill(password);
+  await page.getByRole('textbox', { name: 'Name' }).fill('Sync Tester');
+  await page.getByRole('textbox', { name: 'Email' }).fill(email);
+  await page.getByRole('textbox', { name: 'Password' }).fill(password);
   await page.locator('main').getByRole('button', { name: /sign up/i }).click();
   await expect(page).toHaveURL(/\/dashboard$/);
 
@@ -98,8 +98,8 @@ test('progress syncs across a logout/login cycle', async ({ page }) => {
   await expect(page).toHaveURL(/\/$/);
 
   await page.goto('/login');
-  await page.getByRole('textbox', { name: 'you@example.com' }).fill(email);
-  await page.getByRole('textbox', { name: '••••••••' }).fill(password);
+  await page.getByRole('textbox', { name: 'Email' }).fill(email);
+  await page.getByRole('textbox', { name: 'Password' }).fill(password);
   await page.locator('main').getByRole('button', { name: /log in/i }).click();
   await expect(page).toHaveURL(/\/dashboard$/);
 

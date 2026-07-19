@@ -16,25 +16,19 @@ import { LmnSparklesIcon } from 'lumen-icons/sparkles';
       class="max-w-3xl"
     >
       <div
-        class="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-zinc-600 shadow-sm backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/80 dark:text-zinc-300"
+        class="app-glass inline-flex items-center gap-2 rounded-full border border-line px-3 py-1 font-mono text-xs font-semibold uppercase tracking-wide text-ink-muted shadow-sm"
       >
         <lmn-sparkles [size]="12" />
         Angular 22 demo lab
       </div>
 
       <h1
-        class="mt-6 text-5xl font-extrabold tracking-tight text-zinc-950 dark:text-white sm:text-6xl lg:text-7xl"
+        class="mt-6 text-5xl font-extrabold tracking-tight text-ink sm:text-6xl lg:text-7xl"
       >
         Learn Angular
-        <span
-          class="block bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent"
-        >
-          by doing
-        </span>
+        <span class="text-gradient-brand block">by doing</span>
       </h1>
-      <p
-        class="mt-6 max-w-2xl text-lg leading-8 text-zinc-600 dark:text-zinc-300"
-      >
+      <p class="mt-6 max-w-2xl text-lg leading-8 text-ink-muted">
         Guided missions, editable examples, and instant browser previews. No
         setup, no backend, just code.
       </p>

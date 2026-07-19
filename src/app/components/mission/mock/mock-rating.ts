@@ -7,8 +7,8 @@ import { LmnStarIcon } from 'lumen-icons/star';
   imports: [LmnStarIcon],
   template: `
     <div class="text-center">
-      <p class="text-sm text-zinc-500 dark:text-zinc-400">Your rating</p>
-      <div class="mt-2 flex justify-center gap-1 text-2xl text-amber-500">
+      <p class="text-sm text-ink-muted">Your rating</p>
+      <div class="mt-2 flex justify-center gap-1 text-2xl text-warning">
         @for (star of [1, 2, 3, 4, 5]; track star) {
           <button
             type="button"
@@ -22,7 +22,7 @@ import { LmnStarIcon } from 'lumen-icons/star';
           </button>
         }
       </div>
-      <p class="mt-3 text-lg font-semibold text-zinc-950 dark:text-white">
+      <p class="mt-3 text-lg font-semibold text-ink">
         {{ value() }} / 5
       </p>
     </div>

@@ -29,21 +29,18 @@ const FEATURES = [
     description: 'Step-by-step learning paths that combine theory and practice.',
     detail: 'Progress through tracks like Fundamentals, Routing, and Testing.',
     icon: 'rocket' as const,
-    tone: 'blue' as const,
   },
   {
     title: 'Live Editor',
     description: 'Edit TypeScript and HTML directly in the browser.',
     detail: 'Mock previews show the expected result while the engine is built.',
     icon: 'editor' as const,
-    tone: 'violet' as const,
   },
   {
     title: 'Comparisons',
     description: 'See two approaches side by side and learn when to use each.',
     detail: 'No single "right way" — understand the trade-offs.',
     icon: 'compare' as const,
-    tone: 'amber' as const,
   },
 ];
 
