@@ -10,7 +10,7 @@ Roadmap divided into phases. Each phase is designed to be tackled in a **single 
 - ✅ **Phase 05 — Real content (mission library)**: done — 12 missions in `src/content/missions/`, 3 tracks, 8 live previews, track + difficulty filters.
 - ✅ **Phase 06 — Auth hardening & account lifecycle**: done — password reset + email verification (D1 tokens, provider-agnostic email seam), per-IP rate limiting, sliding-expiry sessions + "log out everywhere", account deletion.
 - ✅ **Phase 07 — Production polish**: done — SEO meta/OG, generated robots+sitemap, editor lazy-load, analytics seam, global error handler, 404 page, a11y fixes (Lighthouse a11y 100 in both themes), full E2E journeys green.
-- 🕐 **Phase 08 — UI identity & componentization refactor**: planned — see `UI-PLAN.md`.
+- ✅ **Phase 08 — UI identity & componentization refactor**: done — semantic `--al-*` token layer (AA-validated both themes), eight shared `ui/` primitives, auth pages rebuilt on them, and a full token/identity sweep. See `UI-PLAN.md` for the brief.
 
 > Details of what shipped live in `context.md`; this file tracks only what's next.
 
@@ -120,6 +120,17 @@ Roadmap divided into phases. Each phase is designed to be tackled in a **single 
 - No hard-coded palette utilities outside the token layer in migrated code.
 - Lighthouse a11y ≥95 in **both** themes on `/`, `/missions`, `/login`; all unit + E2E tests stay green.
 - Visual identity is consistent: one palette, one type scale, one motion vocabulary.
+
+**Status (closed 2026-07-19):** shipped in five staged commits (A → D).
+
+- **A — tokens:** `@theme inline` semantic layer, light+dark palette, Volt `--primary` mapped to brand, blueprint texture replacing the radial blobs.
+- **B — primitives:** `components/ui/` × 8 (GradientIcon, Alert, FormField, AuthLayout, PageHeader, StatTile, ConfirmDialog, EmptyState), each with a Testing Library spec.
+- **C — migrations:** 5 auth pages **870 → 648 lines** (96–155 each) on AuthLayout/FormField/Alert; dashboard tabs on StatTile/ConfirmDialog; mission page's `window.confirm` → ConfirmDialog and not-found → EmptyState (**no `window.confirm` left**); home/catalog/404 restyled.
+- **D — polish:** full token sweep (**no raw palette utilities left in `src/app`**), brand focus ring, global `prefers-reduced-motion`, motion-vocabulary properties, mono accents, brand-gradient SVG favicon.
+
+Two defects were found and fixed while verifying: Volt's theme defines `--surface`/`--success`/`--warning` on `:root[data-color=volt]` and was silently overriding the unprefixed tokens (hence the `--al-*` namespace), and every status colour needed re-validating as text **on its own 10% tint** — the badge/alert pattern is the tightest pair in the system, which moved light accent to `#0c6a84` and warning to `#92400e`.
+
+Verified: **Lighthouse a11y 100 in both themes** on `/`, `/missions`, `/login`; unit 111/111; E2E 14/14; lint and `build:prod` clean. `pages/mission/[id].page.ts` stays a 209-line orchestrator (the plan's audit already flagged it as acceptable).
 
 ---
 
