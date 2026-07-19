@@ -29,20 +29,20 @@ type PreviewStatus = 'idle' | 'running' | 'ready' | 'error';
   imports: [],
   template: `
     <div
-      class="flex h-96 flex-col rounded-xl border border-line bg-surface-raised shadow-sm"
+      class="flex h-96 flex-col rounded-xl border border-al-line bg-al-surface-raised shadow-sm"
     >
       <div
-        class="flex items-center justify-between border-b border-line px-4 py-2"
+        class="flex items-center justify-between border-b border-al-line px-4 py-2"
       >
         <span
-          class="text-xs font-semibold uppercase tracking-wide text-ink-muted"
+          class="text-xs font-semibold uppercase tracking-wide text-al-ink-muted"
         >
           Live preview
         </span>
         <span
           class="text-xs"
-          [class.text-danger]="status() === 'error'"
-          [class.text-ink-muted]="status() !== 'error'"
+          [class.text-al-danger]="status() === 'error'"
+          [class.text-al-ink-muted]="status() !== 'error'"
           aria-live="polite"
         >
           {{ statusLabel() }}
@@ -51,7 +51,7 @@ type PreviewStatus = 'idle' | 'running' | 'ready' | 'error';
 
       <iframe
         #frame
-        class="w-full flex-1 bg-surface-raised"
+        class="w-full flex-1 bg-al-surface-raised"
         sandbox="allow-scripts"
         [srcdoc]="runnerDoc"
         title="Code preview"
@@ -60,12 +60,12 @@ type PreviewStatus = 'idle' | 'running' | 'ready' | 'error';
       @if (error(); as err) {
         <div
           role="alert"
-          class="border-t border-danger/30 bg-danger/10 px-4 py-2"
+          class="border-t border-al-danger/30 bg-al-danger/10 px-4 py-2"
         >
-          <p class="text-xs font-semibold text-danger">
+          <p class="text-xs font-semibold text-al-danger">
             {{ err.title }}
           </p>
-          <p class="text-xs text-danger">{{ err.message }}</p>
+          <p class="text-xs text-al-danger">{{ err.message }}</p>
         </div>
       }
     </div>

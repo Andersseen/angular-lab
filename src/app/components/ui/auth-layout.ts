@@ -35,15 +35,15 @@ import { GradientIcon } from './gradient-icon';
             <ng-content select="[data-slot=icon]" />
           </app-gradient-icon>
         </div>
-        <h1 class="text-2xl font-bold tracking-tight text-ink">
+        <h1 class="text-2xl font-bold tracking-tight text-al-ink">
           {{ heading() }}
         </h1>
         @if (subtitle()) {
-          <p class="mt-2 text-sm text-ink-muted">{{ subtitle() }}</p>
+          <p class="mt-2 text-sm text-al-ink-muted">{{ subtitle() }}</p>
         }
       </div>
 
-      <volt-card class="border-line shadow-xl">
+      <volt-card class="border-al-line shadow-xl">
         <volt-card-header>
           <volt-card-title>{{ cardTitle() }}</volt-card-title>
           <volt-card-description>

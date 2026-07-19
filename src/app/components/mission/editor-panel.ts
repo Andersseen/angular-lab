@@ -29,7 +29,7 @@ import { VertexEditor } from '../editor/vertex-editor';
   template: `
     <volt-tabs value="editor">
       <volt-tabs-list
-        class="grid w-full grid-cols-2 border border-line"
+        class="grid w-full grid-cols-2 border border-al-line"
       >
         <volt-tabs-trigger value="editor">
           <span class="flex items-center gap-2">
@@ -47,7 +47,7 @@ import { VertexEditor } from '../editor/vertex-editor';
 
       <volt-tabs-content value="editor">
         <div
-          class="h-96 overflow-hidden rounded-xl border border-line shadow-sm"
+          class="h-96 overflow-hidden rounded-xl border border-al-line shadow-sm"
         >
           <app-vertex-editor
             [language]="'typescript'"

@@ -30,7 +30,7 @@ pnpm install:vertex  # refresh vendored Vertex Editor assets
 
 - Standalone, small, signal-based components; class names have no `Component` suffix (`Counter`, not `CounterComponent`); semantic accessible HTML.
 - Tests assert user-visible behavior, not implementation details.
-- **Styling goes through the design tokens** (`bg-surface`, `text-ink`, `border-line`, `bg-brand`/`text-brand-ink`, status trios). No raw palette utilities (`zinc-*`, `blue-*`, hex) outside the `--al-*` token layer in `src/styles.css` — see `context.md` Decision 14.
+- **Styling goes through the design tokens** (`bg-al-surface`, `text-al-ink`, `border-al-line`, `bg-al-brand`/`text-al-brand-ink`, status trios). The `al-` prefix is required — unprefixed names collide with Volt's own tokens and utility classes. No raw palette utilities (`zinc-*`, `blue-*`, hex) outside the token layer in `src/styles.css` — see `context.md` Decision 14.
 - Pages are thin orchestrators; **~150 lines is the soft ceiling** for any component file.
 - A visual pattern used twice is extracted to `src/app/components/ui/` before a third use. Those primitives are presentational only: signal inputs, outputs, no service injection.
 - **Spec first, then code.** Behavior lives in `specs/` (no impl detail there); tech choices live in `context.md` / config.

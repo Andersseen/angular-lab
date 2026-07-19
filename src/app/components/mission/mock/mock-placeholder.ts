@@ -4,7 +4,7 @@ import { Component, input } from '@angular/core';
   selector: 'app-mock-placeholder',
   standalone: true,
   template: `
-    <p class="text-center text-sm text-ink-muted">
+    <p class="text-center text-sm text-al-ink-muted">
       {{ message() }}
     </p>
   `,

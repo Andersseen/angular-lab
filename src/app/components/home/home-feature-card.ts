@@ -23,6 +23,9 @@ export interface Feature {
 @Component({
   selector: 'app-home-feature-card',
   standalone: true,
+  // The grid stretches its items, but a custom element is inline by default,
+  // so the card needs a block host with full height for footers to line up.
+  host: { class: 'block h-full' },
   imports: [
     VoltCard,
     VoltCardContent,
@@ -42,7 +45,7 @@ export interface Feature {
       [moveDelay]="delay()"
       [moveWhileHover]="{ y: [0, -6], scale: [1, 1.02] }"
       [moveDuration]="200"
-      class="group overflow-hidden border-line transition-shadow hover:shadow-xl"
+      class="group flex h-full flex-col overflow-hidden border-al-line transition-shadow hover:shadow-xl"
     >
       <div class="bg-gradient-brand h-1.5 w-full"></div>
       <volt-card-header>
@@ -66,12 +69,12 @@ export interface Feature {
           {{ feature().description }}
         </volt-card-description>
       </volt-card-header>
-      <volt-card-content>
+      <volt-card-content class="flex-1">
         {{ feature().detail }}
       </volt-card-content>
       <volt-card-footer>
         <span
-          class="font-mono text-xs font-medium uppercase tracking-wide text-ink-muted"
+          class="font-mono text-xs font-medium uppercase tracking-wide text-al-ink-muted"
         >
           Included in demo
         </span>

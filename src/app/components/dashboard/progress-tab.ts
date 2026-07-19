@@ -31,7 +31,7 @@ import { StatTile } from '../ui/stat-tile';
     LmnRocketLaunchIcon,
   ],
   template: `
-    <volt-card class="border-line">
+    <volt-card class="border-al-line">
       <volt-card-header>
         <volt-card-title>Learning progress</volt-card-title>
         <volt-card-description>
@@ -45,9 +45,9 @@ import { StatTile } from '../ui/stat-tile';
       <volt-card-content>
         @if (summary().started === 0) {
           <div
-            class="flex h-48 flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-line p-6"
+            class="flex h-48 flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-al-line p-6"
           >
-            <p class="text-ink-muted">
+            <p class="text-al-ink-muted">
               Complete missions to see your progress here.
             </p>
             <a routerLink="/missions">
@@ -70,16 +70,16 @@ import { StatTile } from '../ui/stat-tile';
             @for (item of missionProgress(); track item.id) {
               <a
                 [routerLink]="['/mission', item.id]"
-                class="block rounded-lg border border-line p-4 transition-colors hover:border-brand"
+                class="block rounded-lg border border-al-line p-4 transition-colors hover:border-al-brand"
               >
                 <div class="flex items-center justify-between gap-4">
                   <div>
-                    <p class="font-medium text-ink">{{ item.title }}</p>
-                    <p class="text-sm text-ink-muted">
+                    <p class="font-medium text-al-ink">{{ item.title }}</p>
+                    <p class="text-sm text-al-ink-muted">
                       Step {{ item.currentStep }} of {{ item.totalSteps }}
                     </p>
                   </div>
-                  <span class="font-mono text-sm font-medium text-ink">
+                  <span class="font-mono text-sm font-medium text-al-ink">
                     {{ item.percentage }}%
                   </span>
                 </div>

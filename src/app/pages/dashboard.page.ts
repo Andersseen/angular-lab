@@ -39,18 +39,18 @@ export const routeMeta: RouteMeta = {
     <section class="mx-auto w-full max-w-5xl px-6 py-10">
       <header class="mb-8">
         <h1
-          class="text-3xl font-bold tracking-tight text-ink"
+          class="text-3xl font-bold tracking-tight text-al-ink"
         >
           Dashboard
         </h1>
-        <p class="mt-2 text-ink-muted">
+        <p class="mt-2 text-al-ink-muted">
           Manage your account and track your learning progress.
         </p>
       </header>
 
       <volt-tabs value="profile" class="w-full">
         <volt-tabs-list
-          class="mb-6 grid w-full grid-cols-3 rounded-xl border border-line bg-surface-raised p-1 shadow-sm sm:w-fit"
+          class="mb-6 grid w-full grid-cols-3 rounded-xl border border-al-line bg-al-surface-raised p-1 shadow-sm sm:w-fit"
         >
           <volt-tabs-trigger value="profile">
             <span class="flex items-center justify-center gap-2">

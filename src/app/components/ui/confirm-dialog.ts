@@ -36,15 +36,15 @@ let dialogCount = 0;
           aria-modal="true"
           [attr.aria-labelledby]="titleId"
           [attr.aria-describedby]="descId"
-          class="relative z-10 w-full max-w-md rounded-2xl border border-line bg-surface-raised p-6 shadow-2xl"
+          class="relative z-10 w-full max-w-md rounded-2xl border border-al-line bg-al-surface-raised p-6 shadow-2xl"
           (keydown.escape)="dismiss.emit()"
           (keydown.tab)="trap($event, false)"
           (keydown.shift.tab)="trap($event, true)"
         >
-          <h2 [id]="titleId" class="text-lg font-semibold text-ink">
+          <h2 [id]="titleId" class="text-lg font-semibold text-al-ink">
             {{ title() }}
           </h2>
-          <p [id]="descId" class="mt-2 text-sm text-ink-muted">
+          <p [id]="descId" class="mt-2 text-sm text-al-ink-muted">
             {{ message() }}
           </p>
           <div class="mt-6 flex justify-end gap-3">

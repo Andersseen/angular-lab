@@ -17,14 +17,17 @@ import { LmnListBulletIcon } from 'lumen-icons/list-bullet';
 import type { Mission } from '../../core/models/mission.model';
 
 const DIFFICULTY_STYLES: Record<string, string> = {
-  beginner: 'border-success/30 bg-success/10 text-success',
-  intermediate: 'border-warning/40 bg-warning/10 text-warning',
-  advanced: 'border-danger/30 bg-danger/10 text-danger',
+  beginner: 'border-al-success/30 bg-al-success/10 text-al-success',
+  intermediate: 'border-al-warning/40 bg-al-warning/10 text-al-warning',
+  advanced: 'border-al-danger/30 bg-al-danger/10 text-al-danger',
 };
 
 @Component({
   selector: 'app-mission-card',
   standalone: true,
+  // The grid stretches its items, but a custom element is inline by default,
+  // so the card needs a block host with full height for footers to line up.
+  host: { class: 'block h-full' },
   imports: [
     RouterLink,
     VoltBadge,
@@ -44,14 +47,14 @@ const DIFFICULTY_STYLES: Record<string, string> = {
     <volt-card
       [move]="'fade-up'"
       [moveDelay]="delay()"
-      class="group flex flex-col overflow-hidden border-line transition-all hover:-translate-y-1 hover:shadow-xl"
+      class="group flex h-full flex-col overflow-hidden border-al-line transition-all hover:-translate-y-1 hover:shadow-xl"
     >
       <div class="bg-gradient-brand h-1.5 w-full"></div>
       <volt-card-header>
         <div
-          class="mb-2 flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wide text-ink-muted"
+          class="mb-2 flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wide text-al-ink-muted"
         >
-          <span class="rounded-md border border-line bg-surface px-2 py-0.5">
+          <span class="rounded-md border border-al-line bg-al-surface px-2 py-0.5">
             {{ mission().track }}
           </span>
           <span>·</span>
@@ -61,7 +64,7 @@ const DIFFICULTY_STYLES: Record<string, string> = {
           </span>
           @if (mission().previewMode === 'live') {
             <span
-              class="inline-flex items-center gap-1 rounded-full border border-accent/50 px-2 py-0.5 text-accent"
+              class="inline-flex items-center gap-1 rounded-full border border-al-accent/50 px-2 py-0.5 text-al-accent"
             >
               Live
             </span>
@@ -86,7 +89,7 @@ const DIFFICULTY_STYLES: Record<string, string> = {
         </div>
 
         <div
-          class="mt-5 flex items-center gap-2 font-mono text-xs text-ink-muted"
+          class="mt-5 flex items-center gap-2 font-mono text-xs text-al-ink-muted"
         >
           <lmn-list-bullet [size]="14" />
           {{ mission().steps.length }} steps

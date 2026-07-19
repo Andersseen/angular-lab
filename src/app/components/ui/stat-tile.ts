@@ -10,14 +10,14 @@ import { Component, input } from '@angular/core';
   standalone: true,
   imports: [],
   template: `
-    <div class="rounded-xl border border-line bg-surface-raised p-3">
-      <div class="mb-1 flex items-center gap-1.5 text-ink-muted">
+    <div class="rounded-xl border border-al-line bg-al-surface-raised p-3">
+      <div class="mb-1 flex items-center gap-1.5 text-al-ink-muted">
         <ng-content select="[data-slot=icon]" />
         <span class="text-[10px] font-semibold uppercase tracking-wide">
           {{ label() }}
         </span>
       </div>
-      <p class="font-mono text-xl font-bold text-ink">{{ value() }}</p>
+      <p class="font-mono text-xl font-bold text-al-ink">{{ value() }}</p>
     </div>
   `,
 })

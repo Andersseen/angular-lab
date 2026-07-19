@@ -47,21 +47,21 @@ type VerifyState = 'pending' | 'success' | 'error';
       <div class="flex flex-col items-center gap-4 py-4 text-center">
         @switch (state()) {
           @case ('pending') {
-            <lmn-arrow-path [size]="32" class="animate-spin text-ink-muted" />
-            <p class="text-sm text-ink-muted">
+            <lmn-arrow-path [size]="32" class="animate-spin text-al-ink-muted" />
+            <p class="text-sm text-al-ink-muted">
               Verifying your email address.
             </p>
           }
           @case ('success') {
-            <lmn-check-circle [size]="32" class="text-success" />
-            <p class="text-sm text-ink-muted">Your email is verified. Thanks!</p>
+            <lmn-check-circle [size]="32" class="text-al-success" />
+            <p class="text-sm text-al-ink-muted">Your email is verified. Thanks!</p>
             <a routerLink="/dashboard">
               <volt-button>Go to dashboard</volt-button>
             </a>
           }
           @case ('error') {
-            <lmn-x-circle [size]="32" class="text-danger" />
-            <p class="text-sm text-ink-muted">{{ error() }}</p>
+            <lmn-x-circle [size]="32" class="text-al-danger" />
+            <p class="text-sm text-al-ink-muted">{{ error() }}</p>
             <a routerLink="/dashboard">
               <volt-button variant="outline">Back to dashboard</volt-button>
             </a>
