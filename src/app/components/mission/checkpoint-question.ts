@@ -1,9 +1,11 @@
-import { Component, ElementRef, input, output, viewChildren } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import {
   VoltCard,
   VoltCardContent,
   VoltCardHeader,
   VoltCardTitle,
+  VoltRadioGroup,
+  VoltRadioItem,
 } from '@voltui/components';
 import type { Checkpoint } from '../../core/models/mission.model';
 import { CheckpointFeedback } from './checkpoint-feedback';
@@ -11,44 +13,42 @@ import { CheckpointFeedback } from './checkpoint-feedback';
 @Component({
   selector: 'app-checkpoint-question',
   standalone: true,
-  imports: [VoltCard, VoltCardContent, VoltCardHeader, VoltCardTitle, CheckpointFeedback],
+  imports: [
+    VoltCard,
+    VoltCardContent,
+    VoltCardHeader,
+    VoltCardTitle,
+    VoltRadioGroup,
+    VoltRadioItem,
+    CheckpointFeedback,
+  ],
   template: `
     <volt-card class="border-al-line">
       <volt-card-header>
-        <volt-card-title class="text-base">Question {{ index() + 1 }}</volt-card-title>
+        <volt-card-title class="text-base">
+          Question {{ index() + 1 }}
+        </volt-card-title>
       </volt-card-header>
       <volt-card-content>
-        <p
-          [id]="'checkpoint-question-' + index()"
-          class="mb-4 text-al-ink"
-        >
+        <p [id]="'checkpoint-question-' + index()" class="mb-4 text-al-ink">
           {{ checkpoint().question }}
         </p>
 
-        <div
-          class="space-y-2"
-          role="radiogroup"
+        <volt-radio-group
+          class="block space-y-2"
+          [value]="selectedValue()"
+          [disabled]="submitted()"
+          (valueChange)="onValueChange($event)"
           [attr.aria-labelledby]="'checkpoint-question-' + index()"
         >
           @for (option of checkpoint().options; track option; let o = $index) {
-            <button
-              #optionButton
-              type="button"
-              role="radio"
-              [attr.aria-checked]="selectedOption() === o"
-              [tabIndex]="rovingTabIndex(o)"
-              [class]="optionClasses(o)"
-              [disabled]="submitted()"
-              (click)="optionSelect.emit(o)"
-              (keydown)="onKeydown($event)"
-            >
-              <span [class]="optionLetterClasses(o)">
-                {{ optionLetter(o) }}
-              </span>
-              {{ option }}
-            </button>
+            <label [class]="optionClasses(o)">
+              <volt-radio-item [value]="optionValue(o)" />
+              <span [class]="optionLetterClasses(o)">{{ optionLetter(o) }}</span>
+              <span>{{ option }}</span>
+            </label>
           }
-        </div>
+        </volt-radio-group>
 
         @if (submitted()) {
           <app-checkpoint-feedback
@@ -69,8 +69,20 @@ export class CheckpointQuestion {
 
   readonly optionSelect = output<number>();
 
-  private readonly optionButtons =
-    viewChildren<ElementRef<HTMLButtonElement>>('optionButton');
+  optionValue(optionIndex: number): string {
+    return String(optionIndex);
+  }
+
+  selectedValue(): string | null {
+    const selected = this.selectedOption();
+    return selected === undefined ? null : String(selected);
+  }
+
+  onValueChange(value: string | null): void {
+    if (value !== null && !this.submitted()) {
+      this.optionSelect.emit(Number(value));
+    }
+  }
 
   optionLetter(index: number): string {
     return String.fromCharCode(65 + index);
@@ -78,7 +90,7 @@ export class CheckpointQuestion {
 
   optionClasses(optionIndex: number): string {
     const base =
-      'group flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left text-sm transition-all';
+      'flex w-full cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 text-left text-sm transition-all';
     if (this.selectedOption() === optionIndex) {
       return `${base} border-al-brand bg-al-brand/10`;
     }
@@ -94,43 +106,5 @@ export class CheckpointQuestion {
     return this.selectedOption() === optionIndex
       ? `${base} border-al-brand bg-al-brand text-al-brand-ink`
       : `${base} border-al-line`;
-  }
-
-  rovingTabIndex(optionIndex: number): number {
-    const active = this.selectedOption() ?? 0;
-    return optionIndex === active ? 0 : -1;
-  }
-
-  onKeydown(event: KeyboardEvent): void {
-    if (this.submitted()) {
-      return;
-    }
-
-    const optionCount = this.checkpoint().options.length;
-    const current = this.selectedOption() ?? 0;
-    let next: number;
-
-    switch (event.key) {
-      case 'ArrowDown':
-      case 'ArrowRight':
-        next = (current + 1) % optionCount;
-        break;
-      case 'ArrowUp':
-      case 'ArrowLeft':
-        next = (current - 1 + optionCount) % optionCount;
-        break;
-      case 'Home':
-        next = 0;
-        break;
-      case 'End':
-        next = optionCount - 1;
-        break;
-      default:
-        return;
-    }
-
-    event.preventDefault();
-    this.optionSelect.emit(next);
-    this.optionButtons()[next]?.nativeElement.focus();
   }
 }
