@@ -52,7 +52,14 @@ export default defineConfig(
       ...angular.configs.templateRecommended,
       ...angular.configs.templateAccessibility,
     ],
-    rules: {},
+    rules: {
+      // Volt renders its own native control inside these custom elements, so a
+      // wrapping <label> is properly associated even though the rule cannot see it.
+      '@angular-eslint/template/label-has-associated-control': [
+        'error',
+        { controlComponents: ['volt-radio-item', 'volt-checkbox', 'volt-switch'] },
+      ],
+    },
   },
   {
     name: 'workers',

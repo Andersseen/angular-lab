@@ -14,6 +14,7 @@ import { AuthService } from '../core/services/auth.service';
 import { Alert } from '../components/ui/alert';
 import { AuthLayout } from '../components/ui/auth-layout';
 import { FormField } from '../components/ui/form-field';
+import { PasswordToggle } from '../components/ui/password-toggle';
 
 export const routeMeta: RouteMeta = {
   title: 'Reset password — Angular Lab',
@@ -27,6 +28,7 @@ export const routeMeta: RouteMeta = {
     VoltButton,
     AuthLayout,
     FormField,
+    PasswordToggle,
     Alert,
     LmnKeyIcon,
     LmnLockClosedIcon,
@@ -52,12 +54,15 @@ export const routeMeta: RouteMeta = {
             <lmn-lock-closed data-slot="icon" [size]="16" />
             <input
               id="password"
-              type="password"
-              volt-input
+              [type]="showPassword() ? 'text' : 'password'"
               formControlName="password"
               placeholder="••••••••"
               autocomplete="new-password"
-              class="pl-9"
+              class="al-input pl-9 pr-10"
+            />
+            <app-password-toggle
+              data-slot="trailing"
+              [(visible)]="showPassword"
             />
           </app-form-field>
 
@@ -86,6 +91,7 @@ export default class ResetPassword {
   readonly token = this.route.snapshot.queryParamMap.get('token');
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
+  readonly showPassword = signal(false);
 
   readonly form: FormGroup = this.fb.group({
     password: ['', [Validators.required, Validators.minLength(8)]],

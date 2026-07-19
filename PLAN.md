@@ -1,144 +1,64 @@
 # Plan — Angular Lab
 
-Roadmap divided into phases. Each phase is designed to be tackled in a **single fresh AI session**: start the session by reading `context.md`, then the phase section below (plus its prompt in `prompts/` if one exists). Do not start a phase until the previous one is merged.
+The roadmap. Each phase is sized for a **single fresh AI session**: start by reading
+`context.md` (what exists and why), then the phase section here. Don't start a phase
+until the previous one is merged.
 
-## Where we are (verified 2026-07-18)
+## Status (verified 2026-07-19)
 
-- ✅ **Phase 01 — Foundation**, **Phase 02 — Learning Engine**, **Phase 03 — Playground** (sandboxed execution, `previewMode`, `dom-playground`): done.
-- ✅ **Auth (unplanned extra)**: Pages Functions + D1, session cookies, auth guard, dashboard shell, demo user seed.
-- ✅ **Phase 04 — Server-side progress sync**: done.
-- ✅ **Phase 05 — Real content (mission library)**: done — 12 missions in `src/content/missions/`, 3 tracks, 8 live previews, track + difficulty filters.
-- ✅ **Phase 06 — Auth hardening & account lifecycle**: done — password reset + email verification (D1 tokens, provider-agnostic email seam), per-IP rate limiting, sliding-expiry sessions + "log out everywhere", account deletion.
-- ✅ **Phase 07 — Production polish**: done — SEO meta/OG, generated robots+sitemap, editor lazy-load, analytics seam, global error handler, 404 page, a11y fixes (Lighthouse a11y 100 in both themes), full E2E journeys green.
-- ✅ **Phase 08 — UI identity & componentization refactor**: done — semantic `--al-*` token layer (AA-validated both themes), eight shared `ui/` primitives, auth pages rebuilt on them, and a full token/identity sweep. See `UI-PLAN.md` for the brief.
+**The planned roadmap is complete.** Phases 01–09 are shipped and merged; there is no
+scheduled next phase. What shipped, and where the detail lives:
 
-> Details of what shipped live in `context.md`; this file tracks only what's next.
+| # | Phase | Shipped |
+|---|-------|---------|
+| 01 | Foundation | Analog + Angular 22, Tailwind v4, Volt UI, CI |
+| 02 | Learning Engine | mission/step model, state service, local persistence |
+| 03 | Playground | sandboxed iframe execution, `previewMode`, friendly errors |
+| 04 | Server-side progress sync | D1 `progress`, `GET/PUT /api/progress`, merge on login |
+| 05 | Real content | 12 missions / 3 tracks in `src/content/missions/`, 8 live |
+| 06 | Auth hardening | reset + verification, rate limiting, session hygiene, deletion |
+| 07 | Production polish | SEO, a11y (Lighthouse 100), lazy editor, 404, analytics seam |
+| 08 | UI identity | `--al-*` token layer, 8 shared `ui/` primitives, auth rebuild |
+| 09 | Engagement | practice streak, derived badges, shareable completion card |
 
----
+**Every design decision behind these lives in `context.md`** — that file is the one to
+read, not this one. This file only tracks what is *next*.
 
-## Phase 04 — Server-side progress sync ✅
+## Phase 09 — Engagement ✅
 
-**Goal:** persist mission progress to D1 for logged-in users; guests keep localStorage.
+Closed 2026-07-19. Scope was chosen deliberately: **reflective, not coercive** — it
+reports practice the learner already did. No points, no leaderboards, no notifications
+(`specs/engagement.md`).
 
-**Deliverables**
+- **Streak** — D1 `activity_days` + `GET/PUT /api/activity`, union-merge sync,
+  local-first like progress. Recorded on any persisted mission change.
+- **Badges** — 9 badges derived, never stored, from completed missions + longest
+  streak, so they cannot drift and cannot be lost. Always visible with progress.
+- **Completion card** — self-contained SVG (dark identity, no account data), saved as
+  PNG via canvas with an SVG fallback, plus a copyable summary.
+- **Dashboard → Achievements** tab; mission completion names the badges *that*
+  completion unlocked (a with/without diff — no "seen" state to keep in sync).
 
-- New D1 migration: `progress` table (user_id, mission_id, step index, code per step, completed_at, updated_at).
-- Pages Functions: `GET/PUT /api/progress` (session-cookie authenticated, reuse `_cookies.ts` helpers).
-- `ProgressSyncService`: on login, merge local → remote (remote wins on conflict by `updated_at`); write-through on step changes (debounced).
-- Dashboard `progress-tab.ts` shows real data (missions started/completed, per-mission %).
-- Logout keeps local copy so guest mode still works.
+Also fixed in the same pass: the auth pages had `<input volt-input>`, but Volt ships
+`volt-input` as an *element* component, so Angular ignored the attribute and every auth
+control rendered unstyled — replaced with the token-driven `.al-input`. Password fields
+gained a show/hide toggle, and nav links now mark the active route.
 
-**Acceptance criteria**
+Verified: lint clean, unit **158/158**, E2E **17/17**, `build:prod` clean, both themes
+checked in the browser.
 
-- Complete a step logged-in on browser A → visible on browser B after login.
-- Guest flow unchanged; no network calls when logged out.
-- Update `specs/auth.md` + new `specs/progress.md`; run `pnpm db:migrate`.
+## What's next
 
-**Key files:** `functions/api/`, `migrations/`, `src/app/core/services/storage.service.ts`, `mission-state.service.ts`, `src/app/components/dashboard/progress-tab.ts`.
+Nothing is scheduled. Candidates, none started, none committed to:
 
----
-
-## Phase 05 — Real content (mission library) ✅
-
-**Goal:** replace the 4 placeholder missions with a real curriculum.
-
-**Deliverables**
-
-- Extract mission data out of `mission-catalog.service.ts` into content files (e.g. `src/content/missions/*.ts` or JSON) loaded lazily; keep the service API stable.
-- Curriculum: 3 tracks (Fundamentals / Reactivity with Signals / Routing & Data) × 4–6 missions each, following `specs/learning-model.md` step mix.
-- Each practice step gets real starter code + expected behavior runnable in the Phase 03 playground.
-- Difficulty + estimated time metadata surfaced in catalog cards and `track-filter.ts`.
-
-**Acceptance criteria**
-
-- ≥12 missions; every mission completable end to end with real execution.
-- Catalog filter by track/difficulty works; deep links `/mission/:id` work for all.
-- Content lives outside component/service code (contributors add missions without touching engine code); document the flow in `context.md` §"Adding a New Mission".
-
----
-
-## Phase 06 — Auth hardening & account lifecycle ✅
-
-**Goal:** make auth production-grade on the Cloudflare free tier.
-
-**Deliverables**
-
-- Password reset via email (Cloudflare Email Routing / Email Service; store one-time tokens in D1 with expiry).
-- Email verification on signup (soft-block: unverified users keep access, banner prompts).
-- Rate limiting on `login`/`signup` (per-IP counter in D1 or Turnstile on the forms).
-- Session hygiene: sliding expiry, cleanup of expired sessions, "log out everywhere".
-- Account deletion (GDPR-style: cascade delete sessions + progress).
-
-**Acceptance criteria**
-
-- Reset flow works end to end locally with `wrangler pages dev`.
-- Brute-force attempt (>N tries/min) gets 429.
-- Update `specs/auth.md`; new migration files; E2E happy-path test for reset.
-
----
-
-## Phase 07 — Production polish
-
-**Goal:** quality pass before promoting the platform publicly.
-
-**Deliverables**
-
-- SEO: per-route meta tags/titles, Open Graph, sitemap, robots.txt (Analog route meta).
-- Accessibility audit: keyboard-only mission completion, focus management on step change, ARIA on checkpoint quiz, color-contrast check in both themes.
-- Performance: route-level code splitting check, editor script lazy-load (only on mission pages instead of global `index.html`), Lighthouse ≥90 on landing and catalog.
-- Error/analytics: privacy-friendly analytics (e.g. Cloudflare Web Analytics), global error boundary + friendly 404/500 pages.
-- E2E coverage: full guest journey + full auth journey in CI.
-
-**Acceptance criteria**
-
-- Lighthouse (mobile) ≥90 perf / ≥95 a11y on `/` and `/missions`.
-- Playwright suite covers: browse → complete mission (guest), signup → progress sync → logout.
-
-**Status (closed 2026-07-19):** all four close-out items done; lint ✓, unit 98/98 ✓, E2E 14/14 ✓.
-
-1. **button-name** ✓ — `nav-links.ts` / `user-menu.ts` responsive labels moved from `hidden sm:inline` to `sr-only sm:not-sr-only`, so icon-only nav/user-menu buttons keep an accessible name on narrow viewports.
-2. **Color contrast (dark theme)** ✓ — dropped the broken `.dark[data-color=volt] { --primary-foreground: #09090b }` override so dark inherits Volt's white foreground; the pinned `--primary: #2351de` now pairs at ~6.3:1 in both themes. (Phase 08's semantic token layer supersedes this one-off.)
-3. **Re-audit** ✓ — Lighthouse (mobile): `/` a11y **100 in light and dark** (SEO 100, Best Practices 96); `/login` (dark) a11y **100**.
-4. **E2E green** ✓ — `pnpm test:e2e` = 14/14, stable across repeated runs. Fixed pre-existing broken/flaky specs committed with `57257b1`: stale `a[routerlink="…"]` selector → `a[href="…"]` (Angular `RouterLink` reflects `href`, not `routerlink`); rapid step / keyboard navigation now asserts each transition instead of blind-looping; the anchored `/^correct!$/i` checkpoint-feedback locator (never matched the icon+text `<p>`) → substring; the ambiguous `/log out/i` selector (also matched "Log out everywhere") → exact `'Log out'`; and `workers: 1` + one local retry so the suite stops contending over the shared local D1 / per-IP rate-limit buckets.
-
----
-
-## Phase 08 — UI identity & componentization refactor
-
-**Goal:** give the platform a distinctive, professional visual identity and pay down UI duplication. Full plan, palette, token architecture, and component inventory live in **`UI-PLAN.md`** — read that file before starting this phase.
-
-**Summary of deliverables** (details in `UI-PLAN.md`)
-
-- Semantic design-token layer (Tailwind v4 `@theme`) replacing scattered raw `zinc-*` / `blue-*` / `emerald-*` utilities; new brand palette, AA-validated in both themes.
-- Shared UI primitives (`src/app/components/ui/`): form field, alert/banner, auth layout, page header, stat tile, confirm dialog, empty state.
-- Auth pages refactor: 5 pages (~870 lines of near-duplicate inline UI) rebuilt on the primitives; each page becomes a thin orchestrator.
-- Typography + motion identity: mono-accent type system, standardized `angular-movement` durations/easings.
-
-**Acceptance criteria**
-
-- No page/component over ~150 lines of template+class (pages are thin orchestrators).
-- No hard-coded palette utilities outside the token layer in migrated code.
-- Lighthouse a11y ≥95 in **both** themes on `/`, `/missions`, `/login`; all unit + E2E tests stay green.
-- Visual identity is consistent: one palette, one type scale, one motion vocabulary.
-
-**Status (closed 2026-07-19):** shipped in five staged commits (A → D).
-
-- **A — tokens:** `@theme inline` semantic layer, light+dark palette, Volt `--primary` mapped to brand, blueprint texture replacing the radial blobs.
-- **B — primitives:** `components/ui/` × 8 (GradientIcon, Alert, FormField, AuthLayout, PageHeader, StatTile, ConfirmDialog, EmptyState), each with a Testing Library spec.
-- **C — migrations:** 5 auth pages **870 → 648 lines** (96–155 each) on AuthLayout/FormField/Alert; dashboard tabs on StatTile/ConfirmDialog; mission page's `window.confirm` → ConfirmDialog and not-found → EmptyState (**no `window.confirm` left**); home/catalog/404 restyled.
-- **D — polish:** full token sweep (**no raw palette utilities left in `src/app`**), brand focus ring, global `prefers-reduced-motion`, motion-vocabulary properties, mono accents, brand-gradient SVG favicon.
-
-Two defects were found and fixed while verifying: Volt's theme defines `--surface`/`--success`/`--warning` on `:root[data-color=volt]` and was silently overriding the unprefixed tokens (hence the `--al-*` namespace), and every status colour needed re-validating as text **on its own 10% tint** — the badge/alert pattern is the tightest pair in the system, which moved light accent to `#0c6a84` and warning to `#92400e`.
-
-Verified: **Lighthouse a11y 100 in both themes** on `/`, `/missions`, `/login`; unit 111/111; E2E 14/14; lint and `build:prod` clean. `pages/mission/[id].page.ts` stays a 209-line orchestrator (the plan's audit already flagged it as acceptable).
-
----
-
-## Phase 09 — Engagement (optional, only if explicitly requested)
-
-Gamification was intentionally out of scope until now (`specs/contribution-principles.md`). Candidate scope: streaks, badges per track, shareable completion cards, mission ratings. **Do not start without an explicit prompt from the owner.**
-
----
+- **Mission ratings** — the one Phase 09 candidate deliberately left out; it needs a new
+  table, endpoints, and a guest-voting policy, so it is its own phase.
+- **Framework execution in the playground** — the 4 Angular-framework missions stay on
+  mock preview until WebContainers (COOP/COEP) is evaluated (`context.md` Decision 8).
+- **Real email delivery** — the provider seam is wired but no provider is
+  (`context.md` Decision 12); required before a public launch.
+- **More content** — the mission library takes new missions without engine changes
+  (`context.md` §"Adding a New Mission").
 
 ## Standing rules for every phase
 
@@ -146,5 +66,5 @@ Gamification was intentionally out of scope until now (`specs/contribution-princ
 2. Spec first: update/add the relevant file in `specs/` before coding.
 3. Add/adjust tests with every behavior change (`pnpm test:unit`, `pnpm test:e2e`).
 4. Keep components standalone, small, signal-based.
-5. Update `context.md` (status + decisions) and this `PLAN.md` (mark the phase ✅) before ending the session.
+5. Update `context.md` (status + decisions) and this file before ending the session.
 6. Work on a feature branch, PR into `main` (CI validates lint + tests + build).

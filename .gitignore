@@ -54,4 +54,5 @@ Thumbs.db
 
 # Wrangler (local D1 state and dev build artifacts)
 /.wrangler/
+/.playwright-mcp/
 

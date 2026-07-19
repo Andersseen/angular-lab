@@ -9,7 +9,9 @@ import {
 } from '@voltui/components';
 import { LmnChartPieIcon } from 'lumen-icons/chart-pie';
 import { LmnCog6ToothIcon } from 'lumen-icons/cog-6-tooth';
+import { LmnTrophyIcon } from 'lumen-icons/trophy';
 import { LmnUserCircleIcon } from 'lumen-icons/user-circle';
+import { AchievementsTab } from '../components/dashboard/achievements-tab';
 import { ProfileTab } from '../components/dashboard/profile-tab';
 import { ProgressTab } from '../components/dashboard/progress-tab';
 import { SettingsTab } from '../components/dashboard/settings-tab';
@@ -28,11 +30,13 @@ export const routeMeta: RouteMeta = {
     VoltTabsContent,
     VoltTabsList,
     VoltTabsTrigger,
+    AchievementsTab,
     ProfileTab,
     ProgressTab,
     SettingsTab,
     LmnUserCircleIcon,
     LmnChartPieIcon,
+    LmnTrophyIcon,
     LmnCog6ToothIcon,
   ],
   template: `
@@ -49,25 +53,35 @@ export const routeMeta: RouteMeta = {
       </header>
 
       <volt-tabs value="profile" class="w-full">
+        <!--
+          Labels use sr-only (not hidden) so the icon-only mobile tabs keep an
+          accessible name — same fix as the nav/user menu in Phase 07.
+        -->
         <volt-tabs-list
-          class="mb-6 grid w-full grid-cols-3 rounded-xl border border-al-line bg-al-surface-raised p-1 shadow-sm sm:w-fit"
+          class="mb-6 grid w-full grid-cols-4 rounded-xl border border-al-line bg-al-surface-raised p-1 shadow-sm sm:w-fit"
         >
           <volt-tabs-trigger value="profile">
             <span class="flex items-center justify-center gap-2">
               <lmn-user-circle [size]="16" />
-              <span class="hidden sm:inline">Profile</span>
+              <span class="sr-only sm:not-sr-only">Profile</span>
             </span>
           </volt-tabs-trigger>
           <volt-tabs-trigger value="progress">
             <span class="flex items-center justify-center gap-2">
               <lmn-chart-pie [size]="16" />
-              <span class="hidden sm:inline">Progress</span>
+              <span class="sr-only sm:not-sr-only">Progress</span>
+            </span>
+          </volt-tabs-trigger>
+          <volt-tabs-trigger value="achievements">
+            <span class="flex items-center justify-center gap-2">
+              <lmn-trophy [size]="16" />
+              <span class="sr-only sm:not-sr-only">Achievements</span>
             </span>
           </volt-tabs-trigger>
           <volt-tabs-trigger value="settings">
             <span class="flex items-center justify-center gap-2">
               <lmn-cog-6-tooth [size]="16" />
-              <span class="hidden sm:inline">Settings</span>
+              <span class="sr-only sm:not-sr-only">Settings</span>
             </span>
           </volt-tabs-trigger>
         </volt-tabs-list>
@@ -78,6 +92,10 @@ export const routeMeta: RouteMeta = {
 
         <volt-tabs-content value="progress">
           <app-progress-tab />
+        </volt-tabs-content>
+
+        <volt-tabs-content value="achievements">
+          <app-achievements-tab />
         </volt-tabs-content>
 
         <volt-tabs-content value="settings">

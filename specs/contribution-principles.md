@@ -56,11 +56,18 @@ All product behavior must be defined in specs before it is implemented. Specs li
 
 ## What Not to Add
 
-- Authentication or user accounts.
+This list is about scope, and it has changed as the product grew. Accounts, a backend,
+and engagement mechanics were all once out of scope and have since shipped under an
+explicit phase — the point of the list is that each of these needs a deliberate decision
+first, not that it is forbidden forever.
+
+Still out of scope without one:
+
 - Payments or subscriptions.
-- Backend services or databases.
-- Gamification mechanics.
-- Real lesson content during foundation phases.
+- Competitive or coercive engagement: points, leaderboards, ranks, streak-loss
+  penalties, or notifications. Engagement is reflective — see `engagement.md`.
+- Anything that gates learning content behind an account or an achievement.
+- Collecting learner data beyond what a listed feature needs.
 
 ## Communication
 

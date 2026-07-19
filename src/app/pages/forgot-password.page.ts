@@ -70,11 +70,10 @@ export const routeMeta: RouteMeta = {
             <input
               id="email"
               type="email"
-              volt-input
               formControlName="email"
               placeholder="you@example.com"
               autocomplete="email"
-              class="pl-9"
+              class="al-input pl-9"
             />
           </app-form-field>
 

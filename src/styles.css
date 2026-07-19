@@ -241,6 +241,44 @@ h6 {
   color: transparent;
 }
 
+/*
+ * Native text control, styled from the token layer.
+ *
+ * Volt ships `<volt-input>` as an *element* component with its own
+ * ControlValueAccessor and internal <input>, which does not fit FormField's
+ * native `<label for>` association (Decision 14) — and the auth pages had been
+ * writing it as an attribute (`<input volt-input>`), which Angular silently
+ * ignores, so the controls rendered completely unstyled. Styling the native
+ * input here keeps the label wiring, the reactive-forms bindings and the design
+ * tokens all in one place. The global :focus-visible rule supplies the ring.
+ */
+@layer components {
+  .al-input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--al-line);
+    border-radius: 0.5rem;
+    background-color: var(--al-surface-raised);
+    color: var(--al-ink);
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    transition: border-color var(--motion-fast) var(--motion-ease);
+  }
+
+  .al-input::placeholder {
+    color: var(--al-ink-muted);
+  }
+
+  .al-input:hover:not(:disabled) {
+    border-color: color-mix(in oklab, var(--al-brand) 45%, var(--al-line));
+  }
+
+  .al-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
 /* Glass card utility, now token-driven. */
 .app-glass {
   background: color-mix(in oklab, var(--al-surface-raised) 72%, transparent);
