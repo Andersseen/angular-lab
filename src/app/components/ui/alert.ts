@@ -44,16 +44,16 @@ const ICON_CLASSES: Record<AlertVariant, string> = {
       <span class="mt-0.5 shrink-0" [class]="iconClasses()">
         @switch (variant()) {
           @case ('success') {
-            <lmn-check-circle [size]="18" />
+            <lmn-check-circle [size]="16" />
           }
           @case ('warning') {
-            <lmn-exclamation-triangle [size]="18" />
+            <lmn-exclamation-triangle [size]="16" />
           }
           @case ('danger') {
-            <lmn-x-circle [size]="18" />
+            <lmn-x-circle [size]="16" />
           }
           @default {
-            <lmn-information-circle [size]="18" />
+            <lmn-information-circle [size]="16" />
           }
         }
       </span>

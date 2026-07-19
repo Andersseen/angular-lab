@@ -1,18 +1,13 @@
 import { Component, inject, signal } from '@angular/core';
 import type { RouteMeta } from '@analogjs/router';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import {
-  VoltButton,
-  VoltCard,
-  VoltCardContent,
-  VoltCardDescription,
-  VoltCardHeader,
-  VoltCardTitle,
-} from '@voltui/components';
+import { VoltButton } from '@voltui/components';
 import { LmnArrowPathIcon } from 'lumen-icons/arrow-path';
 import { LmnCheckCircleIcon } from 'lumen-icons/check-circle';
+import { LmnEnvelopeIcon } from 'lumen-icons/envelope';
 import { LmnXCircleIcon } from 'lumen-icons/x-circle';
 import { AuthService } from '../core/services/auth.service';
+import { AuthLayout } from '../components/ui/auth-layout';
 
 export const routeMeta: RouteMeta = {
   title: 'Verify email — Angular Lab',
@@ -26,74 +21,54 @@ type VerifyState = 'pending' | 'success' | 'error';
   imports: [
     RouterLink,
     VoltButton,
-    VoltCard,
-    VoltCardContent,
-    VoltCardDescription,
-    VoltCardHeader,
-    VoltCardTitle,
+    AuthLayout,
     LmnArrowPathIcon,
     LmnCheckCircleIcon,
+    LmnEnvelopeIcon,
     LmnXCircleIcon,
   ],
   template: `
-    <section
-      class="app-gradient mx-auto flex min-h-[calc(100vh-12rem)] w-full max-w-md flex-col justify-center px-6 py-12"
-    >
-      <volt-card class="border-zinc-200 shadow-xl dark:border-zinc-800">
-        <volt-card-header>
-          <volt-card-title>Email verification</volt-card-title>
-          <volt-card-description>
-            @switch (state()) {
-              @case ('pending') {
-                Confirming your email…
-              }
-              @case ('success') {
-                You're all set.
-              }
-              @case ('error') {
-                We couldn't confirm this link.
-              }
-            }
-          </volt-card-description>
-        </volt-card-header>
-        <volt-card-content>
-          <div class="flex flex-col items-center gap-4 py-4 text-center">
-            @switch (state()) {
-              @case ('pending') {
-                <lmn-arrow-path
-                  [size]="32"
-                  class="animate-spin text-zinc-400"
-                />
-                <p class="text-sm text-zinc-600 dark:text-zinc-300">
-                  Verifying your email address.
-                </p>
-              }
-              @case ('success') {
-                <lmn-check-circle
-                  [size]="32"
-                  class="text-emerald-500"
-                />
-                <p class="text-sm text-zinc-600 dark:text-zinc-300">
-                  Your email is verified. Thanks!
-                </p>
-                <a routerLink="/dashboard">
-                  <volt-button>Go to dashboard</volt-button>
-                </a>
-              }
-              @case ('error') {
-                <lmn-x-circle [size]="32" class="text-rose-500" />
-                <p class="text-sm text-zinc-600 dark:text-zinc-300">
-                  {{ error() }}
-                </p>
-                <a routerLink="/dashboard">
-                  <volt-button variant="outline">Back to dashboard</volt-button>
-                </a>
-              }
-            }
-          </div>
-        </volt-card-content>
-      </volt-card>
-    </section>
+    <app-auth-layout heading="Verify your email" cardTitle="Email verification">
+      <lmn-envelope data-slot="icon" [size]="24" />
+      <span data-slot="card-description">
+        @switch (state()) {
+          @case ('pending') {
+            Confirming your email…
+          }
+          @case ('success') {
+            You're all set.
+          }
+          @case ('error') {
+            We couldn't confirm this link.
+          }
+        }
+      </span>
+
+      <div class="flex flex-col items-center gap-4 py-4 text-center">
+        @switch (state()) {
+          @case ('pending') {
+            <lmn-arrow-path [size]="32" class="animate-spin text-ink-muted" />
+            <p class="text-sm text-ink-muted">
+              Verifying your email address.
+            </p>
+          }
+          @case ('success') {
+            <lmn-check-circle [size]="32" class="text-success" />
+            <p class="text-sm text-ink-muted">Your email is verified. Thanks!</p>
+            <a routerLink="/dashboard">
+              <volt-button>Go to dashboard</volt-button>
+            </a>
+          }
+          @case ('error') {
+            <lmn-x-circle [size]="32" class="text-danger" />
+            <p class="text-sm text-ink-muted">{{ error() }}</p>
+            <a routerLink="/dashboard">
+              <volt-button variant="outline">Back to dashboard</volt-button>
+            </a>
+          }
+        }
+      </div>
+    </app-auth-layout>
   `,
 })
 export default class VerifyEmail {
