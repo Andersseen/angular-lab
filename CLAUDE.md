@@ -31,11 +31,12 @@ pnpm install:vertex  # refresh vendored Vertex Editor assets
 - Standalone, small, signal-based components; class names have no `Component` suffix (`Counter`, not `CounterComponent`); semantic accessible HTML.
 - Tests assert user-visible behavior, not implementation details.
 - **Styling goes through the design tokens** (`bg-al-surface`, `text-al-ink`, `border-al-line`, `bg-al-brand`/`text-al-brand-ink`, status trios). The `al-` prefix is required — unprefixed names collide with Volt's own tokens and utility classes. No raw palette utilities (`zinc-*`, `blue-*`, hex) outside the token layer in `src/styles.css` — see `context.md` Decision 14.
+- **Text inputs use the native `<input class="al-input">`, not Volt.** `volt-input` is an element component with its own CVA, which breaks FormField's `<label for>` association — see `context.md` Decision 16.
 - Pages are thin orchestrators; **~150 lines is the soft ceiling** for any component file.
 - A visual pattern used twice is extracted to `src/app/components/ui/` before a third use. Those primitives are presentational only: signal inputs, outputs, no service injection.
 - **Spec first, then code.** Behavior lives in `specs/` (no impl detail there); tech choices live in `context.md` / config.
 - Update `context.md` + `PLAN.md` at the end of each phase; update `specs/auth.md` when auth behavior changes.
-- Don't add payments, real lessons, or gamification without an explicit phase prompt.
+- Don't add payments or real lesson content without an explicit phase prompt. Engagement (streaks/badges) shipped in Phase 09 and is deliberately **reflective, not competitive** — no points, leaderboards, or notifications without a new decision (`specs/engagement.md`).
 - `.env` is gitignored — never commit secrets.
 
 ## Project skills (`.claude/skills/`)

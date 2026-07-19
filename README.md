@@ -2,7 +2,7 @@
 
 Angular Lab is an interactive learning platform for modern Angular. It teaches Angular through guided missions, hands-on exercises, comparisons, editable examples, and browser-based code execution.
 
-> **Status:** Foundation phase. The project tooling, testing stack, CI/CD, and documentation are in place. The actual learning platform content and playground will be built in upcoming phases.
+> **Status:** Feature-complete for the planned roadmap (phases 01–09). 12 missions across 3 tracks, real in-browser code execution, accounts with progress sync, and practice streaks + badges. See `PLAN.md` for what is and is not next, and `context.md` for how it all works.
 
 ## Table of Contents
 
@@ -23,21 +23,16 @@ Angular Lab helps developers learn Angular by doing. Instead of reading long tut
 
 ## Project Status
 
-- ✅ Analog.js + Angular 22 + pnpm
-- ✅ Tailwind CSS 4
-- ✅ Volt UI components
-- ✅ Angular Movement animations
-- ✅ Vertex Editor (full + lite) integrated as web components
-- ✅ Demo app structure (landing + mission pages)
-- ✅ Vitest + Angular Testing Library
-- ✅ Playwright E2E tests
-- ✅ ESLint
-- ✅ GitHub Actions workflows
-- ✅ Cloudflare Pages static build
-- ✅ MIT license
-- ✅ Initial specs and prompts
-- 🕐 Learning engine (Phase 02)
-- 🕐 Browser playground (Phase 03)
+- ✅ Analog.js + Angular 22 + pnpm, Tailwind CSS 4, Volt UI, Angular Movement
+- ✅ Learning engine: missions, steps, checkpoints, per-step progress
+- ✅ Browser playground: real code execution in a sandboxed iframe
+- ✅ 12 missions across 3 tracks (8 with live execution)
+- ✅ Accounts on Cloudflare Pages Functions + D1, with progress sync
+- ✅ Password reset, email verification seam, rate limiting, account deletion
+- ✅ Design-token identity, shared UI primitives, Lighthouse a11y 100 in both themes
+- ✅ Practice streaks, derived badges, shareable completion cards
+- ✅ Vitest + Angular Testing Library, Playwright E2E, ESLint, GitHub Actions
+- ✅ Cloudflare Pages static build, MIT license
 
 ## Install Dependencies
 
@@ -60,9 +55,9 @@ Main routes:
 - `/missions` — mission catalog
 - `/mission/:id` — interactive mission (e.g., `/mission/reactive-signals`)
 - `/mission` — redirects to `/missions`
-- `/login` — log in
-- `/signup` — create account
-- `/dashboard` — user dashboard (authenticated)
+- `/login`, `/signup` — accounts
+- `/forgot-password`, `/reset-password`, `/verify-email` — account lifecycle
+- `/dashboard` — profile, progress, achievements, settings (authenticated)
 
 ### Running with Pages Functions
 
@@ -127,10 +122,14 @@ Authentication is implemented with Cloudflare Pages Functions and Cloudflare D1:
 
 - Passwords are hashed with Web Crypto PBKDF2-SHA256.
 - Sessions are opaque IDs stored in D1, delivered via HTTP-only cookies.
-- Guests can browse and complete missions without an account.
-- Email verification and password reset are not implemented yet.
+- Guests can browse and complete missions without an account; progress stays local.
+- Email verification and password reset are implemented; email delivery itself is a
+  provider-agnostic seam that logs the link in development (no provider is wired yet).
 
-See `migrations/0001_init.sql` for the D1 schema and `functions/api/auth/` for the endpoints.
+See `migrations/` for the D1 schema and `functions/api/` for the endpoints.
+
+Note that plain `pnpm dev` (port 5173) serves no Pages Functions, so anything touching
+auth, progress, or streaks fails there — use `pnpm dev:pages` (port 8788).
 
 ## Vertex Editor
 
@@ -139,7 +138,7 @@ Vertex Editor is bundled as a framework-agnostic web component in `public/vertex
 - `web-editor.min.js` — full editable editor (`<vertex-editor>`)
 - `web-editor-lite.min.js` — read-only display editor (`<vertex-editor-lite>`)
 
-The full editor script is loaded in `index.html`. Use the `app-vertex-editor` Angular wrapper component or the `<vertex-editor>` custom element directly.
+The editor script is lazy-loaded on mission pages only. Use the `app-vertex-editor` Angular wrapper component or the `<vertex-editor>` custom element directly.
 
 To update the editor assets to the latest release:
 
@@ -185,9 +184,9 @@ We follow spec-driven development. Before writing code, make sure the behavior i
 - Keep components small and focused.
 - Write semantic, accessible HTML.
 - Add tests for new behavior.
-- Do not add authentication, payments, backend logic, gamification, or real lesson content without an explicit phase prompt.
+- Do not add payments, or competitive engagement mechanics (points, leaderboards, streak penalties), without an explicit decision — see `specs/contribution-principles.md`.
+- Style through the design tokens in `src/styles.css`; no raw palette utilities.
 - Update `context.md` and relevant specs when you change architecture or behavior.
-- The editor preview is mocked; label it clearly until real code execution lands in Phase 03.
 - When changing auth behavior, update `specs/auth.md` and run `pnpm db:migrate` locally.
 
 See `specs/contribution-principles.md` for the full contribution standards.

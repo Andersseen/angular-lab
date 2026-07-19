@@ -22,6 +22,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     // remove every owned row before the user.
     await env.DB.batch([
       env.DB.prepare('DELETE FROM progress WHERE user_id = ?').bind(userId),
+      env.DB.prepare('DELETE FROM activity_days WHERE user_id = ?').bind(userId),
       env.DB.prepare('DELETE FROM sessions WHERE user_id = ?').bind(userId),
       env.DB
         .prepare('DELETE FROM password_reset_tokens WHERE user_id = ?')

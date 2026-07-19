@@ -11,13 +11,14 @@ This file is the primary context source for future AI sessions working on Angula
 
 ## Current Status (verified 2026-07-19)
 
-- **Phases 01–08** ✅ complete (Foundation, Learning Engine, Playground, Server-side progress sync, Real content / mission library, Auth hardening & account lifecycle, Production polish, UI identity & componentization). Next up: nothing scheduled — **Phase 09 (Engagement/gamification) is opt-in only** and needs an explicit prompt from the owner.
-- Unit tests: **32 files / 111 tests, all passing** (`pnpm test:unit`, ~3s). E2E: 6 Playwright specs (`home`, `mission`, `auth`, `auth-hardening`, `not-found`, `playground`), **14 tests passing** (`pnpm test:e2e`). The E2E suite runs **single-worker**: all tests share one local D1 (SQLite) database and per-IP auth rate-limit buckets, so parallel workers cause write contention / rate-limit collisions (see Decision 13).
+- **Phases 01–09** ✅ complete (Foundation, Learning Engine, Playground, Server-side progress sync, Real content / mission library, Auth hardening & account lifecycle, Production polish, UI identity & componentization, Engagement). **The planned roadmap is done — nothing is scheduled.** `PLAN.md` lists uncommitted candidates.
+- Unit tests: **41 files / 158 tests, all passing** (`pnpm test:unit`, ~4s). E2E: 7 Playwright specs (`home`, `mission`, `auth`, `auth-hardening`, `achievements`, `not-found`, `playground`), **17 tests passing** (`pnpm test:e2e`). The E2E suite runs **single-worker**: all tests share one local D1 (SQLite) database and per-IP auth rate-limit buckets, so parallel workers cause write contention / rate-limit collisions (see Decision 13).
 - Missions in catalog: **12 across 3 tracks** (Fundamentals, Reactivity with Signals, Routing & Data). **8 are `previewMode: 'live'`** (real sandboxed execution: `dom-playground`, `events-and-state`, `derived-values`, `effect-sync`, `list-search`, `form-validation`, `async-data`, `data-table-sort`); the 4 Angular-framework missions (`reactive-signals`, `component-communication`, `dependency-injection`, `modern-routing`) stay on mock preview. Content lives in `src/content/missions/*.ts`, aggregated by `src/content/missions/index.ts`.
 - Playground is live: sandboxed iframe (`allow-scripts`, no `allow-same-origin`) + `postMessage`, TS transpiled in-browser (lazy `typescript` chunk, ~3.5 MB, loaded only for live missions). Spec: `specs/playground.md`.
 - Auth is live and hardened (Phase 06): Pages Functions + D1, seeded demo user (`migrations/0002_seed_demo_user.sql`), password reset + email verification (one-time D1 tokens, provider-agnostic email seam), per-IP rate limiting on login/signup/reset/resend, sliding-expiry sessions + "log out everywhere", and account deletion. Schema in `migrations/0004_auth_hardening.sql`.
 - Progress sync is live for logged-in users: localStorage remains the first write, then `ProgressSyncService` merges local ↔ D1 on login and write-through syncs mission changes via `GET/PUT /api/progress`. Guests stay local-only.
-- Dashboard exists (`/dashboard`, auth-guarded) with profile/progress/settings tabs; the progress tab shows real started/completed counts and per-mission percentages from stored progress.
+- Dashboard exists (`/dashboard`, auth-guarded) with profile/progress/**achievements**/settings tabs; the progress tab shows real started/completed counts and per-mission percentages from stored progress, and the achievements tab shows the practice streak and the badge catalogue.
+- Engagement is live (Phase 09): a practice-day streak (D1 `activity_days`, `GET/PUT /api/activity`), 9 derived badges, and a shareable SVG completion card on mission completion. Spec: `specs/engagement.md`.
 - CI: `pr-validation.yml` (lint + unit + E2E + build on PRs), `deploy-cloudflare-pages.yml` (deploy on push to `main`, needs `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID` secrets).
 
 ## Technology Stack
@@ -44,31 +45,38 @@ This file is the primary context source for future AI sessions working on Angula
 ```text
 angular-lab/
 ├── .github/workflows/       # pr-validation.yml, deploy-cloudflare-pages.yml
-├── e2e/                      # Playwright: home, mission, auth (+ global-setup)
-├── functions/api/            # auth endpoints + progress sync endpoint
-├── migrations/               # 0001_init, 0002_seed_demo_user, 0003_progress, 0004_auth_hardening
-├── prompts/                  # phase-01..03 prompts for AI sessions
+├── e2e/                      # Playwright: home, mission, playground, auth, auth-hardening,
+│                             # achievements, not-found (+ global-setup)
+├── functions/api/            # auth endpoints + progress & activity sync endpoints
+├── migrations/               # 0001_init, 0002_seed_demo_user, 0003_progress,
+│                             # 0004_auth_hardening, 0005_engagement
 ├── public/vertex-editor/     # vendored web-editor(.lite).min.js
-├── scripts/                  # generate-demo-hash.mjs
-├── specs/                    # product, learning-model, missions, auth, contribution-principles
+├── scripts/                  # generate-demo-hash.mjs, generate-seo-assets.mjs
+├── specs/                    # product, learning-model, missions, playground, auth, progress,
+│                             # engagement, production, contribution-principles
 ├── src/
 │   ├── app/
 │   │   ├── components/
 │   │   │   ├── counter/      # example component + test
-│   │   │   ├── dashboard/    # profile-tab, progress-tab, settings-tab
+│   │   │   ├── dashboard/    # profile-tab, progress-tab, achievements-tab, settings-tab
 │   │   │   ├── editor/       # vertex-editor.ts (Angular wrapper)
 │   │   │   ├── home/         # hero, features, feature-card, stats
 │   │   │   ├── layout/       # shell, nav-links, app-logo, theme-toggle, user-menu
-│   │   │   └── mission/      # step renderers, editor-panel, live-preview, mock-preview, mock/*, cards, filters
+│   │   │   ├── mission/      # step renderers, editor-panel, live/mock preview, completion-card,
+│   │   │   │                 # mission-completed, cards, filters
+│   │   │   └── ui/           # shared presentational primitives (Decision 14 + 15)
 │   │   ├── core/
+│   │   │   ├── achievements/ # streak.ts, badges.ts, share-card.ts, share-image.ts (pure)
 │   │   │   ├── guards/       # auth.guard.ts
-│   │   │   ├── models/       # mission.model.ts, user.model.ts
+│   │   │   ├── models/       # mission.model.ts, user.model.ts, achievement.model.ts
 │   │   │   ├── playground/   # runner-doc.ts (iframe srcdoc), friendly-error.ts
-│   │   │   └── services/     # auth, code-executor, mission-catalog, mission-state, storage, theme
-│   │   └── pages/            # index, missions, mission/[id], mission/index (redirect),
-│   │                         # login, signup, dashboard (guarded)
+│   │   │   └── services/     # auth, activity, achievements, code-executor, mission-catalog,
+│   │   │                     # mission-state, progress-sync, storage, theme, analytics
+│   │   └── pages/            # index, missions, mission/[id], mission/index (redirect), login,
+│   │                         # signup, forgot/reset password, verify-email, dashboard (guarded),
+│   │                         # [...not-found]
 │   ├── content/missions/     # mission library: one Mission per file + index.ts (Phase 05)
-│   ├── styles.css            # Tailwind v4 + @source directives
+│   ├── styles.css            # Tailwind v4 + @source + the --al-* token layer
 │   └── test-setup.ts
 ├── PLAN.md                   # phase roadmap (source of truth for what's next)
 ├── context.md                # this file
@@ -150,11 +158,24 @@ angular-lab/
    - `FormField` renders a native `<label for>` because Volt's `<volt-label for>` does not reach the inner `<label>`; this makes the control's accessible name the label text, which E2E selectors rely on.
    - Identity signatures: electric `brand → accent` gradient (`.bg-gradient-brand` / `.text-gradient-brand`) on logo/hero/icon tiles, a blueprint grid texture (`.app-blueprint`, aliased by the legacy `.app-gradient`) on hero and empty-state backgrounds, and mono type for numbers, stats and metadata.
 
+15. **Engagement: streaks, badges, completion card (Phase 09)**
+   - **Product stance:** engagement is *reflective, never coercive* — it reports practice the learner already did. No points, no leaderboards, no notifications, and nothing gated behind a badge (`specs/engagement.md`). Ratings were deliberately left out of this phase.
+   - **Only practice days are stored.** Migration `0005_engagement.sql` adds `activity_days (user_id, day)`; `day` is the learner's *local* calendar day as `YYYY-MM-DD`. `MissionStateService.persist()` calls `ActivityService.recordToday()`, so any persisted change counts as practice and merely opening a mission does not.
+   - **Sync is a union, not a merge.** The set is append-only, so `PUT /api/activity` sends what the device knows and returns everything the account knows — one request does login-merge *and* push, with no timestamps and no conflict rule (contrast progress, Decision 10). The server keeps a bounded window (400 days).
+   - **Badges are derived, never stored** (`core/achievements/badges.ts`). Every requirement rests on a monotonically increasing value (missions completed, *longest* streak), which is what guarantees a recomputation can never revoke an earned badge. Track badges are generated from the catalog, so adding a track adds its badge.
+   - **"Badges this completion unlocked"** is a with/without diff over the same pure function — no "already seen" state to persist, drift, or reset.
+   - **The completion card is a self-contained SVG** built by `core/achievements/share-card.ts`: fixed dark-identity hexes (it leaves the app, so it must not follow the viewer's theme), generic font families (no external font loads inside an `<img>`-rendered SVG), every value XML-escaped, and no account data. Angular's URL sanitizer allowlists only *raster* `data:` images, so the `<img [src]>` needs `bypassSecurityTrustUrl`. Saving rasterises through canvas to PNG (data-URL SVG does not taint it) and falls back to saving the SVG.
+   - **Gotcha — a signal-reading effect that writes back loops forever.** `ActivityService`'s login effect calls `syncWithRemote()`, which reads `days` and writes it from the response; it must be wrapped in `untracked()`.
+
+16. **Form controls are native, not Volt (found in Phase 09)**
+   - Volt ships `volt-input` as an **element component** (`<volt-input>`) with its own ControlValueAccessor — not an attribute directive. The auth pages had been writing `<input volt-input>` *and* not importing it, so Angular silently ignored both and every auth control rendered as an unstyled native input. `.al-input` in `styles.css` now styles the native control from the token layer, which also keeps FormField's native `<label for>` wiring (Decision 14) and the reactive-forms bindings intact.
+   - `.al-input` lives in `@layer components` **on purpose**: outside a layer it outranks Tailwind utilities and eats the `pl-9` / `pr-10` that make room for the field icon and the password toggle.
+
 ## Conventions
 
 - Standalone, small components; signal-based state; semantic accessible HTML.
 - Tests verify user-visible behavior, not implementation details.
-- No payments, real lessons, or gamification without an explicit phase prompt (see `PLAN.md` phase 08 note).
+- No payments and no real lesson content without an explicit phase prompt. Engagement mechanics shipped in Phase 09 and stay within the stance in Decision 15 — anything competitive or coercive needs its own decision first.
 - When changing auth behavior: update `specs/auth.md` and run `pnpm db:migrate`.
 - Spec first, then code; update `context.md` + `PLAN.md` at the end of each phase session.
 
@@ -167,7 +188,7 @@ pnpm dev:pages        # build + wrangler pages dev :8788 (with functions + D1)
 pnpm db:migrate       # apply D1 migrations locally
 pnpm build:prod       # production build → dist/analog/public
 pnpm preview          # serve production build (static only)
-pnpm test:unit        # Vitest (44 tests)
+pnpm test:unit        # Vitest (158 tests)
 pnpm test:e2e         # Playwright
 pnpm lint             # ESLint
 pnpm install:vertex   # refresh vendored Vertex Editor assets
@@ -180,12 +201,14 @@ pnpm deploy           # manual build + wrangler pages deploy
 2. Follow the `Mission`/`Step` interfaces in `src/app/core/models/mission.model.ts` (step types in Decision 6). Front matter: `goal`, `difficulty`, `durationMinutes`, `track` (one of `Fundamentals` / `Reactivity with Signals` / `Routing & Data`), `tags`, optional `prerequisites` (existing mission ids).
 3. Set `previewMode: 'live'` when the starter code is self-contained plain TS that renders into `root` (no `import`/`export` — see `specs/playground.md`); otherwise it falls back to mock preview and needs a matching mock case in `src/app/components/mission/mock-preview.ts` if it has practice/example steps.
 4. Tests: `mission-catalog.service.spec.ts` enforces the invariants automatically (unique ids, prerequisites resolve, live starter code has no import/export). Add an E2E in `e2e/playground.spec.ts` for new live missions.
+5. Badges follow automatically — a new track gets its own `<Track> Specialist` badge and the catalog-wide targets grow (Decision 15). No badge code to touch.
 
 ## Known Issues / Watch List
 
 - 4 of 12 missions (the Angular-framework ones) stay on mock preview; real Angular execution would need WebContainers (COOP/COEP) — see Decision 8.
-- `typescript` lazy chunk is ~3.5 MB raw (~1 MB gzip), loaded only on first live-preview run (Phase 07 performance pass).
+- `typescript` lazy chunk is ~3.5 MB raw (~1 MB gzip). It is loaded only on the first live-preview run, which is why it was left as is.
 - Email delivery is a log-only seam (Decision 12); no real provider is wired, so production password reset / verification needs Cloudflare Email Service + verified domain (SPF/DKIM/DMARC) before launch.
-- Vertex Editor loads globally in `index.html` even on pages without an editor (Phase 07).
+- Streaks trust the learner's device clock (Decision 15) — a changed clock can extend a streak. Accepted: nothing competitive rides on it.
+- Adding a mission raises the `Lab Graduate` and track-badge targets, so a learner who had "completed the catalog" is short again. That is intended (the badge means *the whole catalog*), but it is the one badge that can visibly un-fill.
 - `@voltui/components` / `angular-movement` peer-dep overrides must stay until they support Angular 22.
 - `.env` exists at repo root (gitignored) — do not commit secrets.

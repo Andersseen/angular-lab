@@ -3,7 +3,8 @@ import { Component, input } from '@angular/core';
 /**
  * Label + leading-icon + control + validation-error group for forms. The
  * control itself is projected so reactive-forms bindings stay on the caller's
- * `<input>`; project the leading icon with `data-slot="icon"`. Uses a native
+ * `<input>`; project the leading icon with `data-slot="icon"` and any in-field
+ * control (e.g. a password toggle) with `data-slot="trailing"`. Uses a native
  * `<label for>` so the control is always programmatically associated.
  */
 @Component({
@@ -22,6 +23,7 @@ import { Component, input } from '@angular/core';
           <ng-content select="[data-slot=icon]" />
         </span>
         <ng-content />
+        <ng-content select="[data-slot=trailing]" />
       </div>
       @if (hint() && !error()) {
         <p class="text-xs text-al-ink-muted">{{ hint() }}</p>

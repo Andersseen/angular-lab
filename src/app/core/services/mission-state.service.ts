@@ -5,6 +5,7 @@ import type {
   MissionState,
   Step,
 } from '../models/mission.model';
+import { ActivityService } from './activity.service';
 import { MissionCatalogService } from './mission-catalog.service';
 import { ProgressSyncService } from './progress-sync.service';
 import { StorageService } from './storage.service';
@@ -26,6 +27,7 @@ function buildInitialState(mission: Mission): MissionState {
   providedIn: 'root',
 })
 export class MissionStateService {
+  private readonly activity = inject(ActivityService);
   private readonly catalog = inject(MissionCatalogService);
   private readonly progressSync = inject(ProgressSyncService);
   private readonly storage = inject(StorageService);
@@ -165,5 +167,8 @@ export class MissionStateService {
     };
     this.storage.setItem(`mission:${mission.id}`, state);
     this.progressSync.queueLocalChange(state);
+    // Every persisted change counts as practice today (specs/engagement.md);
+    // merely opening a mission does not, which is why this lives in persist().
+    this.activity.recordToday();
   }
 }
