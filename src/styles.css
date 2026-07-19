@@ -3,8 +3,68 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Global design tokens */
+/*
+ * ── Phase 08 semantic design-token layer ────────────────────────────────────
+ * Single source of truth for the "Angular Lab" identity. Components should use
+ * the semantic utilities (bg-surface, bg-surface-raised, text-ink,
+ * text-ink-muted, border-line, bg-brand / text-brand-ink, bg-accent, and the
+ * status trios) — never raw palette utilities. Raw hex values live only here.
+ *
+ * Every text/background pair is ≥AA in both themes (WCAG 2.1, small text 4.5:1):
+ *   ink / surface          17.3 L · 17.7 D      brand-ink / brand    6.3 L ·  6.5 D
+ *   ink-muted / surface     6.1 L ·  7.5 D      accent-ink / accent  5.4 L · 10.8 D
+ *   ink-muted / raised      6.3 L ·  7.1 D      success-ink / …      5.5 L · 10.1 D
+ *   brand / surface (link)  6.0 L ·  6.5 D      warning-ink / …      5.0 L · 11.6 D
+ *                                               danger-ink / …       6.3 L ·  7.2 D
+ * Status fills flip their ink: light = deep fill + white text; dark = bright
+ * fill + near-black text. (accent light is cyan-700 #0e7490, deeper than the
+ * §3 candidate #0891b2, so white-on-accent clears AA.)
+ */
+@theme inline {
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-ink: var(--brand-ink);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-success: var(--success);
+  --color-success-ink: var(--success-ink);
+  --color-warning: var(--warning);
+  --color-warning-ink: var(--warning-ink);
+  --color-danger: var(--danger);
+  --color-danger-ink: var(--danger-ink);
+}
+
 :root {
+  /* Semantic palette — light */
+  --surface: #fafafc;
+  --surface-raised: #ffffff;
+  --ink: #16161d;
+  --ink-muted: #5c5f6e;
+  --line: #e4e5ec;
+  --brand: #4f46e5;
+  --brand-ink: #ffffff;
+  --accent: #0e7490;
+  --accent-ink: #ffffff;
+  --success: #047857;
+  --success-ink: #ffffff;
+  --warning: #b45309;
+  --warning-ink: #ffffff;
+  --danger: #be123c;
+  --danger-ink: #ffffff;
+
+  /* Legacy --app-* aliases (body + .app-glass) mapped onto the tokens so the
+     app adopts the new neutrals until components migrate off them (Stage C). */
+  --app-bg: var(--surface);
+  --app-fg: var(--ink);
+  --app-muted: var(--ink-muted);
+  --app-card: var(--surface-raised);
+  --app-border: var(--line);
+  --app-ring: var(--ink-muted);
+
   font-family:
     Inter,
     ui-sans-serif,
@@ -25,36 +85,37 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-
-  --app-bg: #fafafa;
-  --app-fg: #18181b;
-  --app-muted: #71717a;
-  --app-card: #ffffff;
-  --app-border: #e4e4e7;
-  --app-ring: #a1a1aa;
 }
 
 .dark {
-  --app-bg: #09090b;
-  --app-fg: #fafafa;
-  --app-muted: #a1a1aa;
-  --app-card: #18181b;
-  --app-border: #27272a;
-  --app-ring: #52525b;
+  /* Semantic palette — dark (primary design target) */
+  --surface: #0b0d12;
+  --surface-raised: #12141c;
+  --ink: #f4f4f8;
+  --ink-muted: #9da0b0;
+  --line: #232734;
+  --brand: #818cf8;
+  --brand-ink: #0b0d12;
+  --accent: #22d3ee;
+  --accent-ink: #0b0d12;
+  --success: #34d399;
+  --success-ink: #0b0d12;
+  --warning: #fbbf24;
+  --warning-ink: #0b0d12;
+  --danger: #fb7185;
+  --danger-ink: #0b0d12;
 }
 
 /*
- * Volt UI's theme sets --primary via `:root[data-color=volt]` /
- * `.dark[data-color=volt]` (see node_modules/@voltui/components/themes.css),
- * so an override must match that selector's specificity to win the cascade.
- *
- * We pin --primary to #2351de in both themes; Volt's default
- * --primary-foreground is white (oklch(1 0 0)) in both, and white on #2351de
- * is 6.3:1 — comfortably ≥AA — so no foreground override is needed. (Phase 08
- * replaces this one-off with a semantic token layer.)
+ * Volt UI reads --primary / --primary-foreground; map them onto the brand
+ * tokens so every Volt component (buttons, badges, focus rings) inherits the
+ * identity in both themes. :root[data-color=volt] matches Volt's own rule's
+ * specificity and wins by source order. Replaces the old #2351de one-off.
  */
-:root[data-color="volt"] {
-  --primary: #2351de;
+:root[data-color="volt"],
+.dark[data-color="volt"] {
+  --primary: var(--brand);
+  --primary-foreground: var(--brand-ink);
 }
 
 * {
@@ -92,27 +153,42 @@ h6 {
   text-align: left;
 }
 
-/* Subtle mesh gradient background for hero sections */
-.app-gradient {
-  background:
-    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.1) 0px, transparent 50%),
-    var(--app-bg);
+/*
+ * Blueprint texture — a faint graph-paper grid that fades to plain surface
+ * toward the edges, for hero / empty-state backgrounds in both themes. Replaces
+ * the old radial-blob background; the .app-gradient name is kept so existing
+ * pages inherit the new look until they migrate (Stage C), with .app-blueprint
+ * as the canonical alias going forward.
+ */
+.app-gradient,
+.app-blueprint {
+  --blueprint-line: color-mix(in oklab, var(--line) 65%, transparent);
+  background-color: var(--surface);
+  background-image:
+    radial-gradient(135% 80% at 50% -20%, transparent 42%, var(--surface) 82%),
+    linear-gradient(to right, var(--blueprint-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--blueprint-line) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    28px 28px,
+    28px 28px;
+  background-position: center top;
 }
 
-.dark .app-gradient {
-  background:
-    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.18) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.14) 0px, transparent 50%),
-    var(--app-bg);
+/* Electric brand → accent gradient (logo mark, hero headline accent, badges). */
+.bg-gradient-brand {
+  background-image: linear-gradient(120deg, var(--brand), var(--accent));
 }
 
-/* Glass card utility */
+.text-gradient-brand {
+  background-image: linear-gradient(120deg, var(--brand), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Glass card utility, now token-driven. */
 .app-glass {
-  background: rgba(255, 255, 255, 0.7);
+  background: color-mix(in oklab, var(--surface-raised) 72%, transparent);
   backdrop-filter: blur(12px);
-}
-
-.dark .app-glass {
-  background: rgba(24, 24, 27, 0.7);
 }
