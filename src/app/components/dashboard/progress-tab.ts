@@ -13,6 +13,7 @@ import { LmnRocketLaunchIcon } from 'lumen-icons/rocket-launch';
 import { AuthService } from '../../core/services/auth.service';
 import { MissionCatalogService } from '../../core/services/mission-catalog.service';
 import { ProgressSyncService } from '../../core/services/progress-sync.service';
+import { StatTile } from '../ui/stat-tile';
 
 @Component({
   selector: 'app-progress-tab',
@@ -26,10 +27,11 @@ import { ProgressSyncService } from '../../core/services/progress-sync.service';
     VoltCardHeader,
     VoltCardTitle,
     VoltProgress,
+    StatTile,
     LmnRocketLaunchIcon,
   ],
   template: `
-    <volt-card class="border-zinc-200 dark:border-zinc-800">
+    <volt-card class="border-line">
       <volt-card-header>
         <volt-card-title>Learning progress</volt-card-title>
         <volt-card-description>
@@ -43,9 +45,9 @@ import { ProgressSyncService } from '../../core/services/progress-sync.service';
       <volt-card-content>
         @if (summary().started === 0) {
           <div
-            class="flex h-48 flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-zinc-300 p-6 dark:border-zinc-700"
+            class="flex h-48 flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-line p-6"
           >
-            <p class="text-zinc-600 dark:text-zinc-300">
+            <p class="text-ink-muted">
               Complete missions to see your progress here.
             </p>
             <a routerLink="/missions">
@@ -59,49 +61,34 @@ import { ProgressSyncService } from '../../core/services/progress-sync.service';
           </div>
         } @else {
           <div class="grid gap-4 sm:grid-cols-3">
-            <div class="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
-              <p class="text-sm text-zinc-500 dark:text-zinc-400">Started</p>
-              <p class="mt-1 text-3xl font-semibold text-zinc-950 dark:text-zinc-50">
-                {{ summary().started }}
-              </p>
-            </div>
-            <div class="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
-              <p class="text-sm text-zinc-500 dark:text-zinc-400">Completed</p>
-              <p class="mt-1 text-3xl font-semibold text-zinc-950 dark:text-zinc-50">
-                {{ summary().completed }}
-              </p>
-            </div>
-            <div class="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
-              <p class="text-sm text-zinc-500 dark:text-zinc-400">Catalog</p>
-              <p class="mt-1 text-3xl font-semibold text-zinc-950 dark:text-zinc-50">
-                {{ summary().total }}
-              </p>
-            </div>
+            <app-stat-tile label="Started" [value]="summary().started" />
+            <app-stat-tile label="Completed" [value]="summary().completed" />
+            <app-stat-tile label="Catalog" [value]="summary().total" />
           </div>
 
           <div class="mt-6 space-y-4">
             @for (item of missionProgress(); track item.id) {
               <a
                 [routerLink]="['/mission', item.id]"
-                class="block rounded-lg border border-zinc-200 p-4 transition-colors hover:border-zinc-400 dark:border-zinc-800 dark:hover:border-zinc-600"
+                class="block rounded-lg border border-line p-4 transition-colors hover:border-brand"
               >
                 <div class="flex items-center justify-between gap-4">
                   <div>
-                    <p class="font-medium text-zinc-950 dark:text-zinc-50">
-                      {{ item.title }}
-                    </p>
-                    <p class="text-sm text-zinc-500 dark:text-zinc-400">
+                    <p class="font-medium text-ink">{{ item.title }}</p>
+                    <p class="text-sm text-ink-muted">
                       Step {{ item.currentStep }} of {{ item.totalSteps }}
                     </p>
                   </div>
-                  <span class="text-sm font-medium text-zinc-700 dark:text-zinc-200">
+                  <span class="font-mono text-sm font-medium text-ink">
                     {{ item.percentage }}%
                   </span>
                 </div>
                 <volt-progress
                   class="mt-3"
                   [value]="item.percentage"
-                  [attr.aria-label]="item.title + ' progress: ' + item.percentage + '%'"
+                  [attr.aria-label]="
+                    item.title + ' progress: ' + item.percentage + '%'
+                  "
                 />
               </a>
             }
@@ -117,13 +104,16 @@ export class ProgressTab {
   private readonly progressSync = inject(ProgressSyncService);
 
   readonly missionProgress = computed(() =>
-    this.progressSync.localProgress()
+    this.progressSync
+      .localProgress()
       .map((entry) => {
         const mission = this.catalog.getById(entry.missionId);
         if (!mission) {
           return undefined;
         }
-        const stepIndex = mission.steps.findIndex((step) => step.id === entry.currentStepId);
+        const stepIndex = mission.steps.findIndex(
+          (step) => step.id === entry.currentStepId
+        );
         const currentStep = stepIndex >= 0 ? stepIndex + 1 : 1;
         const totalSteps = mission.steps.length;
         return {

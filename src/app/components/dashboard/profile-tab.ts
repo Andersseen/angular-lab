@@ -23,7 +23,7 @@ import type { User } from '../../core/models/user.model';
     LmnArrowRightEndOnRectangleIcon,
   ],
   template: `
-    <volt-card class="border-zinc-200 dark:border-zinc-800">
+    <volt-card class="border-line">
       <volt-card-header>
         <volt-card-title>Your profile</volt-card-title>
         <volt-card-description>
@@ -34,18 +34,18 @@ import type { User } from '../../core/models/user.model';
         @if (user(); as user) {
           <div class="grid gap-4 sm:grid-cols-2">
             <div
-              class="rounded-xl border border-zinc-100 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900"
+              class="rounded-xl border border-line bg-surface p-4"
             >
-              <p class="text-sm text-zinc-500 dark:text-zinc-400">Name</p>
-              <p class="text-lg font-semibold text-zinc-950 dark:text-white">
+              <p class="text-sm text-ink-muted">Name</p>
+              <p class="text-lg font-semibold text-ink">
                 {{ user.name }}
               </p>
             </div>
             <div
-              class="rounded-xl border border-zinc-100 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900"
+              class="rounded-xl border border-line bg-surface p-4"
             >
-              <p class="text-sm text-zinc-500 dark:text-zinc-400">Email</p>
-              <p class="text-lg font-semibold text-zinc-950 dark:text-white">
+              <p class="text-sm text-ink-muted">Email</p>
+              <p class="text-lg font-semibold text-ink">
                 {{ user.email }}
               </p>
             </div>
