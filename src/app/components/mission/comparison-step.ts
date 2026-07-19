@@ -15,40 +15,40 @@ import type { Comparison } from '../../core/models/mission.model';
   template: `
     <div class="space-y-5">
       <div
-        class="overflow-hidden rounded-xl border border-zinc-200 shadow-sm dark:border-zinc-800"
+        class="overflow-hidden rounded-xl border border-line shadow-sm"
       >
         <table class="w-full text-left text-sm">
-          <thead class="bg-zinc-100 dark:bg-zinc-900">
+          <thead class="bg-surface">
             <tr>
               <th
-                class="px-4 py-3 font-semibold text-zinc-700 dark:text-zinc-200"
+                class="px-4 py-3 font-semibold text-ink"
               >
                 Aspect
               </th>
               <th
-                class="px-4 py-3 font-semibold text-blue-700 dark:text-blue-300"
+                class="px-4 py-3 font-semibold text-brand"
               >
                 {{ comparison().titleA }}
               </th>
               <th
-                class="px-4 py-3 font-semibold text-emerald-700 dark:text-emerald-300"
+                class="px-4 py-3 font-semibold text-success"
               >
                 {{ comparison().titleB }}
               </th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
+          <tbody class="divide-y divide-line">
             @for (point of comparison().points; track point.aspect) {
               <tr>
                 <td
-                  class="px-4 py-3 font-medium text-zinc-700 dark:text-zinc-200"
+                  class="px-4 py-3 font-medium text-ink"
                 >
                   {{ point.aspect }}
                 </td>
-                <td class="px-4 py-3 text-zinc-600 dark:text-zinc-300">
+                <td class="px-4 py-3 text-ink-muted">
                   {{ point.a }}
                 </td>
-                <td class="px-4 py-3 text-zinc-600 dark:text-zinc-300">
+                <td class="px-4 py-3 text-ink-muted">
                   {{ point.b }}
                 </td>
               </tr>
@@ -57,16 +57,16 @@ import type { Comparison } from '../../core/models/mission.model';
         </table>
       </div>
 
-      <volt-card class="border-zinc-200 dark:border-zinc-800">
+      <volt-card class="border-line">
         <volt-card-header>
-          <div class="mb-1 flex items-center gap-2 text-blue-600 dark:text-blue-300">
+          <div class="mb-1 flex items-center gap-2 text-brand">
             <lmn-light-bulb [size]="16" />
             <span class="text-xs font-semibold uppercase tracking-wide">Recommendation</span>
           </div>
           <volt-card-title class="text-base">When to choose what</volt-card-title>
         </volt-card-header>
         <volt-card-content>
-          <p class="leading-relaxed text-zinc-700 dark:text-zinc-200">
+          <p class="leading-relaxed text-ink">
             {{ comparison().recommendation }}
           </p>
         </volt-card-content>

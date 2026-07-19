@@ -9,8 +9,8 @@ import { LmnPlusIcon } from 'lumen-icons/plus';
   imports: [VoltButton, LmnMinusIcon, LmnPlusIcon],
   template: `
     <div class="text-center">
-      <p class="text-sm text-zinc-500 dark:text-zinc-400">Count</p>
-      <p class="text-4xl font-bold text-zinc-950 dark:text-white">
+      <p class="text-sm text-ink-muted">Count</p>
+      <p class="text-4xl font-bold text-ink">
         {{ count() }}
       </p>
       <div class="mt-4 flex justify-center gap-2">
@@ -23,7 +23,7 @@ import { LmnPlusIcon } from 'lumen-icons/plus';
           <span class="sr-only">Increment</span>
         </volt-button>
       </div>
-      <p class="mt-3 text-sm text-zinc-500 dark:text-zinc-400">
+      <p class="mt-3 text-sm text-ink-muted">
         Double: {{ (count() ?? 0) * 2 }}
       </p>
     </div>

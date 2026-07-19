@@ -20,7 +20,7 @@ import { TooltipDirective } from 'quartz-headless';
   template: `
     @if (isAuthenticated()) {
       <span
-        class="ml-2 hidden items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-3 py-1 text-xs font-medium text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 sm:inline-flex"
+        class="ml-2 hidden items-center gap-1.5 rounded-full border border-line bg-surface-raised px-3 py-1 text-xs font-medium text-ink sm:inline-flex"
       >
         <lmn-user-circle [size]="14" />
         {{ userName() }}

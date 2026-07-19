@@ -7,36 +7,28 @@ import { LmnXCircleIcon } from 'lumen-icons/x-circle';
   standalone: true,
   imports: [LmnCheckCircleIcon, LmnXCircleIcon],
   template: `
-    <div
-      role="status"
-      class="mt-4 rounded-xl border px-4 py-3 text-sm"
-      [class.border-emerald-200]="correct()"
-      [class.bg-emerald-50]="correct()"
-      [class.text-emerald-800]="correct()"
-      [class.dark:border-emerald-900]="correct()"
-      [class.dark:bg-emerald-950]="correct()"
-      [class.dark:text-emerald-100]="correct()"
-      [class.border-rose-200]="!correct()"
-      [class.bg-rose-50]="!correct()"
-      [class.text-rose-800]="!correct()"
-      [class.dark:border-rose-900]="!correct()"
-      [class.dark:bg-rose-950]="!correct()"
-      [class.dark:text-rose-100]="!correct()"
-    >
-      <p class="flex items-center gap-2 font-semibold">
+    <div role="status" [class]="containerClasses()">
+      <p class="flex items-center gap-2 font-semibold text-ink">
         @if (correct()) {
-          <lmn-check-circle [size]="16" />
+          <lmn-check-circle [size]="16" class="text-success" />
           Correct!
         } @else {
-          <lmn-x-circle [size]="16" />
+          <lmn-x-circle [size]="16" class="text-danger" />
           Not quite.
         }
       </p>
-      <p class="mt-1">{{ explanation() }}</p>
+      <p class="mt-1 text-ink-muted">{{ explanation() }}</p>
     </div>
   `,
 })
 export class CheckpointFeedback {
   readonly correct = input.required<boolean>();
   readonly explanation = input.required<string>();
+
+  containerClasses(): string {
+    const base = 'mt-4 rounded-xl border px-4 py-3 text-sm';
+    return this.correct()
+      ? `${base} border-success/30 bg-success/10`
+      : `${base} border-danger/30 bg-danger/10`;
+  }
 }

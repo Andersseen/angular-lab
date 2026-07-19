@@ -29,22 +29,20 @@ type PreviewStatus = 'idle' | 'running' | 'ready' | 'error';
   imports: [],
   template: `
     <div
-      class="flex h-96 flex-col rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+      class="flex h-96 flex-col rounded-xl border border-line bg-surface-raised shadow-sm"
     >
       <div
-        class="flex items-center justify-between border-b border-zinc-100 px-4 py-2 dark:border-zinc-800"
+        class="flex items-center justify-between border-b border-line px-4 py-2"
       >
         <span
-          class="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400"
+          class="text-xs font-semibold uppercase tracking-wide text-ink-muted"
         >
           Live preview
         </span>
         <span
           class="text-xs"
-          [class.text-red-600]="status() === 'error'"
-          [class.dark:text-red-400]="status() === 'error'"
-          [class.text-zinc-400]="status() !== 'error'"
-          [class.dark:text-zinc-500]="status() !== 'error'"
+          [class.text-danger]="status() === 'error'"
+          [class.text-ink-muted]="status() !== 'error'"
           aria-live="polite"
         >
           {{ statusLabel() }}
@@ -53,7 +51,7 @@ type PreviewStatus = 'idle' | 'running' | 'ready' | 'error';
 
       <iframe
         #frame
-        class="w-full flex-1 bg-white"
+        class="w-full flex-1 bg-surface-raised"
         sandbox="allow-scripts"
         [srcdoc]="runnerDoc"
         title="Code preview"
@@ -62,12 +60,12 @@ type PreviewStatus = 'idle' | 'running' | 'ready' | 'error';
       @if (error(); as err) {
         <div
           role="alert"
-          class="border-t border-red-200 bg-red-50 px-4 py-2 dark:border-red-900 dark:bg-red-950"
+          class="border-t border-danger/30 bg-danger/10 px-4 py-2"
         >
-          <p class="text-xs font-semibold text-red-700 dark:text-red-300">
+          <p class="text-xs font-semibold text-danger">
             {{ err.title }}
           </p>
-          <p class="text-xs text-red-600 dark:text-red-400">{{ err.message }}</p>
+          <p class="text-xs text-danger">{{ err.message }}</p>
         </div>
       }
     </div>

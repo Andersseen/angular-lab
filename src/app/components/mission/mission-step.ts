@@ -53,10 +53,10 @@ const TYPE_ICONS: Record<string, string> = {
     LmnFlagIcon,
   ],
   template: `
-    <volt-card class="border-zinc-200 dark:border-zinc-800">
+    <volt-card class="border-line">
       <volt-card-header>
-        <div class="mb-1 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-          <span class="inline-flex h-5 w-5 items-center justify-center rounded-md bg-zinc-100 dark:bg-zinc-800">
+        <div class="mb-1 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-ink-muted">
+          <span class="inline-flex h-5 w-5 items-center justify-center rounded-md bg-surface">
             @switch (typeIcon(step().type)) {
               @case ('light-bulb') {
                 <lmn-light-bulb [size]="12" />
@@ -86,14 +86,14 @@ const TYPE_ICONS: Record<string, string> = {
       </volt-card-header>
       <volt-card-content>
         <p
-          class="whitespace-pre-line text-base leading-7 text-zinc-700 dark:text-zinc-200"
+          class="whitespace-pre-line text-base leading-7 text-ink"
         >
           {{ step().content }}
         </p>
 
         @if (step().hint) {
           <div
-            class="mt-5 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-100"
+            class="mt-5 rounded-xl border border-brand/40 bg-brand/10 px-4 py-3 text-sm text-brand"
           >
             <span class="font-semibold">Hint:</span> {{ step().hint }}
           </div>
@@ -116,7 +116,7 @@ const TYPE_ICONS: Record<string, string> = {
       </volt-card-content>
       <volt-card-footer>
         <div
-          class="flex flex-wrap items-center gap-3 text-sm text-zinc-500 dark:text-zinc-400"
+          class="flex flex-wrap items-center gap-3 text-sm text-ink-muted"
         >
           <span>{{ currentStepNumber() }} of {{ totalSteps() }}</span>
           <volt-separator orientation="vertical" class="h-4" />
