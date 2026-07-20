@@ -11,6 +11,7 @@ import {
   VoltCardTitle,
 } from '@voltui/components';
 import { MOVEMENT_DIRECTIVES } from 'angular-movement';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LmnArrowRightIcon } from 'lumen-icons/arrow-right';
 import { LmnClockIcon } from 'lumen-icons/clock';
 import { LmnListBulletIcon } from 'lumen-icons/list-bullet';
@@ -39,6 +40,7 @@ const DIFFICULTY_STYLES: Record<string, string> = {
     VoltCardHeader,
     VoltCardTitle,
     ...MOVEMENT_DIRECTIVES,
+    TranslatePipe,
     LmnClockIcon,
     LmnListBulletIcon,
     LmnArrowRightIcon,
@@ -60,13 +62,13 @@ const DIFFICULTY_STYLES: Record<string, string> = {
           <span>·</span>
           <span class="inline-flex items-center gap-1">
             <lmn-clock [size]="12" />
-            {{ mission().durationMinutes }} min
+            {{ 'mission.header.durationMinutes' | translate: { count: mission().durationMinutes } }}
           </span>
           @if (mission().previewMode === 'live') {
             <span
               class="inline-flex items-center gap-1 rounded-full border border-al-accent/50 px-2 py-0.5 text-al-accent"
             >
-              Live
+              {{ 'mission.card.live' | translate }}
             </span>
           }
         </div>
@@ -81,7 +83,7 @@ const DIFFICULTY_STYLES: Record<string, string> = {
             class="rounded-full border px-2.5 py-0.5 text-xs font-medium capitalize"
             [class]="difficultyClasses()"
           >
-            {{ mission().difficulty }}
+            {{ ('mission.header.difficulty.' + mission().difficulty) | translate }}
           </span>
           @for (tag of mission().tags; track tag) {
             <volt-badge variant="outline">{{ tag }}</volt-badge>
@@ -92,14 +94,14 @@ const DIFFICULTY_STYLES: Record<string, string> = {
           class="mt-5 flex items-center gap-2 font-mono text-xs text-al-ink-muted"
         >
           <lmn-list-bullet [size]="14" />
-          {{ mission().steps.length }} steps
+          {{ 'mission.header.stepsCount' | translate: { count: mission().steps.length } }}
         </div>
       </volt-card-content>
       <volt-card-footer>
         <a routerLink="/mission/{{ mission().id }}">
           <volt-button>
             <span class="flex items-center gap-2">
-              Start mission
+              {{ 'mission.card.startMission' | translate }}
               <lmn-arrow-right [size]="14" />
             </span>
           </volt-button>

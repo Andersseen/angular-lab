@@ -9,6 +9,7 @@ import {
   type ElementRef,
 } from '@angular/core';
 import { DomSanitizer, type SafeHtml } from '@angular/platform-browser';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import type { FriendlyError } from '../../core/playground/friendly-error';
 import { buildRunnerDoc } from '../../core/playground/runner-doc';
 import { CodeExecutorService } from '../../core/services/code-executor.service';
@@ -26,7 +27,7 @@ type PreviewStatus = 'idle' | 'running' | 'ready' | 'error';
 @Component({
   selector: 'app-live-preview',
   standalone: true,
-  imports: [],
+  imports: [TranslatePipe],
   template: `
     <div
       class="flex h-96 flex-col rounded-xl border border-al-line bg-al-surface-raised shadow-sm"
@@ -37,7 +38,7 @@ type PreviewStatus = 'idle' | 'running' | 'ready' | 'error';
         <span
           class="text-xs font-semibold uppercase tracking-wide text-al-ink-muted"
         >
-          Live preview
+          {{ 'mission.livePreview.label' | translate }}
         </span>
         <span
           class="text-xs"
@@ -54,7 +55,7 @@ type PreviewStatus = 'idle' | 'running' | 'ready' | 'error';
         class="w-full flex-1 bg-al-surface-raised"
         sandbox="allow-scripts"
         [srcdoc]="runnerDoc"
-        title="Code preview"
+        [attr.title]="'mission.livePreview.iframeTitle' | translate"
       ></iframe>
 
       @if (error(); as err) {
@@ -75,6 +76,7 @@ export class LivePreview {
   readonly code = input.required<string>();
 
   private readonly executor = inject(CodeExecutorService);
+  private readonly translate = inject(TranslateService);
   private readonly frameRef =
     viewChild<ElementRef<HTMLIFrameElement>>('frame');
 
@@ -84,11 +86,11 @@ export class LivePreview {
   protected readonly statusLabel = computed(() => {
     switch (this.status()) {
       case 'running':
-        return 'Running…';
+        return this.translate.instant('mission.livePreview.statusRunning');
       case 'ready':
-        return 'Up to date';
+        return this.translate.instant('mission.livePreview.statusUpToDate');
       case 'error':
-        return 'Error';
+        return this.translate.instant('mission.livePreview.statusError');
       default:
         return '';
     }

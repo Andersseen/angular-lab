@@ -3,8 +3,14 @@ export type BadgeCategory = 'milestone' | 'track' | 'streak';
 
 export interface Badge {
   readonly id: string;
+  /** Translation key, resolved by `BadgeTile` via the `translate` pipe. */
   readonly title: string;
+  /** Translation key, resolved by `BadgeTile` via the `translate` pipe. */
   readonly description: string;
+  /** Interpolation params for `title` (e.g. the track name on track badges). */
+  readonly titleParams?: Record<string, string>;
+  /** Interpolation params for `description`. */
+  readonly descriptionParams?: Record<string, string>;
   readonly category: BadgeCategory;
   readonly earned: boolean;
   /** Progress toward `target`, capped at it. */

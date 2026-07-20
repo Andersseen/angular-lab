@@ -14,6 +14,7 @@ import {
   VoltCardTitle,
   VoltSeparator,
 } from '@voltui/components';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LmnArrowsRightLeftIcon } from 'lumen-icons/arrows-right-left';
 import { LmnCheckCircleIcon } from 'lumen-icons/check-circle';
 import { LmnEyeIcon } from 'lumen-icons/eye';
@@ -43,6 +44,7 @@ const TYPE_ICONS: Record<string, string> = {
     VoltCardHeader,
     VoltCardTitle,
     VoltSeparator,
+    TranslatePipe,
     CheckpointStep,
     ComparisonStep,
     LmnLightBulbIcon,
@@ -78,7 +80,9 @@ const TYPE_ICONS: Record<string, string> = {
               }
             }
           </span>
-          <span class="capitalize">{{ step().type }}</span>
+          <span class="capitalize">{{
+            ('mission.step.type.' + step().type) | translate
+          }}</span>
         </div>
         <volt-card-title #stepTitle tabindex="-1" class="text-xl outline-none">{{
           step().title
@@ -95,7 +99,8 @@ const TYPE_ICONS: Record<string, string> = {
           <div
             class="mt-5 rounded-xl border border-al-brand/40 bg-al-brand/10 px-4 py-3 text-sm text-al-brand"
           >
-            <span class="font-semibold">Hint:</span> {{ step().hint }}
+            <span class="font-semibold">{{ 'mission.step.hintLabel' | translate }}</span>
+            {{ step().hint }}
           </div>
         }
 
@@ -118,9 +123,14 @@ const TYPE_ICONS: Record<string, string> = {
         <div
           class="flex flex-wrap items-center gap-3 text-sm text-al-ink-muted"
         >
-          <span>{{ currentStepNumber() }} of {{ totalSteps() }}</span>
+          <span>{{
+            'mission.step.progress'
+              | translate: { current: currentStepNumber(), total: totalSteps() }
+          }}</span>
           <volt-separator orientation="vertical" class="h-4" />
-          <span class="capitalize">{{ step().type }}</span>
+          <span class="capitalize">{{
+            ('mission.step.type.' + step().type) | translate
+          }}</span>
         </div>
       </volt-card-footer>
     </volt-card>

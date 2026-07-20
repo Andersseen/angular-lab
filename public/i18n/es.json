@@ -1,0 +1,358 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "missions": "Misiones",
+    "dashboard": "Panel"
+  },
+  "theme": {
+    "ariaSwitchToDark": "Cambiar a tema oscuro",
+    "ariaSwitchToLight": "Cambiar a tema claro",
+    "tooltipSwitchToDark": "Cambiar a modo oscuro",
+    "tooltipSwitchToLight": "Cambiar a modo claro"
+  },
+  "language": {
+    "selectLabel": "Idioma"
+  },
+  "userMenu": {
+    "logOut": "Cerrar sesión",
+    "logIn": "Iniciar sesión"
+  },
+  "emailBanner": {
+    "message": "Verifica tu correo electrónico para proteger tu cuenta.",
+    "sending": "Enviando…",
+    "resend": "Reenviar correo",
+    "dismiss": "Descartar",
+    "alreadyVerifiedToastMessage": "Tu correo ya está verificado.",
+    "alreadyVerifiedToastTitle": "Todo listo",
+    "sentToastMessage": "Correo de verificación enviado.",
+    "sentToastTitle": "Revisa tu bandeja de entrada",
+    "errorToastMessage": "No se pudo enviar el correo. Inténtalo de nuevo.",
+    "errorToastTitle": "Ups"
+  },
+  "shell": {
+    "footerTagline": "Plataforma de aprendizaje de código abierto · Licencia MIT",
+    "loggedOutToastMessage": "Has cerrado sesión.",
+    "loggedOutToastTitle": "Hasta pronto"
+  },
+  "home": {
+    "badge": "Laboratorio de demostración de Angular 22",
+    "heading": "Aprende Angular",
+    "headingSuffix": "haciendo",
+    "subtitle": "Misiones guiadas, ejemplos editables y vistas previas instantáneas en el navegador. Sin configuración, sin backend, solo código.",
+    "browseMissions": "Explorar misiones",
+    "contribute": "Contribuir",
+    "stats": {
+      "ariaLabel": "Resumen de la plataforma de demostración",
+      "availableMissions": "Misiones disponibles",
+      "liveDemo": "Demo en vivo",
+      "platformReadiness": "Estado de la plataforma",
+      "platformReadinessAria": "Estado de la plataforma: 75%",
+      "guidedMissions": "misiones guiadas",
+      "toFirstEdit": "hasta la primera edición",
+      "firstEditValue": "<1 min",
+      "browserBased": "basado en el navegador",
+      "browserBasedValue": "100%"
+    },
+    "features": {
+      "includedInDemo": "Incluido en la demo",
+      "missions": {
+        "title": "Misiones",
+        "description": "Rutas de aprendizaje paso a paso que combinan teoría y práctica.",
+        "detail": "Avanza por recorridos como Fundamentos, Enrutamiento y Pruebas."
+      },
+      "liveEditor": {
+        "title": "Editor en vivo",
+        "description": "Edita TypeScript y HTML directamente en el navegador.",
+        "detail": "Las vistas previas simuladas muestran el resultado esperado mientras se construye el motor."
+      },
+      "comparisons": {
+        "title": "Comparaciones",
+        "description": "Compara dos enfoques uno al lado del otro y aprende cuándo usar cada uno.",
+        "detail": "No hay una única \"forma correcta\": comprende las ventajas y desventajas."
+      }
+    }
+  },
+  "common": {
+    "email": "Correo electrónico",
+    "emailPlaceholder": "tu@ejemplo.com",
+    "password": "Contraseña",
+    "browseMissions": "Explorar misiones"
+  },
+  "auth": {
+    "login": {
+      "heading": "Bienvenido de nuevo",
+      "subtitle": "Continúa tu viaje con Angular",
+      "cardTitle": "Iniciar sesión",
+      "demoAccountPrefix": "Cuenta de demostración:",
+      "resetSuccessMessage": "Tu contraseña se actualizó. Inicia sesión con tu nueva contraseña.",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "loggingIn": "Iniciando sesión...",
+      "submit": "Iniciar sesión",
+      "noAccountPrompt": "¿No tienes una cuenta?",
+      "signUpLink": "Regístrate"
+    },
+    "signup": {
+      "heading": "Crear cuenta",
+      "subtitle": "Únete a Angular Lab y sigue tu progreso",
+      "cardTitle": "Regístrate",
+      "cardDescription": "Gratis para siempre. No se requiere tarjeta de crédito.",
+      "nameLabel": "Nombre",
+      "namePlaceholder": "Tu nombre",
+      "passwordHint": "Al menos 8 caracteres con una letra y un número.",
+      "creatingAccount": "Creando cuenta...",
+      "submit": "Regístrate",
+      "hasAccountPrompt": "¿Ya tienes una cuenta?"
+    },
+    "forgotPassword": {
+      "heading": "¿Olvidaste tu contraseña?",
+      "subtitle": "Te enviaremos un enlace por correo para elegir una nueva.",
+      "cardTitle": "Restablecer contraseña",
+      "cardDescription": "Ingresa el correo asociado con tu cuenta.",
+      "sentMessage": "Si ese correo está registrado, un enlace de restablecimiento está en camino. Revisa tu bandeja de entrada.",
+      "sending": "Enviando...",
+      "submit": "Enviar enlace de restablecimiento",
+      "rememberedPrompt": "¿La recordaste?",
+      "backToLogin": "Volver a iniciar sesión"
+    },
+    "resetPassword": {
+      "heading": "Elige una nueva contraseña",
+      "cardTitle": "Establecer contraseña",
+      "cardDescription": "Al menos 8 caracteres, incluyendo una letra y un número.",
+      "invalidLinkMessage": "Este enlace de restablecimiento no es válido o ha caducado.",
+      "newPasswordLabel": "Nueva contraseña",
+      "updating": "Actualizando...",
+      "submit": "Actualizar contraseña"
+    },
+    "verifyEmail": {
+      "heading": "Verifica tu correo electrónico",
+      "cardTitle": "Verificación de correo",
+      "pendingDescription": "Confirmando tu correo…",
+      "successDescription": "Todo listo.",
+      "errorDescription": "No pudimos confirmar este enlace.",
+      "pendingMessage": "Verificando tu dirección de correo.",
+      "successMessage": "Tu correo está verificado. ¡Gracias!",
+      "goToDashboard": "Ir al panel",
+      "backToDashboard": "Volver al panel",
+      "invalidLinkMessage": "Este enlace de verificación no es válido o ha caducado."
+    }
+  },
+  "dashboard": {
+    "heading": "Panel",
+    "subtitle": "Gestiona tu cuenta y sigue tu progreso de aprendizaje.",
+    "tabs": {
+      "profile": "Perfil",
+      "progress": "Progreso",
+      "achievements": "Logros",
+      "settings": "Configuración"
+    },
+    "profile": {
+      "cardTitle": "Tu perfil",
+      "cardDescription": "Esta es la información que tenemos registrada sobre ti.",
+      "nameLabel": "Nombre"
+    },
+    "progress": {
+      "cardTitle": "Progreso de aprendizaje",
+      "syncedDescription": "Sincronizado entre dispositivos cuando has iniciado sesión.",
+      "localDescription": "Almacenado localmente en este dispositivo mientras navegas como invitado.",
+      "emptyMessage": "Completa misiones para ver tu progreso aquí.",
+      "started": "Iniciadas",
+      "completed": "Completadas",
+      "catalog": "Catálogo",
+      "stepOf": "Paso {{current}} de {{total}}",
+      "itemProgressAria": "Progreso de {{title}}: {{percentage}}%"
+    },
+    "achievements": {
+      "cardTitle": "Logros",
+      "cardDescription": "Un registro de tu propia práctica. Nada aquí caduca y no hay tabla de clasificación con nadie más.",
+      "currentStreak": "Racha actual",
+      "longestStreak": "Racha más larga",
+      "badgesEarned": "Insignias obtenidas",
+      "badgesHeading": "Insignias",
+      "day": "día",
+      "days": "días",
+      "hintActiveToday": "Ya practicaste hoy — vuelve mañana para extender la racha.",
+      "hintContinue": "Practica hoy para mantener tu racha.",
+      "hintStart": "Completa un paso de misión para comenzar una racha.",
+      "earnedSrLabel": "— obtenida",
+      "badges": {
+        "firstLaunch": {
+          "title": "Primer lanzamiento",
+          "description": "Completa tu primera misión."
+        },
+        "gettingSerious": {
+          "title": "Poniéndose serio",
+          "description": "Completa 5 misiones."
+        },
+        "labGraduate": {
+          "title": "Graduado del laboratorio",
+          "description": "Completa todas las misiones del catálogo."
+        },
+        "deepEnd": {
+          "title": "Aguas profundas",
+          "description": "Completa una misión avanzada."
+        },
+        "trackSpecialist": {
+          "title": "Especialista en {{track}}",
+          "description": "Completa todas las misiones del recorrido {{track}}."
+        },
+        "threeInARow": {
+          "title": "Tres seguidos",
+          "description": "Practica 3 días seguidos."
+        },
+        "weekStreak": {
+          "title": "Racha semanal",
+          "description": "Practica 7 días seguidos."
+        }
+      }
+    },
+    "settings": {
+      "accountCardTitle": "Configuración de la cuenta",
+      "accountCardDescription": "Actualmente has iniciado sesión como usuario gratuito. No hay métodos de pago configurados.",
+      "logoutEverywhereTitle": "Cerrar sesión en todos los dispositivos",
+      "logoutEverywhereDescription": "Finaliza todas las sesiones activas, incluida esta.",
+      "logoutEverywhereButton": "Cerrar sesión en todas partes",
+      "dangerZoneTitle": "Zona de peligro",
+      "dangerZoneDescription": "Eliminar tu cuenta borra tu perfil y todo el progreso guardado. Esto no se puede deshacer.",
+      "deleteAccountButton": "Eliminar cuenta",
+      "deleteAccountConfirmTitle": "¿Eliminar cuenta?",
+      "deleteAccountConfirmMessage": "Esto elimina permanentemente tu cuenta y todo el progreso guardado. Esto no se puede deshacer.",
+      "deleteAccountConfirmLabel": "Sí, eliminar mi cuenta",
+      "logoutEverywhereToastMessage": "Sesión cerrada en todos los dispositivos.",
+      "doneToastTitle": "Listo",
+      "deleteAccountToastMessage": "Tu cuenta ha sido eliminada.",
+      "goodbyeToastTitle": "Adiós",
+      "deleteAccountErrorToastMessage": "No se pudo eliminar la cuenta. Inténtalo de nuevo.",
+      "oopsToastTitle": "Ups"
+    }
+  },
+  "missions": {
+    "eyebrow": "Rutas de aprendizaje",
+    "heading": "Misiones",
+    "description": "Elige una misión y aprende Angular escribiendo código real en el navegador. No requiere configuración.",
+    "emptyTitle": "No hay misiones que coincidan",
+    "emptyMessage": "Ninguna misión coincide con este filtro todavía. Prueba con otro recorrido o dificultad."
+  },
+  "notFound": {
+    "title": "Página no encontrada",
+    "message": "La página que buscas no existe o pudo haberse movido.",
+    "goHome": "Ir al inicio"
+  },
+  "mission": {
+    "nav": {
+      "ariaLabel": "Pasos de la misión",
+      "stepNumber": "Paso {{number}}"
+    },
+    "header": {
+      "progressLabel": "Progreso de la misión",
+      "progressAria": "Progreso de la misión: {{percentage}}%",
+      "durationMinutes": "{{count}} min",
+      "stepsCount": "{{count}} pasos",
+      "difficulty": {
+        "beginner": "Principiante",
+        "intermediate": "Intermedio",
+        "advanced": "Avanzado"
+      }
+    },
+    "actionBar": {
+      "previous": "Anterior",
+      "reset": "Reiniciar",
+      "complete": "Completar",
+      "next": "Siguiente"
+    },
+    "checkpoint": {
+      "correct": "¡Correcto!",
+      "incorrect": "No exactamente.",
+      "questionNumber": "Pregunta {{number}}",
+      "checkAnswers": "Comprobar respuestas"
+    },
+    "comparison": {
+      "aspectHeader": "Aspecto",
+      "recommendationLabel": "Recomendación",
+      "whenToChooseTitle": "Cuándo elegir cada uno"
+    },
+    "filters": {
+      "levelLabel": "Nivel",
+      "allLevels": "Todos los niveles",
+      "allTracks": "Todos los recorridos"
+    },
+    "card": {
+      "live": "En vivo",
+      "startMission": "Comenzar misión"
+    },
+    "completed": {
+      "title": "¡Misión completada!",
+      "finishedMessage": "Has completado {{title}}.",
+      "estimatedTime": "Tiempo estimado: {{minutes}} minutos · Recorrido: {{track}}",
+      "badgeUnlocked": "Insignia desbloqueada",
+      "badgesUnlocked": "Insignias desbloqueadas",
+      "exploreMore": "Explorar más misiones",
+      "replay": "Repetir misión"
+    },
+    "completedToast": {
+      "title": "Buen trabajo"
+    },
+    "confirmReset": {
+      "title": "¿Reiniciar misión?",
+      "message": "Esto reiniciará tu progreso y restaurará el código inicial."
+    },
+    "notFound": {
+      "title": "Misión no encontrada",
+      "message": "Esta misión pudo haberse movido o nunca existió."
+    },
+    "completionCard": {
+      "altText": "Tarjeta de finalización de {{title}}, {{track}}, completada el {{date}}",
+      "caption": "Guarda o copia esta tarjeta para compartir tu progreso. No contiene datos de la cuenta.",
+      "saveButton": "Guardar tarjeta",
+      "copyButton": "Copiar resumen",
+      "copiedButton": "Resumen copiado"
+    },
+    "step": {
+      "hintLabel": "Pista:",
+      "progress": "{{current}} de {{total}}",
+      "type": {
+        "concept": "Concepto",
+        "example": "Ejemplo",
+        "practice": "Práctica",
+        "comparison": "Comparación",
+        "checkpoint": "Punto de control",
+        "summary": "Resumen"
+      }
+    },
+    "editorPanel": {
+      "editorTab": "Editor",
+      "previewTab": "Vista previa"
+    },
+    "livePreview": {
+      "label": "Vista previa en vivo",
+      "statusRunning": "Ejecutando…",
+      "statusUpToDate": "Actualizado",
+      "statusError": "Error",
+      "iframeTitle": "Vista previa del código"
+    },
+    "mockPreview": {
+      "label": "Vista previa simulada",
+      "comingSoon": "Ejecución en vivo próximamente",
+      "conceptPlaceholder": "Este paso trata sobre comprender conceptos. Ejecuta el siguiente paso de práctica para ver una vista previa simulada en vivo."
+    },
+    "mock": {
+      "counter": {
+        "countLabel": "Contador",
+        "decrement": "Disminuir",
+        "increment": "Aumentar",
+        "double": "Doble: {{value}}"
+      },
+      "rating": {
+        "yourRating": "Tu calificación"
+      },
+      "tasks": {
+        "tasksLabel": "Tareas",
+        "newTaskPlaceholder": "Nueva tarea...",
+        "addButton": "Añadir"
+      },
+      "profile": {
+        "userLabel": "Usuario {{id}}",
+        "mockProfilePage": "Página de perfil simulada"
+      }
+    }
+  }
+}

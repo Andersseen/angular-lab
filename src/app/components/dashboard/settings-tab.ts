@@ -9,6 +9,7 @@ import {
   VoltCardTitle,
 } from '@voltui/components';
 import { ToastService } from 'quartz-headless';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { LmnArrowRightEndOnRectangleIcon } from 'lumen-icons/arrow-right-end-on-rectangle';
 import { LmnTrashIcon } from 'lumen-icons/trash';
 import { AuthService } from '../../core/services/auth.service';
@@ -24,6 +25,7 @@ import { ConfirmDialog } from '../ui/confirm-dialog';
     VoltCardDescription,
     VoltCardHeader,
     VoltCardTitle,
+    TranslatePipe,
     ConfirmDialog,
     LmnArrowRightEndOnRectangleIcon,
     LmnTrashIcon,
@@ -32,10 +34,11 @@ import { ConfirmDialog } from '../ui/confirm-dialog';
     <div class="flex flex-col gap-6">
       <volt-card class="border-al-line">
         <volt-card-header>
-          <volt-card-title>Account settings</volt-card-title>
+          <volt-card-title>{{
+            'dashboard.settings.accountCardTitle' | translate
+          }}</volt-card-title>
           <volt-card-description>
-            You are currently logged in as a free user. No payment methods are
-            configured.
+            {{ 'dashboard.settings.accountCardDescription' | translate }}
           </volt-card-description>
         </volt-card-header>
         <volt-card-content>
@@ -44,10 +47,10 @@ import { ConfirmDialog } from '../ui/confirm-dialog';
           >
             <div>
               <p class="text-sm font-medium text-al-ink">
-                Log out of all devices
+                {{ 'dashboard.settings.logoutEverywhereTitle' | translate }}
               </p>
               <p class="text-sm text-al-ink-muted">
-                End every active session, including this one.
+                {{ 'dashboard.settings.logoutEverywhereDescription' | translate }}
               </p>
             </div>
             <volt-button
@@ -57,7 +60,7 @@ import { ConfirmDialog } from '../ui/confirm-dialog';
             >
               <span class="flex items-center gap-2">
                 <lmn-arrow-right-end-on-rectangle [size]="16" />
-                Log out everywhere
+                {{ 'dashboard.settings.logoutEverywhereButton' | translate }}
               </span>
             </volt-button>
           </div>
@@ -66,10 +69,11 @@ import { ConfirmDialog } from '../ui/confirm-dialog';
 
       <volt-card class="border-al-danger/40">
         <volt-card-header>
-          <volt-card-title class="text-al-danger">Danger zone</volt-card-title>
+          <volt-card-title class="text-al-danger">{{
+            'dashboard.settings.dangerZoneTitle' | translate
+          }}</volt-card-title>
           <volt-card-description>
-            Deleting your account removes your profile and all saved progress.
-            This cannot be undone.
+            {{ 'dashboard.settings.dangerZoneDescription' | translate }}
           </volt-card-description>
         </volt-card-header>
         <volt-card-content>
@@ -80,7 +84,7 @@ import { ConfirmDialog } from '../ui/confirm-dialog';
           >
             <span class="flex items-center gap-2">
               <lmn-trash [size]="16" />
-              Delete account
+              {{ 'dashboard.settings.deleteAccountButton' | translate }}
             </span>
           </volt-button>
         </volt-card-content>
@@ -88,9 +92,9 @@ import { ConfirmDialog } from '../ui/confirm-dialog';
 
       <app-confirm-dialog
         [open]="confirmingDelete()"
-        title="Delete account?"
-        message="This permanently deletes your account and all saved progress. This cannot be undone."
-        confirmLabel="Yes, delete my account"
+        [title]="'dashboard.settings.deleteAccountConfirmTitle' | translate"
+        [message]="'dashboard.settings.deleteAccountConfirmMessage' | translate"
+        [confirmLabel]="'dashboard.settings.deleteAccountConfirmLabel' | translate"
         variant="danger"
         [busy]="busy()"
         (confirm)="deleteAccount()"
@@ -103,6 +107,7 @@ export class SettingsTab {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
   private readonly toast = inject(ToastService);
+  private readonly translate = inject(TranslateService);
 
   readonly busy = signal(false);
   readonly confirmingDelete = signal(false);
@@ -111,7 +116,10 @@ export class SettingsTab {
     this.busy.set(true);
     this.auth.logoutEverywhere().subscribe(() => {
       this.busy.set(false);
-      this.toast.info('Logged out of all devices.', 'Done');
+      this.toast.info(
+        this.translate.instant('dashboard.settings.logoutEverywhereToastMessage'),
+        this.translate.instant('dashboard.settings.doneToastTitle')
+      );
       void this.router.navigate(['/']);
     });
   }
@@ -121,15 +129,18 @@ export class SettingsTab {
     this.auth.deleteAccount().subscribe({
       next: () => {
         this.busy.set(false);
-        this.toast.success('Your account has been deleted.', 'Goodbye');
+        this.toast.success(
+          this.translate.instant('dashboard.settings.deleteAccountToastMessage'),
+          this.translate.instant('dashboard.settings.goodbyeToastTitle')
+        );
         void this.router.navigate(['/']);
       },
       error: () => {
         this.busy.set(false);
         this.confirmingDelete.set(false);
         this.toast.error(
-          'Could not delete the account. Please try again.',
-          'Oops'
+          this.translate.instant('dashboard.settings.deleteAccountErrorToastMessage'),
+          this.translate.instant('dashboard.settings.oopsToastTitle')
         );
       },
     });

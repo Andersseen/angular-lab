@@ -1,4 +1,5 @@
 import { Component, computed, input } from '@angular/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LmnAcademicCapIcon } from 'lumen-icons/academic-cap';
 import { LmnCheckBadgeIcon } from 'lumen-icons/check-badge';
 import { LmnFireIcon } from 'lumen-icons/fire';
@@ -14,6 +15,7 @@ import type { Badge } from '../../core/models/achievement.model';
   selector: 'app-badge-tile',
   standalone: true,
   imports: [
+    TranslatePipe,
     LmnAcademicCapIcon,
     LmnCheckBadgeIcon,
     LmnFireIcon,
@@ -41,13 +43,17 @@ import type { Badge } from '../../core/models/achievement.model';
 
       <div class="min-w-0">
         <p class="flex items-center gap-1.5 font-medium text-al-ink">
-          {{ badge().title }}
+          {{ badge().title | translate: badge().titleParams }}
           @if (badge().earned) {
             <lmn-check-badge class="text-al-success" [size]="16" />
-            <span class="sr-only">— earned</span>
+            <span class="sr-only">{{
+              'dashboard.achievements.earnedSrLabel' | translate
+            }}</span>
           }
         </p>
-        <p class="mt-0.5 text-sm text-al-ink-muted">{{ badge().description }}</p>
+        <p class="mt-0.5 text-sm text-al-ink-muted">
+          {{ badge().description | translate: badge().descriptionParams }}
+        </p>
         @if (!badge().earned) {
           <p class="mt-2 font-mono text-xs text-al-ink-muted">
             {{ badge().current }} / {{ badge().target }}

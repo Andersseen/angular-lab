@@ -1,6 +1,7 @@
 import { Component, input, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { VoltButton } from '@voltui/components';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LmnArrowLeftStartOnRectangleIcon } from 'lumen-icons/arrow-left-start-on-rectangle';
 import { LmnArrowRightEndOnRectangleIcon } from 'lumen-icons/arrow-right-end-on-rectangle';
 import { LmnUserCircleIcon } from 'lumen-icons/user-circle';
@@ -12,6 +13,7 @@ import { TooltipDirective } from 'quartz-headless';
   imports: [
     RouterLink,
     VoltButton,
+    TranslatePipe,
     LmnUserCircleIcon,
     LmnArrowLeftStartOnRectangleIcon,
     LmnArrowRightEndOnRectangleIcon,
@@ -30,22 +32,22 @@ import { TooltipDirective } from 'quartz-headless';
         variant="ghost"
         size="sm"
         class="ml-1"
-        aria-label="Log out"
-        [qzTooltip]="'Log out'"
+        [attr.aria-label]="'userMenu.logOut' | translate"
+        [qzTooltip]="'userMenu.logOut' | translate"
         tooltipPlacement="bottom"
         (click)="logout.emit()"
       >
         <span class="flex items-center gap-2">
           <lmn-arrow-left-start-on-rectangle [size]="20" />
-          <span class="sr-only sm:not-sr-only">Log out</span>
+          <span class="sr-only sm:not-sr-only">{{ 'userMenu.logOut' | translate }}</span>
         </span>
       </volt-button>
     } @else {
-      <a routerLink="/login" aria-label="Log in">
-        <volt-button variant="outline" size="sm" aria-label="Log in">
+      <a routerLink="/login" [attr.aria-label]="'userMenu.logIn' | translate">
+        <volt-button variant="outline" size="sm" [attr.aria-label]="'userMenu.logIn' | translate">
           <span class="flex items-center gap-2">
             <lmn-arrow-right-end-on-rectangle [size]="16" />
-            <span class="sr-only sm:not-sr-only">Log in</span>
+            <span class="sr-only sm:not-sr-only">{{ 'userMenu.logIn' | translate }}</span>
           </span>
         </volt-button>
       </a>

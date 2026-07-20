@@ -1,16 +1,17 @@
 import { Component } from '@angular/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LmnRocketLaunchIcon } from 'lumen-icons/rocket-launch';
 import { PageHeader } from '../ui/page-header';
 
 @Component({
   selector: 'app-missions-header',
   standalone: true,
-  imports: [PageHeader, LmnRocketLaunchIcon],
+  imports: [PageHeader, TranslatePipe, LmnRocketLaunchIcon],
   template: `
     <app-page-header
-      eyebrow="Learning paths"
-      heading="Missions"
-      description="Pick a mission and learn Angular by writing real code in the browser. No setup required."
+      [eyebrow]="'missions.eyebrow' | translate"
+      [heading]="'missions.heading' | translate"
+      [description]="'missions.description' | translate"
     >
       <lmn-rocket-launch data-slot="eyebrow-icon" [size]="12" />
     </app-page-header>

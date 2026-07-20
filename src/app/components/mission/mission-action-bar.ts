@@ -1,5 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { VoltButton } from '@voltui/components';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LmnArrowLeftIcon } from 'lumen-icons/arrow-left';
 import { LmnArrowPathIcon } from 'lumen-icons/arrow-path';
 import { LmnArrowRightIcon } from 'lumen-icons/arrow-right';
@@ -8,7 +9,14 @@ import { LmnCheckIcon } from 'lumen-icons/check';
 @Component({
   selector: 'app-mission-action-bar',
   standalone: true,
-  imports: [VoltButton, LmnArrowLeftIcon, LmnArrowRightIcon, LmnArrowPathIcon, LmnCheckIcon],
+  imports: [
+    VoltButton,
+    TranslatePipe,
+    LmnArrowLeftIcon,
+    LmnArrowRightIcon,
+    LmnArrowPathIcon,
+    LmnCheckIcon,
+  ],
   template: `
     <div
       class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-al-line bg-al-surface-raised p-4 shadow-sm"
@@ -20,7 +28,7 @@ import { LmnCheckIcon } from 'lumen-icons/check';
       >
         <span class="flex items-center gap-2">
           <lmn-arrow-left [size]="14" />
-          Previous
+          {{ 'mission.actionBar.previous' | translate }}
         </span>
       </volt-button>
       <div class="flex flex-wrap gap-3">
@@ -31,14 +39,14 @@ import { LmnCheckIcon } from 'lumen-icons/check';
         >
           <span class="flex items-center gap-2">
             <lmn-arrow-path [size]="14" />
-            Reset
+            {{ 'mission.actionBar.reset' | translate }}
           </span>
         </volt-button>
         @if (isLastStep() && !completed()) {
           <volt-button (click)="complete.emit()">
             <span class="flex items-center gap-2">
               <lmn-check [size]="14" />
-              Complete
+              {{ 'mission.actionBar.complete' | translate }}
             </span>
           </volt-button>
         } @else {
@@ -47,7 +55,7 @@ import { LmnCheckIcon } from 'lumen-icons/check';
             (click)="next.emit()"
           >
             <span class="flex items-center gap-2">
-              Next
+              {{ 'mission.actionBar.next' | translate }}
               <lmn-arrow-right [size]="14" />
             </span>
           </volt-button>

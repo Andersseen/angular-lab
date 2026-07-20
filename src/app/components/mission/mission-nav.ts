@@ -1,4 +1,5 @@
 import { Component, input, output } from '@angular/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LmnArrowsRightLeftIcon } from 'lumen-icons/arrows-right-left';
 import { LmnCheckCircleIcon } from 'lumen-icons/check-circle';
 import { LmnEyeIcon } from 'lumen-icons/eye';
@@ -20,6 +21,7 @@ const TYPE_ICONS: Record<string, string> = {
   selector: 'app-mission-nav',
   standalone: true,
   imports: [
+    TranslatePipe,
     LmnLightBulbIcon,
     LmnEyeIcon,
     LmnPencilSquareIcon,
@@ -28,7 +30,7 @@ const TYPE_ICONS: Record<string, string> = {
     LmnFlagIcon,
   ],
   template: `
-    <nav class="flex flex-col gap-2" aria-label="Mission steps">
+    <nav class="flex flex-col gap-2" [attr.aria-label]="'mission.nav.ariaLabel' | translate">
       @for (step of steps(); track step.id; let i = $index) {
         <button
           type="button"
@@ -64,7 +66,7 @@ const TYPE_ICONS: Record<string, string> = {
                 }
               }
             </span>
-            Step {{ i + 1 }}
+            {{ 'mission.nav.stepNumber' | translate: { number: i + 1 } }}
           </span>
           <span class="block font-semibold text-al-ink">
             {{ step.title }}

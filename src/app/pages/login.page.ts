@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { VoltButton } from '@voltui/components';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LmnArrowRightEndOnRectangleIcon } from 'lumen-icons/arrow-right-end-on-rectangle';
 import { LmnEnvelopeIcon } from 'lumen-icons/envelope';
 import { LmnLockClosedIcon } from 'lumen-icons/lock-closed';
@@ -29,6 +30,7 @@ export const routeMeta: RouteMeta = {
     ReactiveFormsModule,
     RouterLink,
     VoltButton,
+    TranslatePipe,
     AuthLayout,
     FormField,
     PasswordToggle,
@@ -40,37 +42,37 @@ export const routeMeta: RouteMeta = {
   ],
   template: `
     <app-auth-layout
-      heading="Welcome back"
-      subtitle="Continue your Angular journey"
-      cardTitle="Log in"
+      [heading]="'auth.login.heading' | translate"
+      [subtitle]="'auth.login.subtitle' | translate"
+      [cardTitle]="'auth.login.cardTitle' | translate"
     >
       <lmn-rocket-launch data-slot="icon" [size]="24" />
       <span data-slot="card-description">
-        Demo account:
+        {{ 'auth.login.demoAccountPrefix' | translate }}
         <span class="font-medium">demo&#64;angular-lab.dev</span> /
         <span class="font-medium">Demo1234</span>
       </span>
 
       @if (resetDone()) {
         <app-alert variant="success" class="mb-4 block">
-          Your password was updated. Log in with your new password.
+          {{ 'auth.login.resetSuccessMessage' | translate }}
         </app-alert>
       }
 
       <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
-        <app-form-field label="Email" controlId="email">
+        <app-form-field [label]="'common.email' | translate" controlId="email">
           <lmn-envelope data-slot="icon" [size]="16" />
           <input
             id="email"
             type="email"
             formControlName="email"
-            placeholder="you@example.com"
+            [placeholder]="'common.emailPlaceholder' | translate"
             autocomplete="email"
             class="al-input pl-9"
           />
         </app-form-field>
 
-        <app-form-field label="Password" controlId="password">
+        <app-form-field [label]="'common.password' | translate" controlId="password">
           <lmn-lock-closed data-slot="icon" [size]="16" />
           <input
             id="password"
@@ -87,7 +89,7 @@ export const routeMeta: RouteMeta = {
           <a
             routerLink="/forgot-password"
             class="text-sm font-medium text-al-brand hover:underline"
-            >Forgot password?</a
+            >{{ 'auth.login.forgotPassword' | translate }}</a
           >
         </div>
 
@@ -102,19 +104,19 @@ export const routeMeta: RouteMeta = {
         >
           <span class="flex items-center gap-2">
             @if (auth.isLoading()) {
-              Logging in...
+              {{ 'auth.login.loggingIn' | translate }}
             } @else {
               <lmn-arrow-right-end-on-rectangle [size]="16" />
-              Log in
+              {{ 'auth.login.submit' | translate }}
             }
           </span>
         </volt-button>
       </form>
 
       <p class="mt-4 text-center text-sm text-al-ink-muted">
-        Don't have an account?
+        {{ 'auth.login.noAccountPrompt' | translate }}
         <a routerLink="/signup" class="font-medium text-al-brand hover:underline"
-          >Sign up</a
+          >{{ 'auth.login.signUpLink' | translate }}</a
         >
       </p>
     </app-auth-layout>

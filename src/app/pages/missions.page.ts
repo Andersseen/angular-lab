@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import type { RouteMeta } from '@analogjs/router';
 import { MOVEMENT_DIRECTIVES } from 'angular-movement';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LmnMagnifyingGlassIcon } from 'lumen-icons/magnifying-glass';
 import { DifficultyFilter } from '../components/mission/difficulty-filter';
 import { MissionCard } from '../components/mission/mission-card';
@@ -38,6 +39,7 @@ const DIFFICULTY_ORDER: Record<Difficulty, number> = {
   standalone: true,
   imports: [
     MOVEMENT_DIRECTIVES,
+    TranslatePipe,
     MissionsHeader,
     TrackFilter,
     DifficultyFilter,
@@ -78,8 +80,8 @@ const DIFFICULTY_ORDER: Record<Difficulty, number> = {
         </div>
       } @else {
         <app-empty-state
-          title="No missions match"
-          message="No missions match this filter yet. Try a different track or difficulty."
+          [title]="'missions.emptyTitle' | translate"
+          [message]="'missions.emptyMessage' | translate"
         >
           <lmn-magnifying-glass data-slot="icon" [size]="32" />
         </app-empty-state>

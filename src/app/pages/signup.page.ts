@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { VoltButton } from '@voltui/components';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LmnEnvelopeIcon } from 'lumen-icons/envelope';
 import { LmnLockClosedIcon } from 'lumen-icons/lock-closed';
 import { LmnRocketLaunchIcon } from 'lumen-icons/rocket-launch';
@@ -29,6 +30,7 @@ export const routeMeta: RouteMeta = {
     ReactiveFormsModule,
     RouterLink,
     VoltButton,
+    TranslatePipe,
     AuthLayout,
     FormField,
     PasswordToggle,
@@ -40,44 +42,44 @@ export const routeMeta: RouteMeta = {
   ],
   template: `
     <app-auth-layout
-      heading="Create account"
-      subtitle="Join Angular Lab and track your progress"
-      cardTitle="Sign up"
+      [heading]="'auth.signup.heading' | translate"
+      [subtitle]="'auth.signup.subtitle' | translate"
+      [cardTitle]="'auth.signup.cardTitle' | translate"
     >
       <lmn-rocket-launch data-slot="icon" [size]="24" />
       <span data-slot="card-description">
-        Free forever. No credit card required.
+        {{ 'auth.signup.cardDescription' | translate }}
       </span>
 
       <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
-        <app-form-field label="Name" controlId="name">
+        <app-form-field [label]="'auth.signup.nameLabel' | translate" controlId="name">
           <lmn-user data-slot="icon" [size]="16" />
           <input
             id="name"
             type="text"
             formControlName="name"
-            placeholder="Your name"
+            [placeholder]="'auth.signup.namePlaceholder' | translate"
             autocomplete="name"
             class="al-input pl-9"
           />
         </app-form-field>
 
-        <app-form-field label="Email" controlId="email">
+        <app-form-field [label]="'common.email' | translate" controlId="email">
           <lmn-envelope data-slot="icon" [size]="16" />
           <input
             id="email"
             type="email"
             formControlName="email"
-            placeholder="you@example.com"
+            [placeholder]="'common.emailPlaceholder' | translate"
             autocomplete="email"
             class="al-input pl-9"
           />
         </app-form-field>
 
         <app-form-field
-          label="Password"
+          [label]="'common.password' | translate"
           controlId="password"
-          hint="At least 8 characters with a letter and a number."
+          [hint]="'auth.signup.passwordHint' | translate"
         >
           <lmn-lock-closed data-slot="icon" [size]="16" />
           <input
@@ -100,14 +102,17 @@ export const routeMeta: RouteMeta = {
           class="w-full"
           [disabled]="form.invalid || auth.isLoading()"
         >
-          {{ auth.isLoading() ? 'Creating account...' : 'Sign up' }}
+          {{
+            (auth.isLoading() ? 'auth.signup.creatingAccount' : 'auth.signup.submit')
+              | translate
+          }}
         </volt-button>
       </form>
 
       <p class="mt-4 text-center text-sm text-al-ink-muted">
-        Already have an account?
+        {{ 'auth.signup.hasAccountPrompt' | translate }}
         <a routerLink="/login" class="font-medium text-al-brand hover:underline"
-          >Log in</a
+          >{{ 'auth.login.submit' | translate }}</a
         >
       </p>
     </app-auth-layout>

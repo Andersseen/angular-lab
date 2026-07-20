@@ -5,8 +5,8 @@ import { BadgeTile } from './badge-tile';
 function badge(overrides: Partial<Badge> = {}): Badge {
   return {
     id: 'five-missions',
-    title: 'Getting Serious',
-    description: 'Complete 5 missions.',
+    title: 'dashboard.achievements.badges.gettingSerious.title',
+    description: 'dashboard.achievements.badges.gettingSerious.description',
     category: 'milestone',
     earned: false,
     current: 2,

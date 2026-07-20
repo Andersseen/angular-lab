@@ -4,7 +4,7 @@ The roadmap. Each phase is sized for a **single fresh AI session**: start by rea
 `context.md` (what exists and why), then the phase section here. Don't start a phase
 until the previous one is merged.
 
-## Status (verified 2026-07-19)
+## Status (verified 2026-07-20)
 
 **The planned roadmap is complete.** Phases 01–09 are shipped and merged; there is no
 scheduled next phase. What shipped, and where the detail lives:
@@ -20,6 +20,9 @@ scheduled next phase. What shipped, and where the detail lives:
 | 07 | Production polish | SEO, a11y (Lighthouse 100), lazy editor, 404, analytics seam |
 | 08 | UI identity | `--al-*` token layer, 8 shared `ui/` primitives, auth rebuild |
 | 09 | Engagement | practice streak, derived badges, shareable completion card |
+
+Shipped since, outside the numbered roadmap: **i18n** (`ngx-translate`, English/Spanish/
+Ukrainian UI chrome, instant switching) — `context.md` Decision 17, `specs/i18n.md`.
 
 **Every design decision behind these lives in `context.md`** — that file is the one to
 read, not this one. This file only tracks what is *next*.
@@ -59,6 +62,10 @@ Nothing is scheduled. Candidates, none started, none committed to:
   (`context.md` Decision 12); required before a public launch.
 - **More content** — the mission library takes new missions without engine changes
   (`context.md` §"Adding a New Mission").
+- **Translate mission content** — the i18n pass deliberately left mission prose (titles,
+  step content, checkpoints) English-only; machine translation without technical review
+  risks teaching something wrong (`specs/i18n.md`). Needs a reviewed-translation workflow,
+  not just more `en.json` keys.
 
 ## Standing rules for every phase
 

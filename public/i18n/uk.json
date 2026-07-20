@@ -1,0 +1,358 @@
+{
+  "nav": {
+    "home": "Головна",
+    "missions": "Місії",
+    "dashboard": "Панель керування"
+  },
+  "theme": {
+    "ariaSwitchToDark": "Переключити на темну тему",
+    "ariaSwitchToLight": "Переключити на світлу тему",
+    "tooltipSwitchToDark": "Переключити на темний режим",
+    "tooltipSwitchToLight": "Переключити на світлий режим"
+  },
+  "language": {
+    "selectLabel": "Мова"
+  },
+  "userMenu": {
+    "logOut": "Вийти",
+    "logIn": "Увійти"
+  },
+  "emailBanner": {
+    "message": "Підтвердьте свою електронну пошту, щоб захистити обліковий запис.",
+    "sending": "Надсилання…",
+    "resend": "Надіслати ще раз",
+    "dismiss": "Закрити",
+    "alreadyVerifiedToastMessage": "Вашу пошту вже підтверджено.",
+    "alreadyVerifiedToastTitle": "Готово",
+    "sentToastMessage": "Лист для підтвердження надіслано.",
+    "sentToastTitle": "Перевірте пошту",
+    "errorToastMessage": "Не вдалося надіслати лист. Спробуйте ще раз.",
+    "errorToastTitle": "Ой"
+  },
+  "shell": {
+    "footerTagline": "Платформа навчання з відкритим кодом · Ліцензія MIT",
+    "loggedOutToastMessage": "Ви вийшли з облікового запису.",
+    "loggedOutToastTitle": "До зустрічі"
+  },
+  "home": {
+    "badge": "Демо-лабораторія Angular 22",
+    "heading": "Вивчайте Angular",
+    "headingSuffix": "на практиці",
+    "subtitle": "Керовані місії, редаговані приклади та миттєвий перегляд у браузері. Без налаштувань, без бекенду — тільки код.",
+    "browseMissions": "Переглянути місії",
+    "contribute": "Долучитися",
+    "stats": {
+      "ariaLabel": "Огляд демо-платформи",
+      "availableMissions": "Доступні місії",
+      "liveDemo": "Демо наживо",
+      "platformReadiness": "Готовність платформи",
+      "platformReadinessAria": "Готовність платформи: 75%",
+      "guidedMissions": "керованих місій",
+      "toFirstEdit": "до першої зміни",
+      "firstEditValue": "<1 хв",
+      "browserBased": "у браузері",
+      "browserBasedValue": "100%"
+    },
+    "features": {
+      "includedInDemo": "Включено в демо",
+      "missions": {
+        "title": "Місії",
+        "description": "Покрокові навчальні шляхи, що поєднують теорію та практику.",
+        "detail": "Проходьте треки на кшталт «Основи», «Маршрутизація» та «Тестування»."
+      },
+      "liveEditor": {
+        "title": "Живий редактор",
+        "description": "Редагуйте TypeScript і HTML прямо в браузері.",
+        "detail": "Імітовані перегляди показують очікуваний результат, поки рушій ще будується."
+      },
+      "comparisons": {
+        "title": "Порівняння",
+        "description": "Порівнюйте два підходи поруч і дізнавайтеся, коли який використовувати.",
+        "detail": "Немає єдиного «правильного шляху» — розумійте компроміси."
+      }
+    }
+  },
+  "common": {
+    "email": "Електронна пошта",
+    "emailPlaceholder": "you@example.com",
+    "password": "Пароль",
+    "browseMissions": "Переглянути місії"
+  },
+  "auth": {
+    "login": {
+      "heading": "З поверненням",
+      "subtitle": "Продовжуйте свою подорож з Angular",
+      "cardTitle": "Увійти",
+      "demoAccountPrefix": "Демо-обліковий запис:",
+      "resetSuccessMessage": "Ваш пароль оновлено. Увійдіть з новим паролем.",
+      "forgotPassword": "Забули пароль?",
+      "loggingIn": "Вхід...",
+      "submit": "Увійти",
+      "noAccountPrompt": "Немає облікового запису?",
+      "signUpLink": "Зареєструватися"
+    },
+    "signup": {
+      "heading": "Створити обліковий запис",
+      "subtitle": "Приєднуйтеся до Angular Lab і відстежуйте свій прогрес",
+      "cardTitle": "Реєстрація",
+      "cardDescription": "Назавжди безкоштовно. Кредитна картка не потрібна.",
+      "nameLabel": "Ім'я",
+      "namePlaceholder": "Ваше ім'я",
+      "passwordHint": "Щонайменше 8 символів, включно з літерою та цифрою.",
+      "creatingAccount": "Створення облікового запису...",
+      "submit": "Зареєструватися",
+      "hasAccountPrompt": "Вже маєте обліковий запис?"
+    },
+    "forgotPassword": {
+      "heading": "Забули пароль?",
+      "subtitle": "Ми надішлемо вам посилання на пошту, щоб обрати новий.",
+      "cardTitle": "Скинути пароль",
+      "cardDescription": "Введіть електронну пошту, пов'язану з вашим обліковим записом.",
+      "sentMessage": "Якщо ця пошта зареєстрована, посилання для скидання вже надсилається. Перевірте пошту.",
+      "sending": "Надсилання...",
+      "submit": "Надіслати посилання для скидання",
+      "rememberedPrompt": "Згадали пароль?",
+      "backToLogin": "Повернутися до входу"
+    },
+    "resetPassword": {
+      "heading": "Виберіть новий пароль",
+      "cardTitle": "Встановити пароль",
+      "cardDescription": "Щонайменше 8 символів, включно з літерою та цифрою.",
+      "invalidLinkMessage": "Це посилання для скидання недійсне або застаріле.",
+      "newPasswordLabel": "Новий пароль",
+      "updating": "Оновлення...",
+      "submit": "Оновити пароль"
+    },
+    "verifyEmail": {
+      "heading": "Підтвердьте пошту",
+      "cardTitle": "Підтвердження пошти",
+      "pendingDescription": "Підтверджуємо вашу пошту…",
+      "successDescription": "Усе готово.",
+      "errorDescription": "Не вдалося підтвердити це посилання.",
+      "pendingMessage": "Перевіряємо вашу електронну адресу.",
+      "successMessage": "Вашу пошту підтверджено. Дякуємо!",
+      "goToDashboard": "Перейти до панелі",
+      "backToDashboard": "Повернутися до панелі",
+      "invalidLinkMessage": "Це посилання для підтвердження недійсне або застаріле."
+    }
+  },
+  "dashboard": {
+    "heading": "Панель керування",
+    "subtitle": "Керуйте обліковим записом і відстежуйте прогрес навчання.",
+    "tabs": {
+      "profile": "Профіль",
+      "progress": "Прогрес",
+      "achievements": "Досягнення",
+      "settings": "Налаштування"
+    },
+    "profile": {
+      "cardTitle": "Ваш профіль",
+      "cardDescription": "Це інформація, яку ми маємо про вас.",
+      "nameLabel": "Ім'я"
+    },
+    "progress": {
+      "cardTitle": "Прогрес навчання",
+      "syncedDescription": "Синхронізується між пристроями, коли ви увійшли.",
+      "localDescription": "Зберігається локально на цьому пристрої, поки ви переглядаєте як гість.",
+      "emptyMessage": "Виконуйте місії, щоб побачити тут свій прогрес.",
+      "started": "Розпочато",
+      "completed": "Завершено",
+      "catalog": "Каталог",
+      "stepOf": "Крок {{current}} з {{total}}",
+      "itemProgressAria": "Прогрес «{{title}}»: {{percentage}}%"
+    },
+    "achievements": {
+      "cardTitle": "Досягнення",
+      "cardDescription": "Запис вашої власної практики. Тут нічого не втрачає чинності, і на дошці немає нікого іншого.",
+      "currentStreak": "Поточна серія",
+      "longestStreak": "Найдовша серія",
+      "badgesEarned": "Отримано значків",
+      "badgesHeading": "Значки",
+      "day": "день",
+      "days": "днів",
+      "hintActiveToday": "Ви вже практикувалися сьогодні — поверніться завтра, щоб продовжити серію.",
+      "hintContinue": "Практикуйтеся сьогодні, щоб зберегти серію.",
+      "hintStart": "Пройдіть крок місії, щоб почати серію.",
+      "earnedSrLabel": "— отримано",
+      "badges": {
+        "firstLaunch": {
+          "title": "Перший запуск",
+          "description": "Завершіть свою першу місію."
+        },
+        "gettingSerious": {
+          "title": "Серйозний підхід",
+          "description": "Завершіть 5 місій."
+        },
+        "labGraduate": {
+          "title": "Випускник лабораторії",
+          "description": "Завершіть усі місії каталогу."
+        },
+        "deepEnd": {
+          "title": "На глибині",
+          "description": "Завершіть просунуту місію."
+        },
+        "trackSpecialist": {
+          "title": "Спеціаліст з «{{track}}»",
+          "description": "Завершіть усі місії треку «{{track}}»."
+        },
+        "threeInARow": {
+          "title": "Три поспіль",
+          "description": "Практикуйтеся 3 дні поспіль."
+        },
+        "weekStreak": {
+          "title": "Тижнева серія",
+          "description": "Практикуйтеся 7 днів поспіль."
+        }
+      }
+    },
+    "settings": {
+      "accountCardTitle": "Налаштування облікового запису",
+      "accountCardDescription": "Наразі ви увійшли як безкоштовний користувач. Способи оплати не налаштовано.",
+      "logoutEverywhereTitle": "Вийти з усіх пристроїв",
+      "logoutEverywhereDescription": "Завершити всі активні сеанси, включно з цим.",
+      "logoutEverywhereButton": "Вийти всюди",
+      "dangerZoneTitle": "Небезпечна зона",
+      "dangerZoneDescription": "Видалення облікового запису видаляє ваш профіль і весь збережений прогрес. Це неможливо скасувати.",
+      "deleteAccountButton": "Видалити обліковий запис",
+      "deleteAccountConfirmTitle": "Видалити обліковий запис?",
+      "deleteAccountConfirmMessage": "Це остаточно видалить ваш обліковий запис і весь збережений прогрес. Це неможливо скасувати.",
+      "deleteAccountConfirmLabel": "Так, видалити мій обліковий запис",
+      "logoutEverywhereToastMessage": "Вихід з усіх пристроїв виконано.",
+      "doneToastTitle": "Готово",
+      "deleteAccountToastMessage": "Ваш обліковий запис видалено.",
+      "goodbyeToastTitle": "До побачення",
+      "deleteAccountErrorToastMessage": "Не вдалося видалити обліковий запис. Спробуйте ще раз.",
+      "oopsToastTitle": "Ой"
+    }
+  },
+  "missions": {
+    "eyebrow": "Навчальні шляхи",
+    "heading": "Місії",
+    "description": "Оберіть місію та вивчайте Angular, пишучи реальний код у браузері. Налаштування не потрібне.",
+    "emptyTitle": "Немає відповідних місій",
+    "emptyMessage": "Жодна місія не відповідає цьому фільтру. Спробуйте інший трек або рівень складності."
+  },
+  "notFound": {
+    "title": "Сторінку не знайдено",
+    "message": "Сторінка, яку ви шукаєте, не існує або могла бути переміщена.",
+    "goHome": "На головну"
+  },
+  "mission": {
+    "nav": {
+      "ariaLabel": "Кроки місії",
+      "stepNumber": "Крок {{number}}"
+    },
+    "header": {
+      "progressLabel": "Прогрес місії",
+      "progressAria": "Прогрес місії: {{percentage}}%",
+      "durationMinutes": "{{count}} хв",
+      "stepsCount": "{{count}} кроків",
+      "difficulty": {
+        "beginner": "Початковий",
+        "intermediate": "Середній",
+        "advanced": "Просунутий"
+      }
+    },
+    "actionBar": {
+      "previous": "Назад",
+      "reset": "Скинути",
+      "complete": "Завершити",
+      "next": "Далі"
+    },
+    "checkpoint": {
+      "correct": "Правильно!",
+      "incorrect": "Не зовсім.",
+      "questionNumber": "Питання {{number}}",
+      "checkAnswers": "Перевірити відповіді"
+    },
+    "comparison": {
+      "aspectHeader": "Аспект",
+      "recommendationLabel": "Рекомендація",
+      "whenToChooseTitle": "Коли що обирати"
+    },
+    "filters": {
+      "levelLabel": "Рівень",
+      "allLevels": "Усі рівні",
+      "allTracks": "Усі треки"
+    },
+    "card": {
+      "live": "Наживо",
+      "startMission": "Почати місію"
+    },
+    "completed": {
+      "title": "Місію завершено!",
+      "finishedMessage": "Ви завершили {{title}}.",
+      "estimatedTime": "Орієнтовний час: {{minutes}} хв · Трек: {{track}}",
+      "badgeUnlocked": "Значок розблоковано",
+      "badgesUnlocked": "Значки розблоковано",
+      "exploreMore": "Переглянути більше місій",
+      "replay": "Повторити місію"
+    },
+    "completedToast": {
+      "title": "Чудова робота"
+    },
+    "confirmReset": {
+      "title": "Скинути місію?",
+      "message": "Це скине ваш прогрес і відновить початковий код."
+    },
+    "notFound": {
+      "title": "Місію не знайдено",
+      "message": "Ця місія могла бути переміщена або ніколи не існувала."
+    },
+    "completionCard": {
+      "altText": "Картка завершення для {{title}}, {{track}}, завершено {{date}}",
+      "caption": "Збережіть або скопіюйте цю картку, щоб поділитися прогресом. Вона не містить даних облікового запису.",
+      "saveButton": "Зберегти картку",
+      "copyButton": "Копіювати підсумок",
+      "copiedButton": "Підсумок скопійовано"
+    },
+    "step": {
+      "hintLabel": "Підказка:",
+      "progress": "{{current}} з {{total}}",
+      "type": {
+        "concept": "Концепція",
+        "example": "Приклад",
+        "practice": "Практика",
+        "comparison": "Порівняння",
+        "checkpoint": "Контрольна точка",
+        "summary": "Підсумок"
+      }
+    },
+    "editorPanel": {
+      "editorTab": "Редактор",
+      "previewTab": "Перегляд"
+    },
+    "livePreview": {
+      "label": "Перегляд наживо",
+      "statusRunning": "Виконання…",
+      "statusUpToDate": "Актуально",
+      "statusError": "Помилка",
+      "iframeTitle": "Перегляд коду"
+    },
+    "mockPreview": {
+      "label": "Імітований перегляд",
+      "comingSoon": "Виконання наживо незабаром",
+      "conceptPlaceholder": "Цей крок присвячений розумінню концепцій. Перейдіть до наступного практичного кроку, щоб побачити імітований перегляд наживо."
+    },
+    "mock": {
+      "counter": {
+        "countLabel": "Лічильник",
+        "decrement": "Зменшити",
+        "increment": "Збільшити",
+        "double": "Подвоєне: {{value}}"
+      },
+      "rating": {
+        "yourRating": "Ваша оцінка"
+      },
+      "tasks": {
+        "tasksLabel": "Завдання",
+        "newTaskPlaceholder": "Нове завдання...",
+        "addButton": "Додати"
+      },
+      "profile": {
+        "userLabel": "Користувач {{id}}",
+        "mockProfilePage": "Імітована сторінка профілю"
+      }
+    }
+  }
+}

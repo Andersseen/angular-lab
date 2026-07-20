@@ -1,5 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { ToastService } from 'quartz-headless';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { LmnEnvelopeIcon } from 'lumen-icons/envelope';
 import { LmnXMarkIcon } from 'lumen-icons/x-mark';
 import { AuthService } from '../../core/services/auth.service';
@@ -7,7 +8,7 @@ import { AuthService } from '../../core/services/auth.service';
 @Component({
   selector: 'app-email-verification-banner',
   standalone: true,
-  imports: [LmnEnvelopeIcon, LmnXMarkIcon],
+  imports: [TranslatePipe, LmnEnvelopeIcon, LmnXMarkIcon],
   template: `
     @if (show()) {
       <div
@@ -17,7 +18,7 @@ import { AuthService } from '../../core/services/auth.service';
         <div class="mx-auto flex max-w-7xl items-center gap-3">
           <lmn-envelope [size]="16" class="shrink-0" />
           <p class="flex-1">
-            Please verify your email to secure your account.
+            {{ 'emailBanner.message' | translate }}
           </p>
           <button
             type="button"
@@ -25,12 +26,12 @@ import { AuthService } from '../../core/services/auth.service';
             [disabled]="sending()"
             (click)="resend()"
           >
-            {{ sending() ? 'Sending…' : 'Resend email' }}
+            {{ (sending() ? 'emailBanner.sending' : 'emailBanner.resend') | translate }}
           </button>
           <button
             type="button"
             class="rounded p-1 hover:bg-al-warning/10"
-            aria-label="Dismiss"
+            [attr.aria-label]="'emailBanner.dismiss' | translate"
             (click)="dismiss()"
           >
             <lmn-x-mark [size]="16" />
@@ -43,6 +44,7 @@ import { AuthService } from '../../core/services/auth.service';
 export class EmailVerificationBanner {
   private readonly auth = inject(AuthService);
   private readonly toast = inject(ToastService);
+  private readonly translate = inject(TranslateService);
 
   private readonly dismissed = signal(false);
   readonly sending = signal(false);
@@ -60,14 +62,23 @@ export class EmailVerificationBanner {
       next: (response) => {
         this.sending.set(false);
         if (response.alreadyVerified) {
-          this.toast.success('Your email is already verified.', 'All set');
+          this.toast.success(
+            this.translate.instant('emailBanner.alreadyVerifiedToastMessage'),
+            this.translate.instant('emailBanner.alreadyVerifiedToastTitle')
+          );
         } else {
-          this.toast.info('Verification email sent.', 'Check your inbox');
+          this.toast.info(
+            this.translate.instant('emailBanner.sentToastMessage'),
+            this.translate.instant('emailBanner.sentToastTitle')
+          );
         }
       },
       error: () => {
         this.sending.set(false);
-        this.toast.error('Could not send the email. Please try again.', 'Oops');
+        this.toast.error(
+          this.translate.instant('emailBanner.errorToastMessage'),
+          this.translate.instant('emailBanner.errorToastTitle')
+        );
       },
     });
   }

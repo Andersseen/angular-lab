@@ -1,6 +1,7 @@
 import { Component, computed, inject, input, signal } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { VoltButton } from '@voltui/components';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LmnArrowDownTrayIcon } from 'lumen-icons/arrow-down-tray';
 import { LmnClipboardIcon } from 'lumen-icons/clipboard';
 import {
@@ -15,26 +16,26 @@ import { AchievementsService } from '../../core/services/achievements.service';
 @Component({
   selector: 'app-completion-card',
   standalone: true,
-  imports: [VoltButton, LmnArrowDownTrayIcon, LmnClipboardIcon],
+  imports: [VoltButton, TranslatePipe, LmnArrowDownTrayIcon, LmnClipboardIcon],
   template: `
     <figure class="m-0">
       <img
         class="w-full rounded-xl border border-al-line"
         [src]="imageSrc()"
         [alt]="
-          'Completion card for ' +
-          mission().title +
-          ', ' +
-          card().track +
-          ', completed ' +
-          card().completedOn
+          'mission.completionCard.altText'
+            | translate
+              : {
+                  title: mission().title,
+                  track: card().track,
+                  date: card().completedOn
+                }
         "
         width="1200"
         height="630"
       />
       <figcaption class="mt-3 text-sm text-al-ink-muted">
-        Save or copy this card to share your progress. It contains no account
-        details.
+        {{ 'mission.completionCard.caption' | translate }}
       </figcaption>
     </figure>
 
@@ -42,13 +43,18 @@ import { AchievementsService } from '../../core/services/achievements.service';
       <volt-button variant="outline" (click)="save()">
         <span class="flex items-center gap-2">
           <lmn-arrow-down-tray [size]="16" />
-          Save card
+          {{ 'mission.completionCard.saveButton' | translate }}
         </span>
       </volt-button>
       <volt-button variant="outline" (click)="copy()">
         <span class="flex items-center gap-2">
           <lmn-clipboard [size]="16" />
-          {{ copied() ? 'Summary copied' : 'Copy summary' }}
+          {{
+            (copied()
+              ? 'mission.completionCard.copiedButton'
+              : 'mission.completionCard.copyButton'
+            ) | translate
+          }}
         </span>
       </volt-button>
     </div>

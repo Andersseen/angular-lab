@@ -10,6 +10,7 @@ import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router'
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 import { VoltButton } from '@voltui/components';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { LmnMagnifyingGlassIcon } from 'lumen-icons/magnifying-glass';
 import { MissionActionBar } from '../../components/mission/mission-action-bar';
 import { EditorPanel } from '../../components/mission/editor-panel';
@@ -57,6 +58,7 @@ export const routeMeta: RouteMeta = {
     MissionActionBar,
     ConfirmDialog,
     EmptyState,
+    TranslatePipe,
     LmnMagnifyingGlassIcon,
   ],
   template: `
@@ -109,21 +111,21 @@ export const routeMeta: RouteMeta = {
 
         <app-confirm-dialog
           [open]="confirmingReset()"
-          title="Reset mission?"
-          message="This will reset your progress and restore the starter code."
-          confirmLabel="Reset"
+          [title]="'mission.confirmReset.title' | translate"
+          [message]="'mission.confirmReset.message' | translate"
+          [confirmLabel]="'mission.actionBar.reset' | translate"
           variant="danger"
           (confirm)="confirmReset()"
           (dismiss)="confirmingReset.set(false)"
         />
       } @else {
         <app-empty-state
-          title="Mission not found"
-          message="This mission may have moved or never existed."
+          [title]="'mission.notFound.title' | translate"
+          [message]="'mission.notFound.message' | translate"
         >
           <lmn-magnifying-glass data-slot="icon" [size]="32" />
           <volt-button data-slot="action" (click)="goToMissions()">
-            Browse missions
+            {{ 'common.browseMissions' | translate }}
           </volt-button>
         </app-empty-state>
       }
@@ -135,6 +137,7 @@ export default class Mission {
   private readonly route = inject(ActivatedRoute);
   private readonly missionState = inject(MissionStateService);
   private readonly toast = inject(ToastService);
+  private readonly translate = inject(TranslateService);
 
   readonly id = toSignal(
     this.route.paramMap.pipe(map((params) => params.get('id') ?? '')),
@@ -194,7 +197,10 @@ export default class Mission {
 
   markCompleted(): void {
     this.missionState.markCompleted();
-    this.toast.success('Mission completed!', 'Great job');
+    this.toast.success(
+      this.translate.instant('mission.completed.title'),
+      this.translate.instant('mission.completedToast.title')
+    );
   }
 
   markCompletedIfLastStep(): void {

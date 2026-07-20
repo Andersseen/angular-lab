@@ -9,10 +9,11 @@ This file is the primary context source for future AI sessions working on Angula
 - **License:** MIT
 - **Repository:** github.com/Andersseen/angular-lab
 
-## Current Status (verified 2026-07-19)
+## Current Status (verified 2026-07-20)
 
 - **Phases 01–09** ✅ complete (Foundation, Learning Engine, Playground, Server-side progress sync, Real content / mission library, Auth hardening & account lifecycle, Production polish, UI identity & componentization, Engagement). **The planned roadmap is done — nothing is scheduled.** `PLAN.md` lists uncommitted candidates.
-- Unit tests: **41 files / 158 tests, all passing** (`pnpm test:unit`, ~4s). E2E: 7 Playwright specs (`home`, `mission`, `auth`, `auth-hardening`, `achievements`, `not-found`, `playground`), **17 tests passing** (`pnpm test:e2e`). The E2E suite runs **single-worker**: all tests share one local D1 (SQLite) database and per-IP auth rate-limit buckets, so parallel workers cause write contention / rate-limit collisions (see Decision 13).
+- i18n is live (not a numbered phase, an ad hoc addition): English/Spanish/Ukrainian UI chrome via `ngx-translate`, instant no-reload switching, persisted per learner. Mission content stays English-only. Spec: `specs/i18n.md`, Decision 17.
+- Unit tests: **43 files / 164 tests, all passing** (`pnpm test:unit`, ~5s). E2E: 7 Playwright specs (`home`, `mission`, `auth`, `auth-hardening`, `achievements`, `not-found`, `playground`), **17 tests passing** (`pnpm test:e2e`). The E2E suite runs **single-worker**: all tests share one local D1 (SQLite) database and per-IP auth rate-limit buckets, so parallel workers cause write contention / rate-limit collisions (see Decision 13).
 - Missions in catalog: **12 across 3 tracks** (Fundamentals, Reactivity with Signals, Routing & Data). **8 are `previewMode: 'live'`** (real sandboxed execution: `dom-playground`, `events-and-state`, `derived-values`, `effect-sync`, `list-search`, `form-validation`, `async-data`, `data-table-sort`); the 4 Angular-framework missions (`reactive-signals`, `component-communication`, `dependency-injection`, `modern-routing`) stay on mock preview. Content lives in `src/content/missions/*.ts`, aggregated by `src/content/missions/index.ts`.
 - Playground is live: sandboxed iframe (`allow-scripts`, no `allow-same-origin`) + `postMessage`, TS transpiled in-browser (lazy `typescript` chunk, ~3.5 MB, loaded only for live missions). Spec: `specs/playground.md`.
 - Auth is live and hardened (Phase 06): Pages Functions + D1, seeded demo user (`migrations/0002_seed_demo_user.sql`), password reset + email verification (one-time D1 tokens, provider-agnostic email seam), per-IP rate limiting on login/signup/reset/resend, sliding-expiry sessions + "log out everywhere", and account deletion. Schema in `migrations/0004_auth_hardening.sql`.
@@ -51,9 +52,10 @@ angular-lab/
 ├── migrations/               # 0001_init, 0002_seed_demo_user, 0003_progress,
 │                             # 0004_auth_hardening, 0005_engagement
 ├── public/vertex-editor/     # vendored web-editor(.lite).min.js
+├── public/i18n/              # en.json, es.json, uk.json — UI chrome translations (Decision 17)
 ├── scripts/                  # generate-demo-hash.mjs, generate-seo-assets.mjs
 ├── specs/                    # product, learning-model, missions, playground, auth, progress,
-│                             # engagement, production, contribution-principles
+│                             # engagement, production, contribution-principles, i18n
 ├── src/
 │   ├── app/
 │   │   ├── components/
@@ -61,7 +63,8 @@ angular-lab/
 │   │   │   ├── dashboard/    # profile-tab, progress-tab, achievements-tab, settings-tab
 │   │   │   ├── editor/       # vertex-editor.ts (Angular wrapper)
 │   │   │   ├── home/         # hero, features, feature-card, stats
-│   │   │   ├── layout/       # shell, nav-links, app-logo, theme-toggle, user-menu
+│   │   │   ├── layout/       # shell, nav-links, app-logo, theme-toggle, user-menu,
+│   │   │   │                 # language-switcher
 │   │   │   ├── mission/      # step renderers, editor-panel, live/mock preview, completion-card,
 │   │   │   │                 # mission-completed, cards, filters
 │   │   │   └── ui/           # shared presentational primitives (Decision 14 + 15)
@@ -71,7 +74,7 @@ angular-lab/
 │   │   │   ├── models/       # mission.model.ts, user.model.ts, achievement.model.ts
 │   │   │   ├── playground/   # runner-doc.ts (iframe srcdoc), friendly-error.ts
 │   │   │   └── services/     # auth, activity, achievements, code-executor, mission-catalog,
-│   │   │                     # mission-state, progress-sync, storage, theme, analytics
+│   │   │                     # mission-state, progress-sync, storage, theme, language, analytics
 │   │   └── pages/            # index, missions, mission/[id], mission/index (redirect), login,
 │   │                         # signup, forgot/reset password, verify-email, dashboard (guarded),
 │   │                         # [...not-found]
@@ -171,6 +174,15 @@ angular-lab/
    - Volt ships `volt-input` as an **element component** (`<volt-input>`) with its own ControlValueAccessor — not an attribute directive. The auth pages had been writing `<input volt-input>` *and* not importing it, so Angular silently ignored both and every auth control rendered as an unstyled native input. `.al-input` in `styles.css` now styles the native control from the token layer, which also keeps FormField's native `<label for>` wiring (Decision 14) and the reactive-forms bindings intact.
    - `.al-input` lives in `@layer components` **on purpose**: outside a layer it outranks Tailwind utilities and eats the `pl-9` / `pr-10` that make room for the field icon and the password toggle.
 
+17. **i18n: `ngx-translate`, UI chrome only, English/Spanish/Ukrainian**
+   - **Chose `ngx-translate` over Analog's built-in `provideI18n()`.** Analog wraps Angular's `$localize`; on a static build it resolves the locale from the first URL segment and switching languages means navigating to a different locale-prefixed route (already-rendered components don't react to a runtime change). That would have meant prefixing every route and touching the SEO/sitemap script and E2E. `ngx-translate` v18 is signals-backed internally (`TranslateService` stores translations in a `signal()`; `TranslatePipe` is `pure:false` + `markForCheck()`), so it's zoneless-compatible and gives an **instant, no-navigation** switch — the same UX as `ThemeService`'s toggle.
+   - **Scope is UI chrome only** — nav, auth, dashboard, mission UI shell, empty states, toasts. Mission content (`src/content/missions/*.ts`), track names (`Mission.track`, free-form, not an enum), server-driven auth error strings, `routeMeta` `<title>`/meta tags, and the completion-card SVG (Decision 15 — it leaves the app with a fixed identity) are **deliberately excluded**. Full boundary and reasoning: `specs/i18n.md`.
+   - **`LanguageService`** (`core/services/language.service.ts`) mirrors `ThemeService`'s shape exactly: a signal, an `angular-lab:lang` localStorage key, an SSR-guarded `getInitialLang()`. `app.config.ts` calls the same `getInitialLang()` (not a hardcoded `'en'`) when configuring `provideTranslateService`, so there's no English-then-target-language double fetch on boot; a `provideAppInitializer` blocks first render on that initial `translate.use()` call to avoid a flash of raw translation keys.
+   - **Gotcha — `[value]` on a native `<select>` races its `@for`-generated `<option>`s.** Binding `[value]="lang()"` on the `<select>` itself intermittently left the browser showing the first `<option>` as selected (visually wrong) even though the correct language was active — a known class of bug where a parent's value binding can evaluate before dynamically-created child options exist to match against. Fixed by binding `[selected]="option.code === lang()"` on each `<option>` instead, which ties selection to each option's own binding rather than a parent/child race. Caught only by an actual browser check — unit tests didn't fail (jsdom/Testing Library assert on the DOM `value`, not the visually-selected option) and would not have here either.
+   - **Testing:** all 158 pre-i18n unit tests keep passing unmodified. `test-setup.ts` globally provides `TranslateService` with a **synchronous** loader built from a direct `import` of `public/i18n/en.json` (`of(en)` resolves before first render), so `getByText('Sign in')`-style assertions still match — `en.json`'s values are verbatim copies of the strings that used to be hardcoded. Requires `"resolveJsonModule": true` in `tsconfig.json`.
+   - **Badge titles/descriptions** (`core/achievements/badges.ts`, a pure function with no DI) hold translation **keys**, not literal text — `Badge` gained optional `titleParams`/`descriptionParams` for the one dynamic case (track badges interpolate the untranslated track name). `BadgeTile` resolves both via the `translate` pipe.
+   - Adding a language: add `public/i18n/<code>.json` with the same key set as `en.json` (verified by flattening and diffing, not by convention) and register it in `LANGUAGES` (`language.service.ts`). No other code changes.
+
 ## Conventions
 
 - Standalone, small components; signal-based state; semantic accessible HTML.
@@ -188,7 +200,7 @@ pnpm dev:pages        # build + wrangler pages dev :8788 (with functions + D1)
 pnpm db:migrate       # apply D1 migrations locally
 pnpm build:prod       # production build → dist/analog/public
 pnpm preview          # serve production build (static only)
-pnpm test:unit        # Vitest (158 tests)
+pnpm test:unit        # Vitest (164 tests)
 pnpm test:e2e         # Playwright
 pnpm lint             # ESLint
 pnpm install:vertex   # refresh vendored Vertex Editor assets
@@ -212,3 +224,4 @@ pnpm deploy           # manual build + wrangler pages deploy
 - Adding a mission raises the `Lab Graduate` and track-badge targets, so a learner who had "completed the catalog" is short again. That is intended (the badge means *the whole catalog*), but it is the one badge that can visibly un-fill.
 - `@voltui/components` / `angular-movement` peer-dep overrides must stay until they support Angular 22.
 - `.env` exists at repo root (gitignored) — do not commit secrets.
+- Mission content (titles, step prose, checkpoints) is English-only (Decision 17) — translating it needs human review of technical accuracy, not just more `en.json` keys.

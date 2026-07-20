@@ -7,6 +7,7 @@ import {
   VoltRadioGroup,
   VoltRadioItem,
 } from '@voltui/components';
+import { TranslatePipe } from '@ngx-translate/core';
 import type { Checkpoint } from '../../core/models/mission.model';
 import { CheckpointFeedback } from './checkpoint-feedback';
 
@@ -20,13 +21,14 @@ import { CheckpointFeedback } from './checkpoint-feedback';
     VoltCardTitle,
     VoltRadioGroup,
     VoltRadioItem,
+    TranslatePipe,
     CheckpointFeedback,
   ],
   template: `
     <volt-card class="border-al-line">
       <volt-card-header>
         <volt-card-title class="text-base">
-          Question {{ index() + 1 }}
+          {{ 'mission.checkpoint.questionNumber' | translate: { number: index() + 1 } }}
         </volt-card-title>
       </volt-card-header>
       <volt-card-content>
