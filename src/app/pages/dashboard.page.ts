@@ -7,6 +7,7 @@ import {
   VoltTabsList,
   VoltTabsTrigger,
 } from '@voltui/components';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LmnChartPieIcon } from 'lumen-icons/chart-pie';
 import { LmnCog6ToothIcon } from 'lumen-icons/cog-6-tooth';
 import { LmnTrophyIcon } from 'lumen-icons/trophy';
@@ -30,6 +31,7 @@ export const routeMeta: RouteMeta = {
     VoltTabsContent,
     VoltTabsList,
     VoltTabsTrigger,
+    TranslatePipe,
     AchievementsTab,
     ProfileTab,
     ProgressTab,
@@ -45,10 +47,10 @@ export const routeMeta: RouteMeta = {
         <h1
           class="text-3xl font-bold tracking-tight text-al-ink"
         >
-          Dashboard
+          {{ 'dashboard.heading' | translate }}
         </h1>
         <p class="mt-2 text-al-ink-muted">
-          Manage your account and track your learning progress.
+          {{ 'dashboard.subtitle' | translate }}
         </p>
       </header>
 
@@ -63,25 +65,33 @@ export const routeMeta: RouteMeta = {
           <volt-tabs-trigger value="profile">
             <span class="flex items-center justify-center gap-2">
               <lmn-user-circle [size]="16" />
-              <span class="sr-only sm:not-sr-only">Profile</span>
+              <span class="sr-only sm:not-sr-only">{{
+                'dashboard.tabs.profile' | translate
+              }}</span>
             </span>
           </volt-tabs-trigger>
           <volt-tabs-trigger value="progress">
             <span class="flex items-center justify-center gap-2">
               <lmn-chart-pie [size]="16" />
-              <span class="sr-only sm:not-sr-only">Progress</span>
+              <span class="sr-only sm:not-sr-only">{{
+                'dashboard.tabs.progress' | translate
+              }}</span>
             </span>
           </volt-tabs-trigger>
           <volt-tabs-trigger value="achievements">
             <span class="flex items-center justify-center gap-2">
               <lmn-trophy [size]="16" />
-              <span class="sr-only sm:not-sr-only">Achievements</span>
+              <span class="sr-only sm:not-sr-only">{{
+                'dashboard.tabs.achievements' | translate
+              }}</span>
             </span>
           </volt-tabs-trigger>
           <volt-tabs-trigger value="settings">
             <span class="flex items-center justify-center gap-2">
               <lmn-cog-6-tooth [size]="16" />
-              <span class="sr-only sm:not-sr-only">Settings</span>
+              <span class="sr-only sm:not-sr-only">{{
+                'dashboard.tabs.settings' | translate
+              }}</span>
             </span>
           </volt-tabs-trigger>
         </volt-tabs-list>

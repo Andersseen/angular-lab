@@ -5,13 +5,21 @@ import {
   VoltCardHeader,
   VoltCardTitle,
 } from '@voltui/components';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LmnLightBulbIcon } from 'lumen-icons/light-bulb';
 import type { Comparison } from '../../core/models/mission.model';
 
 @Component({
   selector: 'app-comparison-step',
   standalone: true,
-  imports: [VoltCard, VoltCardContent, VoltCardHeader, VoltCardTitle, LmnLightBulbIcon],
+  imports: [
+    VoltCard,
+    VoltCardContent,
+    VoltCardHeader,
+    VoltCardTitle,
+    TranslatePipe,
+    LmnLightBulbIcon,
+  ],
   template: `
     <div class="space-y-5">
       <div
@@ -23,7 +31,7 @@ import type { Comparison } from '../../core/models/mission.model';
               <th
                 class="px-4 py-3 font-semibold text-al-ink"
               >
-                Aspect
+                {{ 'mission.comparison.aspectHeader' | translate }}
               </th>
               <th
                 class="px-4 py-3 font-semibold text-al-brand"
@@ -61,9 +69,13 @@ import type { Comparison } from '../../core/models/mission.model';
         <volt-card-header>
           <div class="mb-1 flex items-center gap-2 text-al-brand">
             <lmn-light-bulb [size]="16" />
-            <span class="text-xs font-semibold uppercase tracking-wide">Recommendation</span>
+            <span class="text-xs font-semibold uppercase tracking-wide">{{
+              'mission.comparison.recommendationLabel' | translate
+            }}</span>
           </div>
-          <volt-card-title class="text-base">When to choose what</volt-card-title>
+          <volt-card-title class="text-base">{{
+            'mission.comparison.whenToChooseTitle' | translate
+          }}</volt-card-title>
         </volt-card-header>
         <volt-card-content>
           <p class="leading-relaxed text-al-ink">

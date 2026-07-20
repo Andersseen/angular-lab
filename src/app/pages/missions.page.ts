@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import type { RouteMeta } from '@analogjs/router';
 import { MOVEMENT_DIRECTIVES } from 'angular-movement';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LmnMagnifyingGlassIcon } from 'lumen-icons/magnifying-glass';
 import { DifficultyFilter } from '../components/mission/difficulty-filter';
 import { MissionCard } from '../components/mission/mission-card';
@@ -9,6 +10,7 @@ import { TrackFilter } from '../components/mission/track-filter';
 import { EmptyState } from '../components/ui/empty-state';
 import type { Difficulty } from '../core/models/mission.model';
 import { MissionCatalogService } from '../core/services/mission-catalog.service';
+import { MissionTranslationService } from '../core/services/mission-translation.service';
 
 export const routeMeta: RouteMeta = {
   title: 'Missions — Angular Lab',
@@ -38,6 +40,7 @@ const DIFFICULTY_ORDER: Record<Difficulty, number> = {
   standalone: true,
   imports: [
     MOVEMENT_DIRECTIVES,
+    TranslatePipe,
     MissionsHeader,
     TrackFilter,
     DifficultyFilter,
@@ -66,7 +69,9 @@ const DIFFICULTY_ORDER: Record<Difficulty, number> = {
         />
       </div>
 
-      @if (filteredMissions().length > 0) {
+      @if (!missionTranslation.ready()) {
+        <p class="text-al-ink-muted">{{ 'common.loading' | translate }}</p>
+      } @else if (filteredMissions().length > 0) {
         <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           @for (
             mission of filteredMissions();
@@ -78,8 +83,8 @@ const DIFFICULTY_ORDER: Record<Difficulty, number> = {
         </div>
       } @else {
         <app-empty-state
-          title="No missions match"
-          message="No missions match this filter yet. Try a different track or difficulty."
+          [title]="'missions.emptyTitle' | translate"
+          [message]="'missions.emptyMessage' | translate"
         >
           <lmn-magnifying-glass data-slot="icon" [size]="32" />
         </app-empty-state>
@@ -89,6 +94,7 @@ const DIFFICULTY_ORDER: Record<Difficulty, number> = {
 })
 export default class Missions {
   private readonly catalog = inject(MissionCatalogService);
+  readonly missionTranslation = inject(MissionTranslationService);
 
   readonly selectedTrack = signal<string | null>(null);
   readonly selectedDifficulty = signal<Difficulty | null>(null);
@@ -111,11 +117,14 @@ export default class Missions {
       const matchesDifficulty = !difficulty || mission.difficulty === difficulty;
       return matchesTrack && matchesDifficulty;
     });
-    return [...filtered].sort(
-      (a, b) =>
-        a.track.localeCompare(b.track) ||
-        DIFFICULTY_ORDER[a.difficulty] - DIFFICULTY_ORDER[b.difficulty]
-    );
+    return [...filtered]
+      .sort(
+        (a, b) =>
+          a.track.localeCompare(b.track) ||
+          DIFFICULTY_ORDER[a.difficulty] - DIFFICULTY_ORDER[b.difficulty]
+      )
+      .map((mission) => this.missionTranslation.hydrate(mission))
+      .filter((mission) => mission !== undefined);
   });
 
   selectTrack(track: string | null): void {

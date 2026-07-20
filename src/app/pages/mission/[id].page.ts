@@ -8,8 +8,9 @@ import {
 import type { RouteMeta } from '@analogjs/router';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs';
+import { map, of } from 'rxjs';
 import { VoltButton } from '@voltui/components';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { LmnMagnifyingGlassIcon } from 'lumen-icons/magnifying-glass';
 import { MissionActionBar } from '../../components/mission/mission-action-bar';
 import { EditorPanel } from '../../components/mission/editor-panel';
@@ -21,27 +22,39 @@ import { ConfirmDialog } from '../../components/ui/confirm-dialog';
 import { EmptyState } from '../../components/ui/empty-state';
 import { MissionCatalogService } from '../../core/services/mission-catalog.service';
 import { MissionStateService } from '../../core/services/mission-state.service';
+import { MissionTranslationService } from '../../core/services/mission-translation.service';
 import { ToastService } from 'quartz-headless';
 
-function resolveMission(route: ActivatedRouteSnapshot) {
-  return inject(MissionCatalogService).getById(route.paramMap.get('id') ?? '');
+/**
+ * SEO title/description are always English (specs/i18n.md), sourced from
+ * `MissionTranslationService`'s cached `en.json` fetch — resolvers support
+ * Observables natively, so this doesn't need the mission to be structurally
+ * resolved through `MissionStateService` first.
+ */
+function resolveEnglishSummary(route: ActivatedRouteSnapshot) {
+  const catalog = inject(MissionCatalogService);
+  const translation = inject(MissionTranslationService);
+  const id = route.paramMap.get('id') ?? '';
+  return catalog.getById(id) ? translation.getEnglishSummary(id) : of(undefined);
 }
 
 export const routeMeta: RouteMeta = {
-  title: (route) => {
-    const mission = resolveMission(route);
-    return mission ? `${mission.title} — Angular Lab` : 'Mission — Angular Lab';
-  },
-  meta: (route) => {
-    const mission = resolveMission(route);
-    const description = mission?.description ?? 'An interactive Angular learning mission.';
-    return [
-      { name: 'description', content: description },
-      { property: 'og:title', content: mission ? mission.title : 'Angular Lab Mission' },
-      { property: 'og:description', content: description },
-      { property: 'og:type', content: 'article' },
-    ];
-  },
+  title: (route) =>
+    resolveEnglishSummary(route).pipe(
+      map((summary) => (summary ? `${summary.title} — Angular Lab` : 'Mission — Angular Lab'))
+    ),
+  meta: (route) =>
+    resolveEnglishSummary(route).pipe(
+      map((summary) => {
+        const description = summary?.description ?? 'An interactive Angular learning mission.';
+        return [
+          { name: 'description', content: description },
+          { property: 'og:title', content: summary ? summary.title : 'Angular Lab Mission' },
+          { property: 'og:description', content: description },
+          { property: 'og:type', content: 'article' },
+        ];
+      })
+    ),
 };
 
 @Component({
@@ -57,11 +70,14 @@ export const routeMeta: RouteMeta = {
     MissionActionBar,
     ConfirmDialog,
     EmptyState,
+    TranslatePipe,
     LmnMagnifyingGlassIcon,
   ],
   template: `
     <div class="mx-auto w-full max-w-7xl px-6 py-8">
-      @if (mission(); as mission) {
+      @if (!missionTranslation.ready()) {
+        <p class="text-al-ink-muted">{{ 'common.loading' | translate }}</p>
+      } @else if (mission(); as mission) {
         <app-mission-header [mission]="mission" [progress]="progress()" />
 
         <div class="grid gap-6 lg:grid-cols-3">
@@ -109,21 +125,21 @@ export const routeMeta: RouteMeta = {
 
         <app-confirm-dialog
           [open]="confirmingReset()"
-          title="Reset mission?"
-          message="This will reset your progress and restore the starter code."
-          confirmLabel="Reset"
+          [title]="'mission.confirmReset.title' | translate"
+          [message]="'mission.confirmReset.message' | translate"
+          [confirmLabel]="'mission.actionBar.reset' | translate"
           variant="danger"
           (confirm)="confirmReset()"
           (dismiss)="confirmingReset.set(false)"
         />
       } @else {
         <app-empty-state
-          title="Mission not found"
-          message="This mission may have moved or never existed."
+          [title]="'mission.notFound.title' | translate"
+          [message]="'mission.notFound.message' | translate"
         >
           <lmn-magnifying-glass data-slot="icon" [size]="32" />
           <volt-button data-slot="action" (click)="goToMissions()">
-            Browse missions
+            {{ 'common.browseMissions' | translate }}
           </volt-button>
         </app-empty-state>
       }
@@ -134,16 +150,27 @@ export default class Mission {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly missionState = inject(MissionStateService);
+  readonly missionTranslation = inject(MissionTranslationService);
   private readonly toast = inject(ToastService);
+  private readonly translate = inject(TranslateService);
 
   readonly id = toSignal(
     this.route.paramMap.pipe(map((params) => params.get('id') ?? '')),
     { initialValue: '' }
   );
 
-  readonly mission = this.missionState.mission.asReadonly();
+  readonly mission = computed(() => {
+    const mission = this.missionState.mission();
+    return mission ? this.missionTranslation.hydrate(mission) : undefined;
+  });
   readonly currentStepId = this.missionState.currentStepId.asReadonly();
-  readonly currentStep = this.missionState.currentStep;
+  readonly currentStep = computed(() => {
+    const step = this.missionState.currentStep();
+    if (!step) {
+      return undefined;
+    }
+    return this.mission()?.steps.find((s) => s.id === step.id);
+  });
   readonly currentStepNumber = this.missionState.currentStepNumber;
   readonly progress = this.missionState.progress;
   readonly hasPrevious = this.missionState.hasPrevious;
@@ -194,7 +221,10 @@ export default class Mission {
 
   markCompleted(): void {
     this.missionState.markCompleted();
-    this.toast.success('Mission completed!', 'Great job');
+    this.toast.success(
+      this.translate.instant('mission.completed.title'),
+      this.translate.instant('mission.completedToast.title')
+    );
   }
 
   markCompletedIfLastStep(): void {

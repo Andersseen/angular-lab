@@ -6,6 +6,7 @@ import {
   VoltCardHeader,
   VoltCardTitle,
 } from '@voltui/components';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LmnArrowPathIcon } from 'lumen-icons/arrow-path';
 import { LmnCheckBadgeIcon } from 'lumen-icons/check-badge';
 import { LmnRocketLaunchIcon } from 'lumen-icons/rocket-launch';
@@ -23,6 +24,7 @@ import { CompletionCard } from './completion-card';
     VoltCardHeader,
     VoltCardTitle,
     VoltButton,
+    TranslatePipe,
     BadgeTile,
     CompletionCard,
     LmnCheckBadgeIcon,
@@ -39,23 +41,31 @@ import { CompletionCard } from './completion-card';
           <lmn-check-badge [size]="24" />
         </div>
         <volt-card-title class="text-2xl text-al-success">
-          Mission completed!
+          {{ 'mission.completed.title' | translate }}
         </volt-card-title>
       </volt-card-header>
       <volt-card-content>
         <p class="text-lg text-al-ink">
-          You finished <strong>{{ mission().title }}</strong>.
+          {{ 'mission.completed.finishedMessage' | translate: { title: mission().title } }}
         </p>
         <p class="mt-2 text-al-ink-muted">
-          Estimated time: {{ mission().durationMinutes }} minutes · Track:
-          {{ mission().track }}
+          {{
+            'mission.completed.estimatedTime'
+              | translate
+                : { minutes: mission().durationMinutes, track: mission().track }
+          }}
         </p>
 
         @if (newBadges().length > 0) {
           <h3
             class="mt-6 mb-3 text-sm font-semibold uppercase tracking-wide text-al-ink-muted"
           >
-            {{ newBadges().length === 1 ? 'Badge unlocked' : 'Badges unlocked' }}
+            {{
+              (newBadges().length === 1
+                ? 'mission.completed.badgeUnlocked'
+                : 'mission.completed.badgesUnlocked'
+              ) | translate
+            }}
           </h3>
           <ul class="grid list-none gap-3 p-0 sm:grid-cols-2">
             @for (badge of newBadges(); track badge.id) {
@@ -72,13 +82,13 @@ import { CompletionCard } from './completion-card';
           <volt-button (click)="explore.emit()">
             <span class="flex items-center gap-2">
               <lmn-rocket-launch [size]="16" />
-              Explore more missions
+              {{ 'mission.completed.exploreMore' | translate }}
             </span>
           </volt-button>
           <volt-button variant="outline" (click)="replay.emit()">
             <span class="flex items-center gap-2">
               <lmn-arrow-path [size]="16" />
-              Replay mission
+              {{ 'mission.completed.replay' | translate }}
             </span>
           </volt-button>
         </div>

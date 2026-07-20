@@ -1,4 +1,4 @@
-import type { Mission } from '../../app/core/models/mission.model';
+import type { MissionMeta } from '../../app/core/models/mission.model';
 import { ASYNC_DATA_MISSION } from './async-data';
 import { COMPONENT_COMMUNICATION_MISSION } from './component-communication';
 import { DATA_TABLE_SORT_MISSION } from './data-table-sort';
@@ -14,10 +14,10 @@ import { REACTIVE_SIGNALS_MISSION } from './reactive-signals';
 
 /**
  * The mission library. To add a mission, create a `./<id>.ts` file that exports a
- * `Mission` and register it here — no engine/service code needs to change.
+ * `MissionMeta` and register it here — no engine/service code needs to change.
  * Order here is the authoring order; the catalog sorts for display by track + difficulty.
  */
-export const MISSIONS: readonly Mission[] = [
+export const MISSIONS: readonly MissionMeta[] = [
   // Track: Fundamentals
   DOM_PLAYGROUND_MISSION,
   EVENTS_AND_STATE_MISSION,

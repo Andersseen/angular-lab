@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import type { RouteMeta } from '@analogjs/router';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { VoltButton } from '@voltui/components';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { LmnArrowPathIcon } from 'lumen-icons/arrow-path';
 import { LmnCheckCircleIcon } from 'lumen-icons/check-circle';
 import { LmnEnvelopeIcon } from 'lumen-icons/envelope';
@@ -21,6 +22,7 @@ type VerifyState = 'pending' | 'success' | 'error';
   imports: [
     RouterLink,
     VoltButton,
+    TranslatePipe,
     AuthLayout,
     LmnArrowPathIcon,
     LmnCheckCircleIcon,
@@ -28,18 +30,21 @@ type VerifyState = 'pending' | 'success' | 'error';
     LmnXCircleIcon,
   ],
   template: `
-    <app-auth-layout heading="Verify your email" cardTitle="Email verification">
+    <app-auth-layout
+      [heading]="'auth.verifyEmail.heading' | translate"
+      [cardTitle]="'auth.verifyEmail.cardTitle' | translate"
+    >
       <lmn-envelope data-slot="icon" [size]="24" />
       <span data-slot="card-description">
         @switch (state()) {
           @case ('pending') {
-            Confirming your email…
+            {{ 'auth.verifyEmail.pendingDescription' | translate }}
           }
           @case ('success') {
-            You're all set.
+            {{ 'auth.verifyEmail.successDescription' | translate }}
           }
           @case ('error') {
-            We couldn't confirm this link.
+            {{ 'auth.verifyEmail.errorDescription' | translate }}
           }
         }
       </span>
@@ -49,21 +54,27 @@ type VerifyState = 'pending' | 'success' | 'error';
           @case ('pending') {
             <lmn-arrow-path [size]="32" class="animate-spin text-al-ink-muted" />
             <p class="text-sm text-al-ink-muted">
-              Verifying your email address.
+              {{ 'auth.verifyEmail.pendingMessage' | translate }}
             </p>
           }
           @case ('success') {
             <lmn-check-circle [size]="32" class="text-al-success" />
-            <p class="text-sm text-al-ink-muted">Your email is verified. Thanks!</p>
+            <p class="text-sm text-al-ink-muted">
+              {{ 'auth.verifyEmail.successMessage' | translate }}
+            </p>
             <a routerLink="/dashboard">
-              <volt-button>Go to dashboard</volt-button>
+              <volt-button>{{
+                'auth.verifyEmail.goToDashboard' | translate
+              }}</volt-button>
             </a>
           }
           @case ('error') {
             <lmn-x-circle [size]="32" class="text-al-danger" />
             <p class="text-sm text-al-ink-muted">{{ error() }}</p>
             <a routerLink="/dashboard">
-              <volt-button variant="outline">Back to dashboard</volt-button>
+              <volt-button variant="outline">{{
+                'auth.verifyEmail.backToDashboard' | translate
+              }}</volt-button>
             </a>
           }
         }
@@ -74,9 +85,12 @@ type VerifyState = 'pending' | 'success' | 'error';
 export default class VerifyEmail {
   private readonly auth = inject(AuthService);
   private readonly route = inject(ActivatedRoute);
+  private readonly translate = inject(TranslateService);
 
   readonly state = signal<VerifyState>('pending');
-  readonly error = signal('This verification link is invalid or has expired.');
+  readonly error = signal(
+    this.translate.instant('auth.verifyEmail.invalidLinkMessage')
+  );
 
   constructor() {
     const token = this.route.snapshot.queryParamMap.get('token');

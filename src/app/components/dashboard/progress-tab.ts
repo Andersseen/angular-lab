@@ -9,9 +9,11 @@ import {
   VoltCardTitle,
   VoltProgress,
 } from '@voltui/components';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LmnRocketLaunchIcon } from 'lumen-icons/rocket-launch';
 import { AuthService } from '../../core/services/auth.service';
 import { MissionCatalogService } from '../../core/services/mission-catalog.service';
+import { MissionTranslationService } from '../../core/services/mission-translation.service';
 import { ProgressSyncService } from '../../core/services/progress-sync.service';
 import { StatTile } from '../ui/stat-tile';
 
@@ -27,43 +29,55 @@ import { StatTile } from '../ui/stat-tile';
     VoltCardHeader,
     VoltCardTitle,
     VoltProgress,
+    TranslatePipe,
     StatTile,
     LmnRocketLaunchIcon,
   ],
   template: `
     <volt-card class="border-al-line">
       <volt-card-header>
-        <volt-card-title>Learning progress</volt-card-title>
+        <volt-card-title>{{ 'dashboard.progress.cardTitle' | translate }}</volt-card-title>
         <volt-card-description>
           @if (auth.isAuthenticated()) {
-            Synced across devices when you are signed in.
+            {{ 'dashboard.progress.syncedDescription' | translate }}
           } @else {
-            Stored locally on this device while you browse as a guest.
+            {{ 'dashboard.progress.localDescription' | translate }}
           }
         </volt-card-description>
       </volt-card-header>
       <volt-card-content>
-        @if (summary().started === 0) {
+        @if (!missionTranslation.ready()) {
+          <p class="text-al-ink-muted">{{ 'common.loading' | translate }}</p>
+        } @else if (summary().started === 0) {
           <div
             class="flex h-48 flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-al-line p-6"
           >
             <p class="text-al-ink-muted">
-              Complete missions to see your progress here.
+              {{ 'dashboard.progress.emptyMessage' | translate }}
             </p>
             <a routerLink="/missions">
               <volt-button>
                 <span class="flex items-center gap-2">
                   <lmn-rocket-launch [size]="16" />
-                  Browse missions
+                  {{ 'common.browseMissions' | translate }}
                 </span>
               </volt-button>
             </a>
           </div>
         } @else {
           <div class="grid gap-4 sm:grid-cols-3">
-            <app-stat-tile label="Started" [value]="summary().started" />
-            <app-stat-tile label="Completed" [value]="summary().completed" />
-            <app-stat-tile label="Catalog" [value]="summary().total" />
+            <app-stat-tile
+              [label]="'dashboard.progress.started' | translate"
+              [value]="summary().started"
+            />
+            <app-stat-tile
+              [label]="'dashboard.progress.completed' | translate"
+              [value]="summary().completed"
+            />
+            <app-stat-tile
+              [label]="'dashboard.progress.catalog' | translate"
+              [value]="summary().total"
+            />
           </div>
 
           <div class="mt-6 space-y-4">
@@ -76,7 +90,11 @@ import { StatTile } from '../ui/stat-tile';
                   <div>
                     <p class="font-medium text-al-ink">{{ item.title }}</p>
                     <p class="text-sm text-al-ink-muted">
-                      Step {{ item.currentStep }} of {{ item.totalSteps }}
+                      {{
+                        'dashboard.progress.stepOf'
+                          | translate
+                            : { current: item.currentStep, total: item.totalSteps }
+                      }}
                     </p>
                   </div>
                   <span class="font-mono text-sm font-medium text-al-ink">
@@ -87,7 +105,8 @@ import { StatTile } from '../ui/stat-tile';
                   class="mt-3"
                   [value]="item.percentage"
                   [attr.aria-label]="
-                    item.title + ' progress: ' + item.percentage + '%'
+                    'dashboard.progress.itemProgressAria'
+                      | translate: { title: item.title, percentage: item.percentage }
                   "
                 />
               </a>
@@ -101,13 +120,15 @@ import { StatTile } from '../ui/stat-tile';
 export class ProgressTab {
   readonly auth = inject(AuthService);
   private readonly catalog = inject(MissionCatalogService);
+  readonly missionTranslation = inject(MissionTranslationService);
   private readonly progressSync = inject(ProgressSyncService);
 
   readonly missionProgress = computed(() =>
     this.progressSync
       .localProgress()
       .map((entry) => {
-        const mission = this.catalog.getById(entry.missionId);
+        const meta = this.catalog.getById(entry.missionId);
+        const mission = meta ? this.missionTranslation.hydrate(meta) : undefined;
         if (!mission) {
           return undefined;
         }

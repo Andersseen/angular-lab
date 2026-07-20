@@ -5,6 +5,7 @@ import {
   VoltTabsList,
   VoltTabsTrigger,
 } from '@voltui/components';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LmnCodeBracketIcon } from 'lumen-icons/code-bracket';
 import { LmnEyeIcon } from 'lumen-icons/eye';
 import type { Mission, Step } from '../../core/models/mission.model';
@@ -23,6 +24,7 @@ import { VertexEditor } from '../editor/vertex-editor';
     VoltTabsContent,
     VoltTabsList,
     VoltTabsTrigger,
+    TranslatePipe,
     LmnCodeBracketIcon,
     LmnEyeIcon,
   ],
@@ -34,13 +36,13 @@ import { VertexEditor } from '../editor/vertex-editor';
         <volt-tabs-trigger value="editor">
           <span class="flex items-center gap-2">
             <lmn-code-bracket [size]="14" />
-            Editor
+            {{ 'mission.editorPanel.editorTab' | translate }}
           </span>
         </volt-tabs-trigger>
         <volt-tabs-trigger value="preview">
           <span class="flex items-center gap-2">
             <lmn-eye [size]="14" />
-            Preview
+            {{ 'mission.editorPanel.previewTab' | translate }}
           </span>
         </volt-tabs-trigger>
       </volt-tabs-list>

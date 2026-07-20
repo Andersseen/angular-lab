@@ -7,6 +7,7 @@ import {
   VoltCardHeader,
   VoltCardTitle,
 } from '@voltui/components';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LmnArrowRightEndOnRectangleIcon } from 'lumen-icons/arrow-right-end-on-rectangle';
 import type { User } from '../../core/models/user.model';
 
@@ -20,14 +21,15 @@ import type { User } from '../../core/models/user.model';
     VoltCardDescription,
     VoltCardHeader,
     VoltCardTitle,
+    TranslatePipe,
     LmnArrowRightEndOnRectangleIcon,
   ],
   template: `
     <volt-card class="border-al-line">
       <volt-card-header>
-        <volt-card-title>Your profile</volt-card-title>
+        <volt-card-title>{{ 'dashboard.profile.cardTitle' | translate }}</volt-card-title>
         <volt-card-description>
-          This is the information we have on file for you.
+          {{ 'dashboard.profile.cardDescription' | translate }}
         </volt-card-description>
       </volt-card-header>
       <volt-card-content class="space-y-4">
@@ -36,7 +38,9 @@ import type { User } from '../../core/models/user.model';
             <div
               class="rounded-xl border border-al-line bg-al-surface p-4"
             >
-              <p class="text-sm text-al-ink-muted">Name</p>
+              <p class="text-sm text-al-ink-muted">
+                {{ 'dashboard.profile.nameLabel' | translate }}
+              </p>
               <p class="text-lg font-semibold text-al-ink">
                 {{ user.name }}
               </p>
@@ -44,7 +48,9 @@ import type { User } from '../../core/models/user.model';
             <div
               class="rounded-xl border border-al-line bg-al-surface p-4"
             >
-              <p class="text-sm text-al-ink-muted">Email</p>
+              <p class="text-sm text-al-ink-muted">
+                {{ 'common.email' | translate }}
+              </p>
               <p class="text-lg font-semibold text-al-ink">
                 {{ user.email }}
               </p>
@@ -55,7 +61,7 @@ import type { User } from '../../core/models/user.model';
           <volt-button variant="outline" (click)="logout.emit()">
             <span class="flex items-center gap-2">
               <lmn-arrow-right-end-on-rectangle [size]="16" />
-              Log out
+              {{ 'userMenu.logOut' | translate }}
             </span>
           </volt-button>
         </div>

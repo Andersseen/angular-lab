@@ -1,4 +1,5 @@
-import { Component, computed, input, signal } from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import type { Mission, Step } from '../../core/models/mission.model';
 import { MockCounter } from './mock/mock-counter';
 import { MockPlaceholder } from './mock/mock-placeholder';
@@ -20,6 +21,7 @@ interface MockState {
   selector: 'app-mock-preview',
   standalone: true,
   imports: [
+    TranslatePipe,
     MockCounter,
     MockRating,
     MockTasks,
@@ -36,10 +38,10 @@ interface MockState {
         <span
           class="text-xs font-semibold uppercase tracking-wide text-al-ink-muted"
         >
-          Mock preview
+          {{ 'mission.mockPreview.label' | translate }}
         </span>
         <span class="text-xs text-al-ink-muted">
-          Live execution coming soon
+          {{ 'mission.mockPreview.comingSoon' | translate }}
         </span>
       </div>
 
@@ -82,6 +84,8 @@ interface MockState {
   `,
 })
 export class MockPreview {
+  private readonly translate = inject(TranslateService);
+
   readonly mission = input.required<Mission>();
   readonly step = input.required<Step>();
 
@@ -113,7 +117,7 @@ export class MockPreview {
 
     return {
       kind: 'placeholder',
-      message: 'This step is about understanding concepts. Run the next practice step to see a live mock preview.',
+      message: this.translate.instant('mission.mockPreview.conceptPlaceholder'),
     };
   });
 

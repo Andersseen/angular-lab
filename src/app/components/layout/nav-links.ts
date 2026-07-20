@@ -1,6 +1,7 @@
 import { Component, input } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { VoltButton } from '@voltui/components';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LmnHomeIcon } from 'lumen-icons/home';
 import { LmnListBulletIcon } from 'lumen-icons/list-bullet';
 import { LmnSquares2x2Icon } from 'lumen-icons/squares-2x2';
@@ -18,6 +19,7 @@ import { LmnSquares2x2Icon } from 'lumen-icons/squares-2x2';
     RouterLink,
     RouterLinkActive,
     VoltButton,
+    TranslatePipe,
     LmnHomeIcon,
     LmnListBulletIcon,
     LmnSquares2x2Icon,
@@ -30,12 +32,12 @@ import { LmnSquares2x2Icon } from 'lumen-icons/squares-2x2';
       [routerLinkActiveOptions]="{ exact: true }"
       [attr.aria-current]="homeLink.isActive ? 'page' : null"
       [class]="anchorClass(homeLink.isActive)"
-      aria-label="Home"
+      [attr.aria-label]="'nav.home' | translate"
     >
-      <volt-button variant="ghost" size="sm" aria-label="Home">
+      <volt-button variant="ghost" size="sm" [attr.aria-label]="'nav.home' | translate">
         <span class="flex items-center gap-2" [class]="labelClass(homeLink.isActive)">
           <lmn-home [size]="16" />
-          <span class="sr-only sm:not-sr-only">Home</span>
+          <span class="sr-only sm:not-sr-only">{{ 'nav.home' | translate }}</span>
         </span>
       </volt-button>
     </a>
@@ -45,15 +47,15 @@ import { LmnSquares2x2Icon } from 'lumen-icons/squares-2x2';
       #missionsLink="routerLinkActive"
       [attr.aria-current]="missionsLink.isActive ? 'page' : null"
       [class]="anchorClass(missionsLink.isActive)"
-      aria-label="Missions"
+      [attr.aria-label]="'nav.missions' | translate"
     >
-      <volt-button variant="ghost" size="sm" aria-label="Missions">
+      <volt-button variant="ghost" size="sm" [attr.aria-label]="'nav.missions' | translate">
         <span
           class="flex items-center gap-2"
           [class]="labelClass(missionsLink.isActive)"
         >
           <lmn-list-bullet [size]="16" />
-          <span class="sr-only sm:not-sr-only">Missions</span>
+          <span class="sr-only sm:not-sr-only">{{ 'nav.missions' | translate }}</span>
         </span>
       </volt-button>
     </a>
@@ -65,15 +67,15 @@ import { LmnSquares2x2Icon } from 'lumen-icons/squares-2x2';
         #dashboardLink="routerLinkActive"
         [attr.aria-current]="dashboardLink.isActive ? 'page' : null"
         [class]="anchorClass(dashboardLink.isActive)"
-        aria-label="Dashboard"
+        [attr.aria-label]="'nav.dashboard' | translate"
       >
-        <volt-button variant="ghost" size="sm" aria-label="Dashboard">
+        <volt-button variant="ghost" size="sm" [attr.aria-label]="'nav.dashboard' | translate">
           <span
             class="flex items-center gap-2"
             [class]="labelClass(dashboardLink.isActive)"
           >
             <lmn-squares-2x2 [size]="16" />
-            <span class="sr-only sm:not-sr-only">Dashboard</span>
+            <span class="sr-only sm:not-sr-only">{{ 'nav.dashboard' | translate }}</span>
           </span>
         </volt-button>
       </a>

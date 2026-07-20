@@ -1,0 +1,359 @@
+{
+  "nav": {
+    "home": "Home",
+    "missions": "Missions",
+    "dashboard": "Dashboard"
+  },
+  "theme": {
+    "ariaSwitchToDark": "Switch to dark theme",
+    "ariaSwitchToLight": "Switch to light theme",
+    "tooltipSwitchToDark": "Switch to dark mode",
+    "tooltipSwitchToLight": "Switch to light mode"
+  },
+  "language": {
+    "selectLabel": "Language"
+  },
+  "userMenu": {
+    "logOut": "Log out",
+    "logIn": "Log in"
+  },
+  "emailBanner": {
+    "message": "Please verify your email to secure your account.",
+    "sending": "Sending…",
+    "resend": "Resend email",
+    "dismiss": "Dismiss",
+    "alreadyVerifiedToastMessage": "Your email is already verified.",
+    "alreadyVerifiedToastTitle": "All set",
+    "sentToastMessage": "Verification email sent.",
+    "sentToastTitle": "Check your inbox",
+    "errorToastMessage": "Could not send the email. Please try again.",
+    "errorToastTitle": "Oops"
+  },
+  "shell": {
+    "footerTagline": "Open source learning platform · Licensed under MIT",
+    "loggedOutToastMessage": "You have been logged out.",
+    "loggedOutToastTitle": "See you soon"
+  },
+  "home": {
+    "badge": "Angular 22 demo lab",
+    "heading": "Learn Angular",
+    "headingSuffix": "by doing",
+    "subtitle": "Guided missions, editable examples, and instant browser previews. No setup, no backend, just code.",
+    "browseMissions": "Browse Missions",
+    "contribute": "Contribute",
+    "stats": {
+      "ariaLabel": "Demo platform snapshot",
+      "availableMissions": "Available missions",
+      "liveDemo": "Live demo",
+      "platformReadiness": "Platform readiness",
+      "platformReadinessAria": "Platform readiness: 75%",
+      "guidedMissions": "guided missions",
+      "toFirstEdit": "to first edit",
+      "firstEditValue": "<1 min",
+      "browserBased": "browser based",
+      "browserBasedValue": "100%"
+    },
+    "features": {
+      "includedInDemo": "Included in demo",
+      "missions": {
+        "title": "Missions",
+        "description": "Step-by-step learning paths that combine theory and practice.",
+        "detail": "Progress through tracks like Fundamentals, Routing, and Testing."
+      },
+      "liveEditor": {
+        "title": "Live Editor",
+        "description": "Edit TypeScript and HTML directly in the browser.",
+        "detail": "Mock previews show the expected result while the engine is built."
+      },
+      "comparisons": {
+        "title": "Comparisons",
+        "description": "See two approaches side by side and learn when to use each.",
+        "detail": "No single \"right way\" — understand the trade-offs."
+      }
+    }
+  },
+  "common": {
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "password": "Password",
+    "browseMissions": "Browse missions",
+    "loading": "Loading…"
+  },
+  "auth": {
+    "login": {
+      "heading": "Welcome back",
+      "subtitle": "Continue your Angular journey",
+      "cardTitle": "Log in",
+      "demoAccountPrefix": "Demo account:",
+      "resetSuccessMessage": "Your password was updated. Log in with your new password.",
+      "forgotPassword": "Forgot password?",
+      "loggingIn": "Logging in...",
+      "submit": "Log in",
+      "noAccountPrompt": "Don't have an account?",
+      "signUpLink": "Sign up"
+    },
+    "signup": {
+      "heading": "Create account",
+      "subtitle": "Join Angular Lab and track your progress",
+      "cardTitle": "Sign up",
+      "cardDescription": "Free forever. No credit card required.",
+      "nameLabel": "Name",
+      "namePlaceholder": "Your name",
+      "passwordHint": "At least 8 characters with a letter and a number.",
+      "creatingAccount": "Creating account...",
+      "submit": "Sign up",
+      "hasAccountPrompt": "Already have an account?"
+    },
+    "forgotPassword": {
+      "heading": "Forgot your password?",
+      "subtitle": "We'll email you a link to choose a new one.",
+      "cardTitle": "Reset password",
+      "cardDescription": "Enter the email associated with your account.",
+      "sentMessage": "If that email is registered, a reset link is on its way. Check your inbox.",
+      "sending": "Sending...",
+      "submit": "Send reset link",
+      "rememberedPrompt": "Remembered it?",
+      "backToLogin": "Back to log in"
+    },
+    "resetPassword": {
+      "heading": "Choose a new password",
+      "cardTitle": "Set password",
+      "cardDescription": "At least 8 characters, including a letter and a number.",
+      "invalidLinkMessage": "This reset link is invalid or has expired.",
+      "newPasswordLabel": "New password",
+      "updating": "Updating...",
+      "submit": "Update password"
+    },
+    "verifyEmail": {
+      "heading": "Verify your email",
+      "cardTitle": "Email verification",
+      "pendingDescription": "Confirming your email…",
+      "successDescription": "You're all set.",
+      "errorDescription": "We couldn't confirm this link.",
+      "pendingMessage": "Verifying your email address.",
+      "successMessage": "Your email is verified. Thanks!",
+      "goToDashboard": "Go to dashboard",
+      "backToDashboard": "Back to dashboard",
+      "invalidLinkMessage": "This verification link is invalid or has expired."
+    }
+  },
+  "dashboard": {
+    "heading": "Dashboard",
+    "subtitle": "Manage your account and track your learning progress.",
+    "tabs": {
+      "profile": "Profile",
+      "progress": "Progress",
+      "achievements": "Achievements",
+      "settings": "Settings"
+    },
+    "profile": {
+      "cardTitle": "Your profile",
+      "cardDescription": "This is the information we have on file for you.",
+      "nameLabel": "Name"
+    },
+    "progress": {
+      "cardTitle": "Learning progress",
+      "syncedDescription": "Synced across devices when you are signed in.",
+      "localDescription": "Stored locally on this device while you browse as a guest.",
+      "emptyMessage": "Complete missions to see your progress here.",
+      "started": "Started",
+      "completed": "Completed",
+      "catalog": "Catalog",
+      "stepOf": "Step {{current}} of {{total}}",
+      "itemProgressAria": "{{title}} progress: {{percentage}}%"
+    },
+    "achievements": {
+      "cardTitle": "Achievements",
+      "cardDescription": "A record of your own practice. Nothing here expires, and nobody else is on the board.",
+      "currentStreak": "Current streak",
+      "longestStreak": "Longest streak",
+      "badgesEarned": "Badges earned",
+      "badgesHeading": "Badges",
+      "day": "day",
+      "days": "days",
+      "hintActiveToday": "You practiced today — come back tomorrow to extend the streak.",
+      "hintContinue": "Practice today to keep your streak alive.",
+      "hintStart": "Work through a mission step to start a streak.",
+      "earnedSrLabel": "— earned",
+      "badges": {
+        "firstLaunch": {
+          "title": "First Launch",
+          "description": "Complete your first mission."
+        },
+        "gettingSerious": {
+          "title": "Getting Serious",
+          "description": "Complete 5 missions."
+        },
+        "labGraduate": {
+          "title": "Lab Graduate",
+          "description": "Complete every mission in the catalog."
+        },
+        "deepEnd": {
+          "title": "Deep End",
+          "description": "Complete an advanced mission."
+        },
+        "trackSpecialist": {
+          "title": "{{track}} Specialist",
+          "description": "Complete every mission in the {{track}} track."
+        },
+        "threeInARow": {
+          "title": "Three in a Row",
+          "description": "Practice 3 days in a row."
+        },
+        "weekStreak": {
+          "title": "Week Streak",
+          "description": "Practice 7 days in a row."
+        }
+      }
+    },
+    "settings": {
+      "accountCardTitle": "Account settings",
+      "accountCardDescription": "You are currently logged in as a free user. No payment methods are configured.",
+      "logoutEverywhereTitle": "Log out of all devices",
+      "logoutEverywhereDescription": "End every active session, including this one.",
+      "logoutEverywhereButton": "Log out everywhere",
+      "dangerZoneTitle": "Danger zone",
+      "dangerZoneDescription": "Deleting your account removes your profile and all saved progress. This cannot be undone.",
+      "deleteAccountButton": "Delete account",
+      "deleteAccountConfirmTitle": "Delete account?",
+      "deleteAccountConfirmMessage": "This permanently deletes your account and all saved progress. This cannot be undone.",
+      "deleteAccountConfirmLabel": "Yes, delete my account",
+      "logoutEverywhereToastMessage": "Logged out of all devices.",
+      "doneToastTitle": "Done",
+      "deleteAccountToastMessage": "Your account has been deleted.",
+      "goodbyeToastTitle": "Goodbye",
+      "deleteAccountErrorToastMessage": "Could not delete the account. Please try again.",
+      "oopsToastTitle": "Oops"
+    }
+  },
+  "missions": {
+    "eyebrow": "Learning paths",
+    "heading": "Missions",
+    "description": "Pick a mission and learn Angular by writing real code in the browser. No setup required.",
+    "emptyTitle": "No missions match",
+    "emptyMessage": "No missions match this filter yet. Try a different track or difficulty."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "message": "The page you're looking for doesn't exist or may have moved.",
+    "goHome": "Go home"
+  },
+  "mission": {
+    "nav": {
+      "ariaLabel": "Mission steps",
+      "stepNumber": "Step {{number}}"
+    },
+    "header": {
+      "progressLabel": "Mission progress",
+      "progressAria": "Mission progress: {{percentage}}%",
+      "durationMinutes": "{{count}} min",
+      "stepsCount": "{{count}} steps",
+      "difficulty": {
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "advanced": "Advanced"
+      }
+    },
+    "actionBar": {
+      "previous": "Previous",
+      "reset": "Reset",
+      "complete": "Complete",
+      "next": "Next"
+    },
+    "checkpoint": {
+      "correct": "Correct!",
+      "incorrect": "Not quite.",
+      "questionNumber": "Question {{number}}",
+      "checkAnswers": "Check answers"
+    },
+    "comparison": {
+      "aspectHeader": "Aspect",
+      "recommendationLabel": "Recommendation",
+      "whenToChooseTitle": "When to choose what"
+    },
+    "filters": {
+      "levelLabel": "Level",
+      "allLevels": "All levels",
+      "allTracks": "All tracks"
+    },
+    "card": {
+      "live": "Live",
+      "startMission": "Start mission"
+    },
+    "completed": {
+      "title": "Mission completed!",
+      "finishedMessage": "You finished {{title}}.",
+      "estimatedTime": "Estimated time: {{minutes}} minutes · Track: {{track}}",
+      "badgeUnlocked": "Badge unlocked",
+      "badgesUnlocked": "Badges unlocked",
+      "exploreMore": "Explore more missions",
+      "replay": "Replay mission"
+    },
+    "completedToast": {
+      "title": "Great job"
+    },
+    "confirmReset": {
+      "title": "Reset mission?",
+      "message": "This will reset your progress and restore the starter code."
+    },
+    "notFound": {
+      "title": "Mission not found",
+      "message": "This mission may have moved or never existed."
+    },
+    "completionCard": {
+      "altText": "Completion card for {{title}}, {{track}}, completed {{date}}",
+      "caption": "Save or copy this card to share your progress. It contains no account details.",
+      "saveButton": "Save card",
+      "copyButton": "Copy summary",
+      "copiedButton": "Summary copied"
+    },
+    "step": {
+      "hintLabel": "Hint:",
+      "progress": "{{current}} of {{total}}",
+      "type": {
+        "concept": "Concept",
+        "example": "Example",
+        "practice": "Practice",
+        "comparison": "Comparison",
+        "checkpoint": "Checkpoint",
+        "summary": "Summary"
+      }
+    },
+    "editorPanel": {
+      "editorTab": "Editor",
+      "previewTab": "Preview"
+    },
+    "livePreview": {
+      "label": "Live preview",
+      "statusRunning": "Running…",
+      "statusUpToDate": "Up to date",
+      "statusError": "Error",
+      "iframeTitle": "Code preview"
+    },
+    "mockPreview": {
+      "label": "Mock preview",
+      "comingSoon": "Live execution coming soon",
+      "conceptPlaceholder": "This step is about understanding concepts. Run the next practice step to see a live mock preview."
+    },
+    "mock": {
+      "counter": {
+        "countLabel": "Count",
+        "decrement": "Decrement",
+        "increment": "Increment",
+        "double": "Double: {{value}}"
+      },
+      "rating": {
+        "yourRating": "Your rating"
+      },
+      "tasks": {
+        "tasksLabel": "Tasks",
+        "newTaskPlaceholder": "New task...",
+        "addButton": "Add"
+      },
+      "profile": {
+        "userLabel": "User {{id}}",
+        "mockProfilePage": "Mock profile page"
+      }
+    }
+  }
+}

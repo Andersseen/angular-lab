@@ -8,15 +8,16 @@ import {
   VoltCardTitle,
 } from '@voltui/components';
 import { MOVEMENT_DIRECTIVES } from 'angular-movement';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LmnArrowsRightLeftIcon } from 'lumen-icons/arrows-right-left';
 import { LmnCodeBracketSquareIcon } from 'lumen-icons/code-bracket-square';
 import { LmnRocketLaunchIcon } from 'lumen-icons/rocket-launch';
 import { GradientIcon } from '../ui/gradient-icon';
 
 export interface Feature {
-  title: string;
-  description: string;
-  detail: string;
+  titleKey: string;
+  descriptionKey: string;
+  detailKey: string;
   icon: 'rocket' | 'editor' | 'compare';
 }
 
@@ -34,6 +35,7 @@ export interface Feature {
     VoltCardHeader,
     VoltCardTitle,
     ...MOVEMENT_DIRECTIVES,
+    TranslatePipe,
     GradientIcon,
     LmnRocketLaunchIcon,
     LmnCodeBracketSquareIcon,
@@ -64,19 +66,19 @@ export interface Feature {
             }
           </app-gradient-icon>
         </div>
-        <volt-card-title>{{ feature().title }}</volt-card-title>
+        <volt-card-title>{{ feature().titleKey | translate }}</volt-card-title>
         <volt-card-description>
-          {{ feature().description }}
+          {{ feature().descriptionKey | translate }}
         </volt-card-description>
       </volt-card-header>
       <volt-card-content class="flex-1">
-        {{ feature().detail }}
+        {{ feature().detailKey | translate }}
       </volt-card-content>
       <volt-card-footer>
         <span
           class="font-mono text-xs font-medium uppercase tracking-wide text-al-ink-muted"
         >
-          Included in demo
+          {{ 'home.features.includedInDemo' | translate }}
         </span>
       </volt-card-footer>
     </volt-card>

@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VoltButton } from '@voltui/components';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LmnKeyIcon } from 'lumen-icons/key';
 import { LmnLockClosedIcon } from 'lumen-icons/lock-closed';
 import { AuthService } from '../core/services/auth.service';
@@ -26,6 +27,7 @@ export const routeMeta: RouteMeta = {
   imports: [
     ReactiveFormsModule,
     VoltButton,
+    TranslatePipe,
     AuthLayout,
     FormField,
     PasswordToggle,
@@ -34,15 +36,18 @@ export const routeMeta: RouteMeta = {
     LmnLockClosedIcon,
   ],
   template: `
-    <app-auth-layout heading="Choose a new password" cardTitle="Set password">
+    <app-auth-layout
+      [heading]="'auth.resetPassword.heading' | translate"
+      [cardTitle]="'auth.resetPassword.cardTitle' | translate"
+    >
       <lmn-key data-slot="icon" [size]="24" />
       <span data-slot="card-description">
-        At least 8 characters, including a letter and a number.
+        {{ 'auth.resetPassword.cardDescription' | translate }}
       </span>
 
       @if (!token) {
         <app-alert variant="danger">
-          This reset link is invalid or has expired.
+          {{ 'auth.resetPassword.invalidLinkMessage' | translate }}
         </app-alert>
       } @else {
         <form
@@ -50,7 +55,10 @@ export const routeMeta: RouteMeta = {
           (ngSubmit)="onSubmit()"
           class="flex flex-col gap-4"
         >
-          <app-form-field label="New password" controlId="password">
+          <app-form-field
+            [label]="'auth.resetPassword.newPasswordLabel' | translate"
+            controlId="password"
+          >
             <lmn-lock-closed data-slot="icon" [size]="16" />
             <input
               id="password"
@@ -75,7 +83,12 @@ export const routeMeta: RouteMeta = {
             class="w-full"
             [disabled]="form.invalid || loading()"
           >
-            {{ loading() ? 'Updating...' : 'Update password' }}
+            {{
+              (loading()
+                ? 'auth.resetPassword.updating'
+                : 'auth.resetPassword.submit'
+              ) | translate
+            }}
           </volt-button>
         </form>
       }

@@ -1,20 +1,21 @@
 import { Component, input } from '@angular/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LmnCheckCircleIcon } from 'lumen-icons/check-circle';
 import { LmnXCircleIcon } from 'lumen-icons/x-circle';
 
 @Component({
   selector: 'app-checkpoint-feedback',
   standalone: true,
-  imports: [LmnCheckCircleIcon, LmnXCircleIcon],
+  imports: [TranslatePipe, LmnCheckCircleIcon, LmnXCircleIcon],
   template: `
     <div role="status" [class]="containerClasses()">
       <p class="flex items-center gap-2 font-semibold text-al-ink">
         @if (correct()) {
           <lmn-check-circle [size]="16" class="text-al-success" />
-          Correct!
+          {{ 'mission.checkpoint.correct' | translate }}
         } @else {
           <lmn-x-circle [size]="16" class="text-al-danger" />
-          Not quite.
+          {{ 'mission.checkpoint.incorrect' | translate }}
         }
       </p>
       <p class="mt-1 text-al-ink-muted">{{ explanation() }}</p>

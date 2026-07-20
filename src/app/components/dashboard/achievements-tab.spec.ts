@@ -7,8 +7,8 @@ import { AchievementsTab } from './achievements-tab';
 const BADGES: Badge[] = [
   {
     id: 'first-mission',
-    title: 'First Launch',
-    description: 'Complete your first mission.',
+    title: 'dashboard.achievements.badges.firstLaunch.title',
+    description: 'dashboard.achievements.badges.firstLaunch.description',
     category: 'milestone',
     earned: true,
     current: 1,
@@ -16,8 +16,8 @@ const BADGES: Badge[] = [
   },
   {
     id: 'streak-7',
-    title: 'Week Streak',
-    description: 'Practice 7 days in a row.',
+    title: 'dashboard.achievements.badges.weekStreak.title',
+    description: 'dashboard.achievements.badges.weekStreak.description',
     category: 'streak',
     earned: false,
     current: 2,

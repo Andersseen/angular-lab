@@ -1,12 +1,13 @@
 import { Component, input, output, signal } from '@angular/core';
 import { VoltButton } from '@voltui/components';
+import { TranslatePipe } from '@ngx-translate/core';
 import type { Checkpoint } from '../../core/models/mission.model';
 import { CheckpointQuestion } from './checkpoint-question';
 
 @Component({
   selector: 'app-checkpoint-step',
   standalone: true,
-  imports: [VoltButton, CheckpointQuestion],
+  imports: [VoltButton, TranslatePipe, CheckpointQuestion],
   template: `
     <div class="space-y-6">
       @for (checkpoint of checkpoints(); track checkpoint.question; let i = $index) {
@@ -22,7 +23,7 @@ import { CheckpointQuestion } from './checkpoint-question';
 
       <div class="flex justify-end">
         <volt-button [disabled]="!canSubmit()" (click)="submit()">
-          Check answers
+          {{ 'mission.checkpoint.checkAnswers' | translate }}
         </volt-button>
       </div>
     </div>

@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { VoltButton } from '@voltui/components';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LmnEnvelopeIcon } from 'lumen-icons/envelope';
 import { LmnKeyIcon } from 'lumen-icons/key';
 import { AuthService } from '../core/services/auth.service';
@@ -26,6 +27,7 @@ export const routeMeta: RouteMeta = {
     ReactiveFormsModule,
     RouterLink,
     VoltButton,
+    TranslatePipe,
     AuthLayout,
     FormField,
     Alert,
@@ -34,20 +36,19 @@ export const routeMeta: RouteMeta = {
   ],
   template: `
     <app-auth-layout
-      heading="Forgot your password?"
-      subtitle="We'll email you a link to choose a new one."
-      cardTitle="Reset password"
+      [heading]="'auth.forgotPassword.heading' | translate"
+      [subtitle]="'auth.forgotPassword.subtitle' | translate"
+      [cardTitle]="'auth.forgotPassword.cardTitle' | translate"
     >
       <lmn-key data-slot="icon" [size]="24" />
       <span data-slot="card-description">
-        Enter the email associated with your account.
+        {{ 'auth.forgotPassword.cardDescription' | translate }}
       </span>
 
       @if (sent()) {
         <app-alert variant="success" class="block">
           <p>
-            If that email is registered, a reset link is on its way. Check your
-            inbox.
+            {{ 'auth.forgotPassword.sentMessage' | translate }}
           </p>
           @if (devLink()) {
             <a
@@ -65,13 +66,13 @@ export const routeMeta: RouteMeta = {
           (ngSubmit)="onSubmit()"
           class="flex flex-col gap-4"
         >
-          <app-form-field label="Email" controlId="email">
+          <app-form-field [label]="'common.email' | translate" controlId="email">
             <lmn-envelope data-slot="icon" [size]="16" />
             <input
               id="email"
               type="email"
               formControlName="email"
-              placeholder="you@example.com"
+              [placeholder]="'common.emailPlaceholder' | translate"
               autocomplete="email"
               class="al-input pl-9"
             />
@@ -82,15 +83,20 @@ export const routeMeta: RouteMeta = {
             class="w-full"
             [disabled]="form.invalid || loading()"
           >
-            {{ loading() ? 'Sending...' : 'Send reset link' }}
+            {{
+              (loading()
+                ? 'auth.forgotPassword.sending'
+                : 'auth.forgotPassword.submit'
+              ) | translate
+            }}
           </volt-button>
         </form>
       }
 
       <p class="mt-4 text-center text-sm text-al-ink-muted">
-        Remembered it?
+        {{ 'auth.forgotPassword.rememberedPrompt' | translate }}
         <a routerLink="/login" class="font-medium text-al-brand hover:underline"
-          >Back to log in</a
+          >{{ 'auth.forgotPassword.backToLogin' | translate }}</a
         >
       </p>
     </app-auth-layout>

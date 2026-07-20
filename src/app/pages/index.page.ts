@@ -25,21 +25,21 @@ export const routeMeta: RouteMeta = {
 
 const FEATURES = [
   {
-    title: 'Missions',
-    description: 'Step-by-step learning paths that combine theory and practice.',
-    detail: 'Progress through tracks like Fundamentals, Routing, and Testing.',
+    titleKey: 'home.features.missions.title',
+    descriptionKey: 'home.features.missions.description',
+    detailKey: 'home.features.missions.detail',
     icon: 'rocket' as const,
   },
   {
-    title: 'Live Editor',
-    description: 'Edit TypeScript and HTML directly in the browser.',
-    detail: 'Mock previews show the expected result while the engine is built.',
+    titleKey: 'home.features.liveEditor.title',
+    descriptionKey: 'home.features.liveEditor.description',
+    detailKey: 'home.features.liveEditor.detail',
     icon: 'editor' as const,
   },
   {
-    title: 'Comparisons',
-    description: 'See two approaches side by side and learn when to use each.',
-    detail: 'No single "right way" — understand the trade-offs.',
+    titleKey: 'home.features.comparisons.title',
+    descriptionKey: 'home.features.comparisons.description',
+    detailKey: 'home.features.comparisons.detail',
     icon: 'compare' as const,
   },
 ];

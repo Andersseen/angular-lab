@@ -1,4 +1,4 @@
-import type { Mission } from '../models/mission.model';
+import type { MissionMeta } from '../models/mission.model';
 import type { Badge, BadgeCategory } from '../models/achievement.model';
 
 /**
@@ -9,7 +9,8 @@ import type { Badge, BadgeCategory } from '../models/achievement.model';
  */
 
 export interface BadgeInput {
-  readonly missions: readonly Mission[];
+  /** Only structural fields (`id`/`track`/`difficulty`) are read — badges never need mission text. */
+  readonly missions: readonly MissionMeta[];
   readonly completedMissionIds: ReadonlySet<string>;
   readonly longestStreak: number;
 }
@@ -20,12 +21,16 @@ function badge(
   description: string,
   category: BadgeCategory,
   current: number,
-  target: number
+  target: number,
+  titleParams?: Record<string, string>,
+  descriptionParams?: Record<string, string>
 ): Badge {
   return {
     id,
     title,
     description,
+    titleParams,
+    descriptionParams,
     category,
     current: Math.min(current, target),
     target,
@@ -48,32 +53,32 @@ export function computeBadges(input: BadgeInput): Badge[] {
   return [
     badge(
       'first-mission',
-      'First Launch',
-      'Complete your first mission.',
+      'dashboard.achievements.badges.firstLaunch.title',
+      'dashboard.achievements.badges.firstLaunch.description',
       'milestone',
       completed.length,
       1
     ),
     badge(
       'five-missions',
-      'Getting Serious',
-      'Complete 5 missions.',
+      'dashboard.achievements.badges.gettingSerious.title',
+      'dashboard.achievements.badges.gettingSerious.description',
       'milestone',
       completed.length,
       5
     ),
     badge(
       'all-missions',
-      'Lab Graduate',
-      'Complete every mission in the catalog.',
+      'dashboard.achievements.badges.labGraduate.title',
+      'dashboard.achievements.badges.labGraduate.description',
       'milestone',
       completed.length,
       missions.length
     ),
     badge(
       'advanced-mission',
-      'Deep End',
-      'Complete an advanced mission.',
+      'dashboard.achievements.badges.deepEnd.title',
+      'dashboard.achievements.badges.deepEnd.description',
       'milestone',
       advancedCompleted,
       1
@@ -81,25 +86,27 @@ export function computeBadges(input: BadgeInput): Badge[] {
     ...tracks.map((track) =>
       badge(
         `track:${track}`,
-        `${track} Specialist`,
-        `Complete every mission in the ${track} track.`,
+        'dashboard.achievements.badges.trackSpecialist.title',
+        'dashboard.achievements.badges.trackSpecialist.description',
         'track',
         completed.filter((mission) => mission.track === track).length,
-        missions.filter((mission) => mission.track === track).length
+        missions.filter((mission) => mission.track === track).length,
+        { track },
+        { track }
       )
     ),
     badge(
       'streak-3',
-      'Three in a Row',
-      'Practice 3 days in a row.',
+      'dashboard.achievements.badges.threeInARow.title',
+      'dashboard.achievements.badges.threeInARow.description',
       'streak',
       longestStreak,
       3
     ),
     badge(
       'streak-7',
-      'Week Streak',
-      'Practice 7 days in a row.',
+      'dashboard.achievements.badges.weekStreak.title',
+      'dashboard.achievements.badges.weekStreak.description',
       'streak',
       longestStreak,
       7

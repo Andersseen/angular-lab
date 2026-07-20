@@ -2,10 +2,12 @@ import { Component, inject } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { MoveEnterDirective } from 'angular-movement';
 import { ToastContainerComponent, ToastService } from 'quartz-headless';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../core/services/auth.service';
 import { ThemeService } from '../../core/services/theme.service';
 import { AppLogo } from './app-logo';
 import { EmailVerificationBanner } from './email-verification-banner';
+import { LanguageSwitcher } from './language-switcher';
 import { NavLinks } from './nav-links';
 import { ThemeToggle } from './theme-toggle';
 import { UserMenu } from './user-menu';
@@ -16,9 +18,11 @@ import { UserMenu } from './user-menu';
   imports: [
     RouterOutlet,
     MoveEnterDirective,
+    TranslatePipe,
     AppLogo,
     NavLinks,
     ThemeToggle,
+    LanguageSwitcher,
     UserMenu,
     EmailVerificationBanner,
     ToastContainerComponent,
@@ -37,6 +41,7 @@ import { UserMenu } from './user-menu';
           <div class="flex items-center gap-1 sm:gap-2">
             <app-nav-links [isAuthenticated]="auth.isAuthenticated()" />
             <app-theme-toggle />
+            <app-language-switcher />
             <app-user-menu
               [isAuthenticated]="auth.isAuthenticated()"
               [userName]="auth.user()?.name"
@@ -58,7 +63,7 @@ import { UserMenu } from './user-menu';
         class="border-t border-al-line bg-al-surface px-6 py-8 text-center text-sm text-al-ink-muted"
       >
         <p class="font-medium">Angular Lab</p>
-        <p class="mt-1">Open source learning platform · Licensed under MIT</p>
+        <p class="mt-1">{{ 'shell.footerTagline' | translate }}</p>
       </footer>
     </div>
   `,
@@ -68,10 +73,14 @@ export class Shell {
   readonly theme = inject(ThemeService);
   readonly auth = inject(AuthService);
   private readonly toast = inject(ToastService);
+  private readonly translate = inject(TranslateService);
 
   logout(): void {
     this.auth.logout().subscribe(() => {
-      this.toast.info('You have been logged out.', 'See you soon');
+      this.toast.info(
+        this.translate.instant('shell.loggedOutToastMessage'),
+        this.translate.instant('shell.loggedOutToastTitle')
+      );
       void this.router.navigate(['/']);
     });
   }

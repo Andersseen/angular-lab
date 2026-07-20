@@ -6,14 +6,11 @@ import {
   VoltCardHeader,
   VoltCardTitle,
 } from '@voltui/components';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { LmnFireIcon } from 'lumen-icons/fire';
 import { AchievementsService } from '../../core/services/achievements.service';
 import { BadgeTile } from '../ui/badge-tile';
 import { StatTile } from '../ui/stat-tile';
-
-function days(count: number): string {
-  return `${count} ${count === 1 ? 'day' : 'days'}`;
-}
 
 @Component({
   selector: 'app-achievements-tab',
@@ -24,6 +21,7 @@ function days(count: number): string {
     VoltCardDescription,
     VoltCardHeader,
     VoltCardTitle,
+    TranslatePipe,
     BadgeTile,
     StatTile,
     LmnFireIcon,
@@ -31,19 +29,29 @@ function days(count: number): string {
   template: `
     <volt-card class="border-al-line">
       <volt-card-header>
-        <volt-card-title>Achievements</volt-card-title>
+        <volt-card-title>{{
+          'dashboard.achievements.cardTitle' | translate
+        }}</volt-card-title>
         <volt-card-description>
-          A record of your own practice. Nothing here expires, and nobody else
-          is on the board.
+          {{ 'dashboard.achievements.cardDescription' | translate }}
         </volt-card-description>
       </volt-card-header>
       <volt-card-content>
         <div class="grid gap-4 sm:grid-cols-3">
-          <app-stat-tile label="Current streak" [value]="currentStreak()">
+          <app-stat-tile
+            [label]="'dashboard.achievements.currentStreak' | translate"
+            [value]="currentStreak()"
+          >
             <lmn-fire data-slot="icon" [size]="14" />
           </app-stat-tile>
-          <app-stat-tile label="Longest streak" [value]="longestStreak()" />
-          <app-stat-tile label="Badges earned" [value]="badgeScore()" />
+          <app-stat-tile
+            [label]="'dashboard.achievements.longestStreak' | translate"
+            [value]="longestStreak()"
+          />
+          <app-stat-tile
+            [label]="'dashboard.achievements.badgesEarned' | translate"
+            [value]="badgeScore()"
+          />
         </div>
 
         <p class="mt-4 text-sm text-al-ink-muted">{{ streakHint() }}</p>
@@ -51,7 +59,7 @@ function days(count: number): string {
         <h3
           class="mt-8 mb-4 text-sm font-semibold uppercase tracking-wide text-al-ink-muted"
         >
-          Badges
+          {{ 'dashboard.achievements.badgesHeading' | translate }}
         </h3>
         <ul class="grid list-none gap-3 p-0 sm:grid-cols-2">
           @for (badge of badges(); track badge.id) {
@@ -64,11 +72,19 @@ function days(count: number): string {
 })
 export class AchievementsTab {
   private readonly achievements = inject(AchievementsService);
+  private readonly translate = inject(TranslateService);
 
   readonly badges = this.achievements.badges;
 
-  readonly currentStreak = computed(() => days(this.achievements.streak().current));
-  readonly longestStreak = computed(() => days(this.achievements.streak().longest));
+  private days(count: number): string {
+    const unit = this.translate.instant(
+      count === 1 ? 'dashboard.achievements.day' : 'dashboard.achievements.days'
+    );
+    return `${count} ${unit}`;
+  }
+
+  readonly currentStreak = computed(() => this.days(this.achievements.streak().current));
+  readonly longestStreak = computed(() => this.days(this.achievements.streak().longest));
   readonly badgeScore = computed(
     () => `${this.achievements.earnedBadges().length} / ${this.badges().length}`
   );
@@ -76,11 +92,11 @@ export class AchievementsTab {
   readonly streakHint = computed(() => {
     const streak = this.achievements.streak();
     if (streak.activeToday) {
-      return 'You practiced today — come back tomorrow to extend the streak.';
+      return this.translate.instant('dashboard.achievements.hintActiveToday');
     }
     if (streak.current > 0) {
-      return 'Practice today to keep your streak alive.';
+      return this.translate.instant('dashboard.achievements.hintContinue');
     }
-    return 'Work through a mission step to start a streak.';
+    return this.translate.instant('dashboard.achievements.hintStart');
   });
 }

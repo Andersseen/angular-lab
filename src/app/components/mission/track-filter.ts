@@ -1,4 +1,5 @@
 import { Component, input, output } from '@angular/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LmnCheckIcon } from 'lumen-icons/check';
 import { LmnRocketLaunchIcon } from 'lumen-icons/rocket-launch';
 import { LmnSquares2x2Icon } from 'lumen-icons/squares-2x2';
@@ -6,7 +7,7 @@ import { LmnSquares2x2Icon } from 'lumen-icons/squares-2x2';
 @Component({
   selector: 'app-track-filter',
   standalone: true,
-  imports: [LmnCheckIcon, LmnRocketLaunchIcon, LmnSquares2x2Icon],
+  imports: [TranslatePipe, LmnCheckIcon, LmnRocketLaunchIcon, LmnSquares2x2Icon],
   template: `
     <div class="flex flex-wrap gap-2">
       <button
@@ -20,7 +21,7 @@ import { LmnSquares2x2Icon } from 'lumen-icons/squares-2x2';
         } @else {
           <lmn-squares-2x2 [size]="14" />
         }
-        All tracks
+        {{ 'mission.filters.allTracks' | translate }}
       </button>
       @for (track of tracks(); track track) {
         <button
