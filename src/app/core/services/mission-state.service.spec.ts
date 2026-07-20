@@ -33,7 +33,7 @@ describe('MissionStateService', () => {
 
     expect(service.mission()?.id).toBe(DEMO_MISSION_ID);
     expect(service.currentStepId()).toBe('concept');
-    expect(service.currentStep()?.title).toBe('What are signals?');
+    expect(service.currentStep()?.type).toBe('concept');
   });
 
   it('navigates to the next and previous steps', () => {

@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import Missions from './missions.page';
 import { MissionCatalogService } from '../core/services/mission-catalog.service';
+import { MissionTranslationService } from '../core/services/mission-translation.service';
 
 const MOCK_MISSIONS = [
   {
@@ -39,6 +40,13 @@ function renderMissions() {
           getAll: () => MOCK_MISSIONS,
           getTracks: () => ['Fundamentals', 'Routing & Data'],
         },
+      },
+      // Mock missions already carry full text (title/description), so hydration
+      // is an identity pass-through — this spec tests page logic, not merging
+      // (see mission-translation.service.spec.ts for that).
+      {
+        provide: MissionTranslationService,
+        useValue: { ready: () => true, hydrate: (mission: unknown) => mission },
       },
     ],
   });

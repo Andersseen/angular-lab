@@ -54,6 +54,49 @@ export interface Mission {
   readonly previewMode?: "live" | "mock";
 }
 
+/**
+ * A checkpoint's structural identity: which option is correct. Never
+ * translated, so it lives in the mission-authoring (structural) layer rather
+ * than in a translation file, where it would have to stay in sync by hand.
+ */
+export interface CheckpointMeta {
+  readonly correctIndex: number;
+}
+
+/**
+ * A step's structural identity — everything about it that ISN'T text.
+ * `id` and `type` drive which text/checkpoints/comparison get attached by
+ * `MissionTranslationService.hydrate()`; the text itself lives in
+ * `public/i18n/missions/*.json` (see specs/i18n.md).
+ */
+export interface StepMeta {
+  readonly id: string;
+  readonly type: StepType;
+  /** Present only for `type: 'checkpoint'` steps; length = number of checkpoints. */
+  readonly checkpoints?: readonly CheckpointMeta[];
+}
+
+/**
+ * A mission's structural identity — everything about it that ISN'T learner-
+ * facing prose. Authored directly in `src/content/missions/*.ts`. All text
+ * (title, description, goal, step content, checkpoint questions, comparisons)
+ * lives in `public/i18n/missions/*.json` for every language including
+ * English — `MissionTranslationService.hydrate()` assembles the full
+ * `Mission` the app renders by combining this structural data with the
+ * current language's text. See specs/i18n.md.
+ */
+export interface MissionMeta {
+  readonly id: string;
+  readonly difficulty: Difficulty;
+  readonly durationMinutes: number;
+  readonly track: string;
+  readonly tags: readonly string[];
+  readonly prerequisites?: readonly string[];
+  readonly steps: readonly StepMeta[];
+  readonly starterCode: string;
+  readonly previewMode?: "live" | "mock";
+}
+
 export interface StepState {
   readonly code: string;
 }

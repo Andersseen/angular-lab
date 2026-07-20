@@ -25,14 +25,15 @@ describe('MissionCatalogService', () => {
   });
 
   it('looks up a mission by id and returns undefined for unknown ids', () => {
-    expect(catalog.getById('dom-playground')?.title).toBeTruthy();
+    expect(catalog.getById('dom-playground')).toBeTruthy();
     expect(catalog.getById('does-not-exist')).toBeUndefined();
   });
 
-  it('gives every mission the required content fields', () => {
+  // Text coverage (title/description/step content) is asserted against the
+  // translation files in src/content/missions/translations.spec.ts, since
+  // that's where the text actually lives now (see specs/i18n.md).
+  it('gives every mission the required structural fields', () => {
     for (const mission of catalog.getAll()) {
-      expect(mission.title.length).toBeGreaterThan(0);
-      expect(mission.description.length).toBeGreaterThan(0);
       expect(mission.steps.length).toBeGreaterThan(0);
       expect(mission.starterCode.length).toBeGreaterThan(0);
     }

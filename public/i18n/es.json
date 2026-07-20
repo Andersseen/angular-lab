@@ -76,7 +76,8 @@
     "email": "Correo electrónico",
     "emailPlaceholder": "tu@ejemplo.com",
     "password": "Contraseña",
-    "browseMissions": "Explorar misiones"
+    "browseMissions": "Explorar misiones",
+    "loading": "Cargando…"
   },
   "auth": {
     "login": {

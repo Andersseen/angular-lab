@@ -1,0 +1,786 @@
+{
+  "dom-playground": {
+    "title": "DOM Playground",
+    "description": "See your code run for real: build an interactive counter with plain TypeScript and the DOM, the foundation under every Angular template.",
+    "steps": {
+      "concept": {
+        "title": "The DOM, up close",
+        "content": "Before Angular renders anything for you, the browser already offers the DOM: a live tree of elements you can create and update with code.\n\nIn this mission you will drive the DOM directly with TypeScript. The preview on the right runs your real code in a sandbox, on every change."
+      },
+      "example": {
+        "title": "A real counter",
+        "content": "The editor contains a small counter built with `document.createElement` and a click listener. It renders into `root`, the container the playground hands to your code.\n\nOpen the preview and click Increment: this is your actual code running, not a simulation.",
+        "hint": "Try changing the initial value of `count` and watch the preview update."
+      },
+      "practice": {
+        "title": "Add a Decrement button",
+        "content": "Add a second button labeled \"Decrement\" that lowers the count by one and updates the label.\n\nThe preview re-runs your code as you type, and shows a friendly message if something breaks.",
+        "hint": "Mirror the Increment button: create it, set `textContent`, add a click listener that does `count -= 1` and calls `render()`, then append it to `root`."
+      },
+      "comparison": {
+        "title": "Imperative DOM vs declarative templates",
+        "content": "Updating the DOM by hand works, but Angular offers a different trade-off. Both are worth understanding.",
+        "comparison": {
+          "titleA": "Imperative DOM",
+          "titleB": "Angular template",
+          "points": [
+            {
+              "aspect": "Mental model",
+              "a": "You command each step: create, listen, update",
+              "b": "You declare the result; Angular updates the DOM"
+            },
+            {
+              "aspect": "Boilerplate",
+              "a": "Grows fast: every element and listener by hand",
+              "b": "Minimal: bindings and events inline in the template"
+            },
+            {
+              "aspect": "Best for",
+              "a": "Understanding what the browser really does",
+              "b": "Building real applications at scale"
+            }
+          ],
+          "recommendation": "Learn the imperative model to understand the platform; use declarative templates to build applications."
+        }
+      },
+      "checkpoint": {
+        "title": "Quick check",
+        "content": "Verify what you learned about the DOM playground.",
+        "checkpoints": [
+          {
+            "question": "Where does playground code render its output?",
+            "options": [
+              "Anywhere in the host page",
+              "Inside the provided `root` container",
+              "In the browser console only",
+              "In a new browser tab"
+            ],
+            "explanation": "The playground runs your code in a sandbox and hands it a dedicated `root` element to render into."
+          },
+          {
+            "question": "What happens when your code throws an error?",
+            "options": [
+              "The page reloads",
+              "Nothing; errors are silent",
+              "The preview shows a friendly plain-language message",
+              "The mission resets"
+            ],
+            "explanation": "Errors are captured in the sandbox and shown in the preview panel with a suggested next step."
+          },
+          {
+            "question": "Why does Angular use declarative templates instead of manual DOM code?",
+            "options": [
+              "Manual DOM code is impossible in browsers",
+              "Templates remove boilerplate and let Angular handle updates",
+              "Templates run faster than any DOM code",
+              "Browsers require templates"
+            ],
+            "explanation": "Declarative templates state what the UI should look like; Angular performs the DOM updates for you."
+          }
+        ]
+      },
+      "summary": {
+        "title": "Mission complete",
+        "content": "You ran real TypeScript in the playground: created elements, handled events, and kept the UI in sync by hand.\n\nNext: see how Angular signals make that synchronization automatic."
+      }
+    }
+  },
+  "events-and-state": {
+    "title": "Events & State",
+    "description": "Wire user events to state and re-render the UI by hand — the loop every framework automates for you.",
+    "goal": "Update an immutable state array from click events and re-render the list.",
+    "steps": {
+      "concept": {
+        "title": "State drives the UI",
+        "content": "A UI is a function of state: given the current data, you produce the DOM. When an event changes the state, you render again.\n\nKeeping state in one place and re-rendering from it is the mental model behind signals, React, and every modern framework."
+      },
+      "example": {
+        "title": "A toggle list",
+        "content": "The editor holds a checklist. Each item has a `done` flag. Clicking an item produces a NEW array with that item flipped, then calls `render()`.\n\nRun the preview and click the items — the ✓/○ marker updates because the state changed and the list re-rendered.",
+        "hint": "Notice `items.map(...)` returns a new array instead of mutating the old one."
+      },
+      "practice": {
+        "title": "Show a done counter",
+        "content": "Add a line above the list that shows how many items are done, like \"2 / 3 complete\". It must update every time you toggle an item.",
+        "hint": "Count with `items.filter((item) => item.done).length` inside `render()`, and set it on a paragraph you append to `root` first."
+      },
+      "comparison": {
+        "title": "Mutate vs replace",
+        "content": "You can change state in place or replace it with a new value. The choice affects how easy your app is to reason about.",
+        "comparison": {
+          "titleA": "Replace (immutable)",
+          "titleB": "Mutate in place",
+          "points": [
+            {
+              "aspect": "Change detection",
+              "a": "New reference: easy to detect a change",
+              "b": "Same reference: changes can go unnoticed"
+            },
+            {
+              "aspect": "Debugging",
+              "a": "Old and new state both exist",
+              "b": "Old state is gone"
+            },
+            {
+              "aspect": "Fits with",
+              "a": "Signals, computed, OnPush",
+              "b": "Quick scripts and prototypes"
+            }
+          ],
+          "recommendation": "Prefer replacing state with new objects/arrays. It pairs naturally with signals and Angular change detection."
+        }
+      },
+      "checkpoint": {
+        "title": "Quick check",
+        "content": "Confirm the state-driven UI loop.",
+        "checkpoints": [
+          {
+            "question": "What is the correct loop for an interactive UI?",
+            "options": [
+              "Render once, then patch the DOM directly forever",
+              "Event → change state → render from state",
+              "Change state and hope the DOM updates",
+              "Render only on page load"
+            ],
+            "explanation": "An event updates the state, then you re-render the UI from that state."
+          },
+          {
+            "question": "Why return a new array instead of mutating the old one?",
+            "options": [
+              "It is faster in every case",
+              "A new reference makes the change easy to detect",
+              "Arrays cannot be mutated in TypeScript",
+              "It uses less memory"
+            ],
+            "explanation": "A fresh reference signals \"something changed\", which pairs well with signals and OnPush change detection."
+          }
+        ]
+      },
+      "summary": {
+        "title": "Mission complete",
+        "content": "You connected events to immutable state and re-rendered from it by hand.\n\nNext: let derived values compute themselves so you never store the same fact twice."
+      }
+    }
+  },
+  "reactive-signals": {
+    "title": "Reactive Signals",
+    "description": "Master Angular signals: the modern reactive primitive for state that updates the UI automatically.",
+    "goal": "Create, read, update, and derive signals in an Angular component.",
+    "steps": {
+      "concept": {
+        "title": "What are signals?",
+        "content": "Signals are the core reactive primitive in modern Angular. A signal holds a value and notifies consumers when that value changes.\n\nUnlike RxJS observables, signals are synchronous and fine-grained: only the DOM nodes that read the signal re-render when it changes."
+      },
+      "example": {
+        "title": "A living counter",
+        "content": "The editor contains a tiny counter component. Read the code, then run the preview to see how `signal(0)` and `count.update(...)` work together.",
+        "hint": "In the next step you will edit this code yourself."
+      },
+      "practice": {
+        "title": "Add double count",
+        "content": "Add a second signal called `doubleCount` that is computed from `count`. Update the template to display it.\n\nThen click the preview to see the mock result.",
+        "hint": "Use `computed(() => count() * 2)` and read it like a function in the template."
+      },
+      "comparison": {
+        "title": "Signals vs RxJS",
+        "content": "Signals and RxJS solve similar problems in different ways. Understanding when to use each makes your code simpler.",
+        "comparison": {
+          "titleA": "Signals",
+          "titleB": "RxJS BehaviorSubject",
+          "points": [
+            {
+              "aspect": "API shape",
+              "a": "Synchronous getter function: count()",
+              "b": "Observable stream: count$.subscribe(...)"
+            },
+            {
+              "aspect": "Granularity",
+              "a": "Fine-grained: only readers re-render",
+              "b": "Stream-based: consumers handle emissions"
+            },
+            {
+              "aspect": "Best for",
+              "a": "Component state, simple reactive values",
+              "b": "HTTP streams, event composition, complex async"
+            }
+          ],
+          "recommendation": "Start with signals for component state. Reach for RxJS when you need operators, async streams, or event composition."
+        }
+      },
+      "checkpoint": {
+        "title": "Quick check",
+        "content": "Answer these questions to verify your understanding.",
+        "checkpoints": [
+          {
+            "question": "How do you read the current value of a signal?",
+            "options": [
+              "count.value",
+              "count()",
+              "count.get()",
+              "count.subscribe()"
+            ],
+            "explanation": "Signals are read by calling them as a function: `count()`."
+          },
+          {
+            "question": "Which method creates a signal derived from other signals?",
+            "options": [
+              "signal()",
+              "effect()",
+              "computed()",
+              "writable()"
+            ],
+            "explanation": "`computed(() => ...)` creates a read-only signal derived from other signals."
+          },
+          {
+            "question": "When should you prefer RxJS over signals?",
+            "options": [
+              "For every reactive value",
+              "For simple counters only",
+              "For async streams and complex operators",
+              "Never; signals replace RxJS completely"
+            ],
+            "explanation": "RxJS remains the best tool for async streams, HTTP requests, and operator chains."
+          }
+        ]
+      },
+      "summary": {
+        "title": "Mission complete",
+        "content": "You have learned how to create signals, update them, derive values with `computed`, and when to combine them with RxJS.\n\nNext mission: pass data between components with inputs and outputs."
+      }
+    }
+  },
+  "component-communication": {
+    "title": "Component Inputs & Outputs",
+    "description": "Learn the modern way to pass data down and send events up between Angular components.",
+    "goal": "Pass data down with input() and send events up with output().",
+    "steps": {
+      "concept": {
+        "title": "Input and Output flow",
+        "content": "Angular components form a tree. Parents pass data down with `input()` and children send events up with `output()`.\n\nThis unidirectional flow makes applications predictable and easy to debug."
+      },
+      "example": {
+        "title": "Rating component",
+        "content": "The editor shows a `Rating` component that receives a `value` input and emits a `valueChange` output when the user clicks a star."
+      },
+      "practice": {
+        "title": "Bind the rating",
+        "content": "Complete the parent component so it displays the current rating and updates it when the child emits a change.",
+        "hint": "Use `[(value)]` two-way binding or the explicit `[value] + (valueChange)` pair."
+      },
+      "comparison": {
+        "title": "Input required vs optional",
+        "content": "Angular inputs can be required or optional. Choosing the right default makes components safer.",
+        "comparison": {
+          "titleA": "input.required<string>()",
+          "titleB": "input<string>()",
+          "points": [
+            {
+              "aspect": "Compiler check",
+              "a": "Parent must provide the binding",
+              "b": "Binding is optional"
+            },
+            {
+              "aspect": "Runtime value",
+              "a": "Always defined",
+              "b": "May be undefined unless default is set"
+            },
+            {
+              "aspect": "Best for",
+              "a": "Critical configuration values",
+              "b": "Optional flags and defaults"
+            }
+          ],
+          "recommendation": "Use `input.required()` for values the component cannot work without. Use optional `input()` with defaults for flags and modifiers."
+        }
+      },
+      "checkpoint": {
+        "title": "Quick check",
+        "content": "Test your knowledge of component communication.",
+        "checkpoints": [
+          {
+            "question": "Which function declares an output in a child component?",
+            "options": [
+              "input()",
+              "output()",
+              "emit()",
+              "signal()"
+            ],
+            "explanation": "`output()` creates an event emitter for parent binding."
+          },
+          {
+            "question": "What is the shorthand for `[value]=\"x\" (valueChange)=\"x=$event\"`?",
+            "options": [
+              "[(value)]=\"x\"",
+              "[value]=\"x\"",
+              "(value)=\"x\"",
+              "bind-value=\"x\""
+            ],
+            "explanation": "Banana-in-a-box `[(value)]` enables two-way binding when the output is named `valueChange`."
+          }
+        ]
+      },
+      "summary": {
+        "title": "Mission complete",
+        "content": "You can now pass data down with inputs, send events up with outputs, and choose between required and optional inputs.\n\nNext mission: share services with dependency injection."
+      }
+    }
+  },
+  "derived-values": {
+    "title": "Derived Values",
+    "description": "Compute values from your source state instead of storing them twice — the idea behind computed() signals.",
+    "goal": "Derive a total from source state and keep it correct without duplicating data.",
+    "steps": {
+      "concept": {
+        "title": "Do not store what you can compute",
+        "content": "If a value can be calculated from other values, do not store it separately — derive it. A stored copy can drift out of sync; a derived value is always correct.\n\nThis is exactly what `computed(() => ...)` does in Angular: it recalculates from its sources whenever they change."
+      },
+      "example": {
+        "title": "A live total",
+        "content": "The editor tracks `price` and `quantity` as source state. The `total()` function derives the amount instead of storing it.\n\nRun the preview and click \"Add one\": the total recomputes from the new quantity — you never assign to it directly.",
+        "hint": "Look how `total()` is a function of `price` and `quantity`, not a stored variable."
+      },
+      "practice": {
+        "title": "Add a discount",
+        "content": "Add a derived `discounted()` value that takes 10% off the total, and show a second line like \"You pay: $36\".\n\nIt must stay correct as the quantity changes.",
+        "hint": "Return `total() * 0.9` from a new function and print it inside `render()`. Derive it — never store the discounted number."
+      },
+      "checkpoint": {
+        "title": "Quick check",
+        "content": "Confirm the derived-state idea.",
+        "checkpoints": [
+          {
+            "question": "Why derive a total instead of storing it in a variable?",
+            "options": [
+              "Stored values are illegal in TypeScript",
+              "A derived value cannot drift out of sync with its sources",
+              "Functions are always faster than variables",
+              "It avoids using state entirely"
+            ],
+            "explanation": "A derived value recomputes from its sources, so it is always consistent with them."
+          },
+          {
+            "question": "Which Angular API expresses a derived value?",
+            "options": [
+              "signal()",
+              "computed()",
+              "effect()",
+              "inject()"
+            ],
+            "explanation": "`computed(() => ...)` produces a read-only value derived from other signals."
+          }
+        ]
+      },
+      "summary": {
+        "title": "Mission complete",
+        "content": "You computed values from source state instead of duplicating them — the core idea of `computed()`.\n\nNext: run side effects automatically whenever state changes."
+      }
+    }
+  },
+  "effect-sync": {
+    "title": "Effects & Auto-Sync",
+    "description": "Run side effects automatically whenever state changes — a from-scratch version of Angular effect().",
+    "goal": "Build a tiny reactive value that re-runs subscribers on every change.",
+    "steps": {
+      "concept": {
+        "title": "Reacting to change",
+        "content": "An effect is code that should re-run whenever the state it depends on changes: update the DOM, log, sync to storage.\n\nAngular gives you `effect(() => ...)`. Here you will build the same idea by hand: a value that keeps a list of listeners and calls them on every set."
+      },
+      "example": {
+        "title": "A reactive value",
+        "content": "The editor defines `createState`, a value with `get`, `set`, and `effect`. The counter registers one effect that writes to the label, and it runs immediately and after every click.\n\nRun the preview: you never call `render()` yourself — the effect keeps the label in sync.",
+        "hint": "Follow the flow: `set` updates the value, then calls every registered listener."
+      },
+      "practice": {
+        "title": "Add a second effect",
+        "content": "Register a SECOND effect that shows whether the count is \"Even\" or \"Odd\" in a separate paragraph. Both effects must run on every click.",
+        "hint": "Create another paragraph, append it to `root`, then call `count.effect(() => { ... })` reading `count.get() % 2`."
+      },
+      "comparison": {
+        "title": "computed vs effect",
+        "content": "Deriving a value and reacting to a change look similar but serve different roles.",
+        "comparison": {
+          "titleA": "computed()",
+          "titleB": "effect()",
+          "points": [
+            {
+              "aspect": "Produces",
+              "a": "A value you read",
+              "b": "A side effect, no value"
+            },
+            {
+              "aspect": "When it runs",
+              "a": "Lazily, when read",
+              "b": "Eagerly, after dependencies change"
+            },
+            {
+              "aspect": "Use for",
+              "a": "Totals, filtered lists, formatting",
+              "b": "DOM writes, logging, persistence"
+            }
+          ],
+          "recommendation": "Use `computed()` to derive values; reserve `effect()` for side effects that reach outside your state."
+        }
+      },
+      "checkpoint": {
+        "title": "Quick check",
+        "content": "Confirm how effects work.",
+        "checkpoints": [
+          {
+            "question": "When should an effect re-run?",
+            "options": [
+              "Only once at startup",
+              "Whenever the state it depends on changes",
+              "On a fixed timer",
+              "Only when the user reloads"
+            ],
+            "explanation": "Effects re-run in response to changes in the state they read."
+          },
+          {
+            "question": "What does an effect produce?",
+            "options": [
+              "A derived value to read",
+              "Nothing — it performs a side effect",
+              "A new component",
+              "An HTTP response"
+            ],
+            "explanation": "Effects perform side effects (DOM writes, logging); they do not return a value to read."
+          }
+        ]
+      },
+      "summary": {
+        "title": "Mission complete",
+        "content": "You built a reactive value that re-runs effects on change — the engine behind `effect()`.\n\nNext: derive a filtered list from a search box."
+      }
+    }
+  },
+  "list-search": {
+    "title": "Build a Searchable List",
+    "description": "Filter a list as the user types by deriving the visible items from a query — no manual DOM juggling.",
+    "goal": "Derive a filtered list from a search query and re-render on every keystroke.",
+    "steps": {
+      "concept": {
+        "title": "The visible list is derived",
+        "content": "A search box does not hold its own list of results. The results are DERIVED: filter the full list by the current query.\n\nKeep one source of truth (the full list + the query) and compute what to show. This is the same pattern as `computed()` over a signal."
+      },
+      "example": {
+        "title": "Filter as you type",
+        "content": "The editor renders an input and a list of fruits. On every keystroke it stores the query and re-renders, showing only fruits that match.\n\nRun the preview and type \"a\": the list narrows because `visible()` derives it from the query.",
+        "hint": "The comparison is case-insensitive: both sides are lower-cased before `includes`."
+      },
+      "practice": {
+        "title": "Handle empty results",
+        "content": "When nothing matches the query, show a \"No matches\" message instead of an empty list. Also show the match count, like \"3 matches\".",
+        "hint": "Inside `render()`, check `visible().length`. If it is 0, append a paragraph with the message; otherwise render the items and a count line."
+      },
+      "checkpoint": {
+        "title": "Quick check",
+        "content": "Confirm the searchable-list pattern.",
+        "checkpoints": [
+          {
+            "question": "Where do the visible results come from?",
+            "options": [
+              "A separate array kept in sync by hand",
+              "Deriving them from the full list and the query",
+              "The DOM, read back on each keystroke",
+              "A server request per keystroke"
+            ],
+            "explanation": "The visible list is derived from the source list filtered by the current query."
+          },
+          {
+            "question": "Why lower-case both the item and the query?",
+            "options": [
+              "To sort the list",
+              "To make the search case-insensitive",
+              "To remove duplicates",
+              "It is required by includes()"
+            ],
+            "explanation": "Lower-casing both sides makes \"Apple\" match a query of \"apple\"."
+          }
+        ]
+      },
+      "summary": {
+        "title": "Mission complete",
+        "content": "You built a searchable list by deriving the visible items from a query.\n\nNext: validate user input in a form."
+      }
+    }
+  },
+  "dependency-injection": {
+    "title": "Dependency Injection Basics",
+    "description": "Understand how Angular provides and injects services, and when to use different injection scopes.",
+    "goal": "Share reactive state across components with an injectable service and inject().",
+    "steps": {
+      "concept": {
+        "title": "The injector tree",
+        "content": "Angular builds an injector tree that mirrors the component tree. Services registered at root are singletons; services provided in a component live as long as that component.\n\nUse `inject()` to request a dependency from the closest injector."
+      },
+      "example": {
+        "title": "A task service",
+        "content": "The editor contains a `TaskService` provided at root and a `TaskList` component that injects it. Notice how `inject(TaskService)` replaces constructor injection."
+      },
+      "practice": {
+        "title": "Add a filter",
+        "content": "Add a `filter` signal to the service and a method `setFilter(query: string)`. Update the component to show only matching tasks.",
+        "hint": "Use `computed(() => tasks().filter(...))` in the service so every consumer sees the filtered list."
+      },
+      "checkpoint": {
+        "title": "Quick check",
+        "content": "Check your DI knowledge.",
+        "checkpoints": [
+          {
+            "question": "Which function is the modern way to inject a service?",
+            "options": [
+              "constructor()",
+              "inject()",
+              "provide()",
+              "useClass()"
+            ],
+            "explanation": "`inject()` is the recommended API inside components, directives, and services."
+          },
+          {
+            "question": "What lifetime has a service provided in a component?",
+            "options": [
+              "Application lifetime",
+              "Same as the component",
+              "One per module",
+              "One per route"
+            ],
+            "explanation": "A service provided in a component is created and destroyed with that component instance."
+          }
+        ]
+      },
+      "summary": {
+        "title": "Mission complete",
+        "content": "You understand how Angular resolves dependencies through the injector tree and how to scope services to components.\n\nNext mission: navigate between views with the modern Angular router."
+      }
+    }
+  },
+  "modern-routing": {
+    "title": "Modern Angular Routing",
+    "description": "Navigate between views, read route parameters, and protect routes with modern router APIs.",
+    "goal": "Map URLs to components, read route params as inputs, and guard navigation.",
+    "steps": {
+      "concept": {
+        "title": "Router as state",
+        "content": "The URL is part of your application state. Angular router maps URLs to components, passes parameters, and lets you guard navigation.\n\nModern routing favors functions over classes: `resolveFn`, `canActivateFn`, and `withComponentInputBinding()`."
+      },
+      "example": {
+        "title": "Route parameters",
+        "content": "The editor shows a `UserProfile` component that reads `:id` from the route. With `withComponentInputBinding()`, the parameter becomes a component input automatically."
+      },
+      "practice": {
+        "title": "Add a guard",
+        "content": "Create a `canActivateFn` that blocks navigation to `/admin` unless a mock `isAdmin()` function returns true. Wire it into the route config.",
+        "hint": "Return `true` to allow navigation or a `UrlTree` to redirect."
+      },
+      "checkpoint": {
+        "title": "Quick check",
+        "content": "Check your routing knowledge.",
+        "checkpoints": [
+          {
+            "question": "Which function enables route params as component inputs?",
+            "options": [
+              "withRouterConfig()",
+              "withComponentInputBinding()",
+              "withEnabledBlockingInitialNavigation()",
+              "withHashLocation()"
+            ],
+            "explanation": "`withComponentInputBinding()` maps route data and parameters to component inputs."
+          },
+          {
+            "question": "What can a guard return to redirect navigation?",
+            "options": [
+              "false",
+              "true",
+              "UrlTree",
+              "All of the above"
+            ],
+            "explanation": "Guards can return boolean values or a `UrlTree` for redirection."
+          }
+        ]
+      },
+      "summary": {
+        "title": "Mission complete",
+        "content": "You can read route parameters, bind them to inputs, and protect routes with functional guards.\n\nYou are ready to build real Angular applications."
+      }
+    }
+  },
+  "form-validation": {
+    "title": "Handle Form Validation",
+    "description": "Give users instant, friendly feedback as they type by validating input and deriving a status message.",
+    "goal": "Validate a field on input and show a clear message for each state.",
+    "steps": {
+      "concept": {
+        "title": "Validation is a pure function",
+        "content": "Good validation is a pure function: given the current value, return a message. No hidden state, no surprises.\n\nYou call it on every input event and show the result. The message is derived from the value — the same reactive idea, applied to forms."
+      },
+      "example": {
+        "title": "Live email feedback",
+        "content": "The editor validates an email field. `validate(value)` returns a message for empty input, a missing \"@\", or a valid address.\n\nRun the preview and type: the message updates on every keystroke because it is derived from the field value.",
+        "hint": "The function returns early for each failing case, then a success message last."
+      },
+      "practice": {
+        "title": "Require a password too",
+        "content": "Add a password field that must be at least 8 characters. Show \"Ready to submit\" only when BOTH the email and the password are valid.",
+        "hint": "Write a `validPassword(value)` returning a boolean, add its own message paragraph, and gate the final message on both checks."
+      },
+      "comparison": {
+        "title": "Validate on input vs on submit",
+        "content": "You can validate as the user types or only when they submit. Each has a place.",
+        "comparison": {
+          "titleA": "On input (live)",
+          "titleB": "On submit",
+          "points": [
+            {
+              "aspect": "Feedback timing",
+              "a": "Immediate, per keystroke",
+              "b": "Only after the user is done"
+            },
+            {
+              "aspect": "Risk",
+              "a": "Can nag before the user finishes",
+              "b": "User discovers all errors at once"
+            },
+            {
+              "aspect": "Good for",
+              "a": "Password rules, availability checks",
+              "b": "Short forms, final confirmation"
+            }
+          ],
+          "recommendation": "Validate on input for guidance, but avoid showing errors until the user has interacted with a field. Always re-check on submit."
+        }
+      },
+      "checkpoint": {
+        "title": "Quick check",
+        "content": "Confirm the validation approach.",
+        "checkpoints": [
+          {
+            "question": "Why keep validation as a pure function of the value?",
+            "options": [
+              "It is the only way TypeScript allows",
+              "It is predictable and easy to test",
+              "It avoids using events",
+              "It makes the form submit automatically"
+            ],
+            "explanation": "A pure function returns the same message for the same input, which is predictable and testable."
+          },
+          {
+            "question": "When should the \"Ready to submit\" message appear?",
+            "options": [
+              "When the email is valid",
+              "When either field is valid",
+              "Only when every field is valid",
+              "As soon as the form loads"
+            ],
+            "explanation": "A submit-ready state requires all fields to pass validation."
+          }
+        ]
+      },
+      "summary": {
+        "title": "Mission complete",
+        "content": "You validated input on every keystroke and derived a clear status from the field values.\n\nNext: load data asynchronously and handle loading and error states."
+      }
+    }
+  },
+  "async-data": {
+    "title": "Async Data & Loading States",
+    "description": "Fetch data without freezing the UI and model the loading, success, and error states every real app needs.",
+    "goal": "Drive a UI through loading → success/error using async/await.",
+    "steps": {
+      "concept": {
+        "title": "Three states, always",
+        "content": "Any data you fetch has at least three states: loading, success, and error. Showing only the success case is the most common UI bug.\n\nWith `async/await` you can move between these states in order and render the right message for each."
+      },
+      "example": {
+        "title": "A fake fetch",
+        "content": "`fakeFetch()` returns a Promise that resolves after a short delay, standing in for a network request. Clicking the button shows \"Loading…\", awaits the result, then shows the name.\n\nRun the preview and click: the UI stays responsive while it waits.",
+        "hint": "The click handler is `async`, so it can `await` the promise before updating the status."
+      },
+      "practice": {
+        "title": "Handle the error state",
+        "content": "Make `fakeFetch` reject about half the time, then wrap the await in `try/catch` and show a friendly error message when it fails.",
+        "hint": "In `fakeFetch`, use `Math.random() < 0.5` to `reject(new Error(\"Network error\"))`. In the handler, `try { ... } catch (err) { setStatus(\"Failed — try again\"); }`."
+      },
+      "checkpoint": {
+        "title": "Quick check",
+        "content": "Confirm async UI handling.",
+        "checkpoints": [
+          {
+            "question": "Which states should a data-fetching UI handle?",
+            "options": [
+              "Only success",
+              "Success and error",
+              "Loading, success, and error",
+              "Loading only"
+            ],
+            "explanation": "Robust UIs handle loading, success, and error — not just the happy path."
+          },
+          {
+            "question": "How do you catch a rejected promise with async/await?",
+            "options": [
+              ".then() only",
+              "A try/catch around the await",
+              "A global window handler",
+              "You cannot catch it"
+            ],
+            "explanation": "Wrapping the `await` in `try/catch` lets you handle a rejected promise like a thrown error."
+          }
+        ]
+      },
+      "summary": {
+        "title": "Mission complete",
+        "content": "You moved a UI through loading, success, and error with async/await.\n\nNext: sort and present a table of records."
+      }
+    }
+  },
+  "data-table-sort": {
+    "title": "Sort a Data Table",
+    "description": "Present records the user can reorder, deriving the sorted view without ever mutating your source data.",
+    "goal": "Toggle sort direction and render a derived, sorted copy of a record list.",
+    "steps": {
+      "concept": {
+        "title": "Sort a copy, not the source",
+        "content": "Array `sort` mutates in place. If you sort your source data directly, you lose the original order and can trigger subtle bugs.\n\nInstead, derive a sorted COPY for display and keep the source untouched — the same \"derive what you show\" rule you used for search."
+      },
+      "example": {
+        "title": "Toggle the order",
+        "content": "The editor renders scores and a button that flips between ascending and descending. `sorted()` returns `[...rows].sort(...)`, a fresh copy, so `rows` never changes.\n\nRun the preview and click the button to reorder the list.",
+        "hint": "The spread `[...rows]` is what protects the original array from being mutated."
+      },
+      "practice": {
+        "title": "Sort by name too",
+        "content": "Add a second button that sorts the rows alphabetically by name. The score button should still work independently.",
+        "hint": "Add a `sortKey` variable (\"score\" | \"name\"), set it in each button handler, and branch inside `sorted()` using `a.name.localeCompare(b.name)` for names."
+      },
+      "checkpoint": {
+        "title": "Quick check",
+        "content": "Confirm safe sorting.",
+        "checkpoints": [
+          {
+            "question": "Why sort a copy instead of the source array?",
+            "options": [
+              "Copies sort faster",
+              "sort() mutates in place and would lose the original order",
+              "The source array is read-only",
+              "It reduces memory use"
+            ],
+            "explanation": "`sort()` mutates the array it is called on, so you sort a spread copy to protect the source."
+          },
+          {
+            "question": "How do you make a shallow copy of an array before sorting?",
+            "options": [
+              "rows.copy()",
+              "[...rows]",
+              "rows.clone()",
+              "new Array(rows)"
+            ],
+            "explanation": "`[...rows]` spreads the items into a new array you can safely sort."
+          }
+        ]
+      },
+      "summary": {
+        "title": "Mission complete",
+        "content": "You presented sortable records by deriving a sorted copy and leaving the source intact.\n\nYou have completed the Routing & Data track — you can now build data-driven Angular views with confidence."
+      }
+    }
+  }
+}

@@ -7,16 +7,33 @@ import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MISSIONS } from '../../../content/missions';
 import { toDayKey } from '../achievements/streak';
-import type { Mission, MissionState } from '../models/mission.model';
+import type { Mission, MissionMeta, MissionState } from '../models/mission.model';
 import { AchievementsService } from './achievements.service';
 import { AuthService } from './auth.service';
 import { StorageService } from './storage.service';
 
 /** Storage is seeded before the services boot: they read it on construction. */
 const seeded = new StorageService();
-const FIRST: Mission = MISSIONS[0];
+const FIRST: MissionMeta = MISSIONS[0];
+/** `completionCard()` needs learner-facing text, which no longer lives on `MissionMeta`. */
+const FIRST_HYDRATED: Mission = {
+  ...FIRST,
+  title: 'Test Mission',
+  description: 'Test mission description',
+  steps: FIRST.steps.map((step) => ({
+    ...step,
+    title: step.id,
+    content: '',
+    checkpoints: step.checkpoints?.map((checkpoint) => ({
+      ...checkpoint,
+      question: '',
+      options: [],
+      explanation: '',
+    })),
+  })),
+};
 
-function completeMission(mission: Mission): void {
+function completeMission(mission: MissionMeta): void {
   const state: MissionState = {
     missionId: mission.id,
     currentStepId: mission.steps[mission.steps.length - 1]?.id ?? '',
@@ -91,11 +108,11 @@ describe('AchievementsService', () => {
   it('builds a completion card from the mission and stored progress', () => {
     completeMission(FIRST);
 
-    const card = build().completionCard(FIRST);
+    const card = build().completionCard(FIRST_HYDRATED);
 
-    expect(card.missionTitle).toBe(FIRST.title);
-    expect(card.track).toBe(FIRST.track);
-    expect(card.difficulty).toBe(FIRST.difficulty);
+    expect(card.missionTitle).toBe(FIRST_HYDRATED.title);
+    expect(card.track).toBe(FIRST_HYDRATED.track);
+    expect(card.difficulty).toBe(FIRST_HYDRATED.difficulty);
     expect(card.missionsCompleted).toBe(1);
     expect(card.missionsTotal).toBe(MISSIONS.length);
     expect(card.completedOn).toMatch(/2026/);

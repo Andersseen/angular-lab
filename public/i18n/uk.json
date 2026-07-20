@@ -76,7 +76,8 @@
     "email": "Електронна пошта",
     "emailPlaceholder": "you@example.com",
     "password": "Пароль",
-    "browseMissions": "Переглянути місії"
+    "browseMissions": "Переглянути місії",
+    "loading": "Завантаження…"
   },
   "auth": {
     "login": {

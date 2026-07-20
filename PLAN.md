@@ -22,7 +22,8 @@ scheduled next phase. What shipped, and where the detail lives:
 | 09 | Engagement | practice streak, derived badges, shareable completion card |
 
 Shipped since, outside the numbered roadmap: **i18n** (`ngx-translate`, English/Spanish/
-Ukrainian UI chrome, instant switching) — `context.md` Decision 17, `specs/i18n.md`.
+Ukrainian, UI chrome + all mission content — no learner-facing text lives in a `.ts` file
+anywhere, including English — instant switching) — `context.md` Decision 17, `specs/i18n.md`.
 
 **Every design decision behind these lives in `context.md`** — that file is the one to
 read, not this one. This file only tracks what is *next*.
@@ -62,10 +63,9 @@ Nothing is scheduled. Candidates, none started, none committed to:
   (`context.md` Decision 12); required before a public launch.
 - **More content** — the mission library takes new missions without engine changes
   (`context.md` §"Adding a New Mission").
-- **Translate mission content** — the i18n pass deliberately left mission prose (titles,
-  step content, checkpoints) English-only; machine translation without technical review
-  risks teaching something wrong (`specs/i18n.md`). Needs a reviewed-translation workflow,
-  not just more `en.json` keys.
+- **Human review of the Spanish/Ukrainian mission translations** — `public/i18n/missions/
+  {es,uk}.json` were AI-translated and structurally verified (`translations.spec.ts`), but
+  not reviewed by a native-speaking Angular expert for technical accuracy (`specs/i18n.md`).
 
 ## Standing rules for every phase
 

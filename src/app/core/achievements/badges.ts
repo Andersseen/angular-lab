@@ -1,4 +1,4 @@
-import type { Mission } from '../models/mission.model';
+import type { MissionMeta } from '../models/mission.model';
 import type { Badge, BadgeCategory } from '../models/achievement.model';
 
 /**
@@ -9,7 +9,8 @@ import type { Badge, BadgeCategory } from '../models/achievement.model';
  */
 
 export interface BadgeInput {
-  readonly missions: readonly Mission[];
+  /** Only structural fields (`id`/`track`/`difficulty`) are read — badges never need mission text. */
+  readonly missions: readonly MissionMeta[];
   readonly completedMissionIds: ReadonlySet<string>;
   readonly longestStreak: number;
 }

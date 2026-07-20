@@ -13,6 +13,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { LmnRocketLaunchIcon } from 'lumen-icons/rocket-launch';
 import { AuthService } from '../../core/services/auth.service';
 import { MissionCatalogService } from '../../core/services/mission-catalog.service';
+import { MissionTranslationService } from '../../core/services/mission-translation.service';
 import { ProgressSyncService } from '../../core/services/progress-sync.service';
 import { StatTile } from '../ui/stat-tile';
 
@@ -45,7 +46,9 @@ import { StatTile } from '../ui/stat-tile';
         </volt-card-description>
       </volt-card-header>
       <volt-card-content>
-        @if (summary().started === 0) {
+        @if (!missionTranslation.ready()) {
+          <p class="text-al-ink-muted">{{ 'common.loading' | translate }}</p>
+        } @else if (summary().started === 0) {
           <div
             class="flex h-48 flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-al-line p-6"
           >
@@ -117,13 +120,15 @@ import { StatTile } from '../ui/stat-tile';
 export class ProgressTab {
   readonly auth = inject(AuthService);
   private readonly catalog = inject(MissionCatalogService);
+  readonly missionTranslation = inject(MissionTranslationService);
   private readonly progressSync = inject(ProgressSyncService);
 
   readonly missionProgress = computed(() =>
     this.progressSync
       .localProgress()
       .map((entry) => {
-        const mission = this.catalog.getById(entry.missionId);
+        const meta = this.catalog.getById(entry.missionId);
+        const mission = meta ? this.missionTranslation.hydrate(meta) : undefined;
         if (!mission) {
           return undefined;
         }

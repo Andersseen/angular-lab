@@ -1,16 +1,16 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import type {
-  Mission,
+  MissionMeta,
   MissionProgress,
   MissionState,
-  Step,
+  StepMeta,
 } from '../models/mission.model';
 import { ActivityService } from './activity.service';
 import { MissionCatalogService } from './mission-catalog.service';
 import { ProgressSyncService } from './progress-sync.service';
 import { StorageService } from './storage.service';
 
-function buildInitialState(mission: Mission): MissionState {
+function buildInitialState(mission: MissionMeta): MissionState {
   return {
     missionId: mission.id,
     currentStepId: mission.steps[0]?.id ?? '',
@@ -32,13 +32,13 @@ export class MissionStateService {
   private readonly progressSync = inject(ProgressSyncService);
   private readonly storage = inject(StorageService);
 
-  readonly mission = signal<Mission | undefined>(undefined);
+  readonly mission = signal<MissionMeta | undefined>(undefined);
   readonly currentStepId = signal<string>('');
   readonly stepCode = signal<Record<string, string>>({});
   readonly completed = signal<boolean>(false);
   readonly completedAt = signal<number | null>(null);
 
-  readonly currentStep = computed<Step | undefined>(() => {
+  readonly currentStep = computed<StepMeta | undefined>(() => {
     const mission = this.mission();
     if (!mission) {
       return undefined;

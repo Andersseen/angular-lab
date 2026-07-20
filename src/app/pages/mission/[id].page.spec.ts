@@ -6,6 +6,15 @@ import { vi } from 'vitest';
 import Mission from './[id].page';
 import { MissionStateService } from '../../core/services/mission-state.service';
 import { MissionCatalogService } from '../../core/services/mission-catalog.service';
+import { MissionTranslationService } from '../../core/services/mission-translation.service';
+
+// The mock mission state below already carries full text (title/description/step
+// content), so hydration is an identity pass-through — this spec tests page
+// logic, not merging (see mission-translation.service.spec.ts for that).
+const mockTranslationProvider = {
+  provide: MissionTranslationService,
+  useValue: { ready: () => true, hydrate: (mission: unknown) => mission },
+};
 
 const createMockState = (mission = true) => {
   const mockMission = mission
@@ -69,6 +78,7 @@ describe('Mission page', () => {
         provideRouter([]),
         { provide: MissionStateService, useValue: mockState },
         { provide: MissionCatalogService, useValue: { getAll: () => [] } },
+        mockTranslationProvider,
         { provide: ActivatedRoute, useValue: createRoute('reactive-signals') },
       ],
     });
@@ -85,6 +95,7 @@ describe('Mission page', () => {
         provideRouter([]),
         { provide: MissionStateService, useValue: mockState },
         { provide: MissionCatalogService, useValue: { getAll: () => [] } },
+        mockTranslationProvider,
         { provide: ActivatedRoute, useValue: createRoute('unknown-mission') },
       ],
     });

@@ -76,7 +76,8 @@
     "email": "Email",
     "emailPlaceholder": "you@example.com",
     "password": "Password",
-    "browseMissions": "Browse missions"
+    "browseMissions": "Browse missions",
+    "loading": "Loading…"
   },
   "auth": {
     "login": {

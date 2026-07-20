@@ -1,0 +1,786 @@
+{
+  "dom-playground": {
+    "title": "Zona de pruebas del DOM",
+    "description": "Mira tu código funcionar de verdad: construye un contador interactivo con TypeScript puro y el DOM, la base que sostiene cada plantilla de Angular.",
+    "steps": {
+      "concept": {
+        "title": "El DOM, de cerca",
+        "content": "Antes de que Angular renderice nada por ti, el navegador ya ofrece el DOM: un árbol vivo de elementos que puedes crear y actualizar con código.\n\nEn esta misión vas a manejar el DOM directamente con TypeScript. La vista previa de la derecha ejecuta tu código real en un entorno aislado, con cada cambio que hagas."
+      },
+      "example": {
+        "title": "Un contador real",
+        "content": "El editor contiene un pequeño contador construido con `document.createElement` y un listener de clic. Se renderiza dentro de `root`, el contenedor que la zona de pruebas le entrega a tu código.\n\nAbre la vista previa y haz clic en Incrementar: este es tu código real ejecutándose, no una simulación.",
+        "hint": "Prueba a cambiar el valor inicial de `count` y observa cómo se actualiza la vista previa."
+      },
+      "practice": {
+        "title": "Agrega un botón de Decrementar",
+        "content": "Agrega un segundo botón con la etiqueta \"Decrementar\" que reduzca el contador en uno y actualice la etiqueta.\n\nLa vista previa vuelve a ejecutar tu código mientras escribes y muestra un mensaje amigable si algo falla.",
+        "hint": "Replica el botón de Incrementar: créalo, asigna `textContent`, agrega un listener de clic que haga `count -= 1` y llame a `render()`, y luego añádelo a `root`."
+      },
+      "comparison": {
+        "title": "DOM imperativo frente a plantillas declarativas",
+        "content": "Actualizar el DOM a mano funciona, pero Angular ofrece un equilibrio distinto. Vale la pena entender ambos enfoques.",
+        "comparison": {
+          "titleA": "DOM imperativo",
+          "titleB": "Plantilla de Angular",
+          "points": [
+            {
+              "aspect": "Modelo mental",
+              "a": "Controlas cada paso: crear, escuchar, actualizar",
+              "b": "Declaras el resultado; Angular actualiza el DOM"
+            },
+            {
+              "aspect": "Código repetitivo",
+              "a": "Crece rápido: cada elemento y listener a mano",
+              "b": "Mínimo: enlaces y eventos directamente en la plantilla"
+            },
+            {
+              "aspect": "Ideal para",
+              "a": "Entender lo que el navegador realmente hace",
+              "b": "Construir aplicaciones reales a gran escala"
+            }
+          ],
+          "recommendation": "Aprende el modelo imperativo para entender la plataforma; usa plantillas declarativas para construir aplicaciones."
+        }
+      },
+      "checkpoint": {
+        "title": "Comprobación rápida",
+        "content": "Verifica lo que aprendiste sobre la zona de pruebas del DOM.",
+        "checkpoints": [
+          {
+            "question": "¿Dónde renderiza su salida el código de la zona de pruebas?",
+            "options": [
+              "En cualquier parte de la página anfitriona",
+              "Dentro del contenedor `root` proporcionado",
+              "Solo en la consola del navegador",
+              "En una nueva pestaña del navegador"
+            ],
+            "explanation": "La zona de pruebas ejecuta tu código en un entorno aislado y le entrega un elemento `root` dedicado para renderizar."
+          },
+          {
+            "question": "¿Qué ocurre cuando tu código lanza un error?",
+            "options": [
+              "La página se recarga",
+              "Nada; los errores son silenciosos",
+              "La vista previa muestra un mensaje amigable en lenguaje sencillo",
+              "La misión se reinicia"
+            ],
+            "explanation": "Los errores se capturan en el entorno aislado y se muestran en el panel de vista previa junto con un siguiente paso sugerido."
+          },
+          {
+            "question": "¿Por qué Angular usa plantillas declarativas en lugar de código DOM manual?",
+            "options": [
+              "El código DOM manual es imposible en los navegadores",
+              "Las plantillas eliminan el código repetitivo y dejan que Angular gestione las actualizaciones",
+              "Las plantillas se ejecutan más rápido que cualquier código DOM",
+              "Los navegadores requieren plantillas"
+            ],
+            "explanation": "Las plantillas declarativas indican cómo debe verse la UI; Angular se encarga de las actualizaciones del DOM por ti."
+          }
+        ]
+      },
+      "summary": {
+        "title": "Misión completada",
+        "content": "Ejecutaste TypeScript real en la zona de pruebas: creaste elementos, manejaste eventos y mantuviste la UI sincronizada a mano.\n\nA continuación: descubre cómo las señales de Angular hacen que esa sincronización sea automática."
+      }
+    }
+  },
+  "events-and-state": {
+    "title": "Eventos y estado",
+    "description": "Conecta eventos del usuario al estado y vuelve a renderizar la UI a mano — el ciclo que todo framework automatiza por ti.",
+    "goal": "Actualiza un array de estado inmutable a partir de eventos de clic y vuelve a renderizar la lista.",
+    "steps": {
+      "concept": {
+        "title": "El estado impulsa la UI",
+        "content": "Una UI es una función del estado: dado los datos actuales, produces el DOM. Cuando un evento cambia el estado, vuelves a renderizar.\n\nMantener el estado en un solo lugar y volver a renderizar a partir de él es el modelo mental detrás de las señales, React y todo framework moderno."
+      },
+      "example": {
+        "title": "Una lista con conmutador",
+        "content": "El editor contiene una lista de tareas. Cada elemento tiene una marca `done`. Al hacer clic en un elemento se produce un NUEVO array con ese elemento invertido, y luego se llama a `render()`.\n\nEjecuta la vista previa y haz clic en los elementos — el marcador ✓/○ se actualiza porque el estado cambió y la lista se volvió a renderizar.",
+        "hint": "Fíjate en que `items.map(...)` devuelve un nuevo array en lugar de mutar el anterior."
+      },
+      "practice": {
+        "title": "Muestra un contador de completados",
+        "content": "Agrega una línea encima de la lista que muestre cuántos elementos están completados, algo como \"2 / 3 completados\". Debe actualizarse cada vez que marques un elemento.",
+        "hint": "Cuenta con `items.filter((item) => item.done).length` dentro de `render()`, y asígnalo a un párrafo que agregues primero a `root`."
+      },
+      "comparison": {
+        "title": "Mutar frente a reemplazar",
+        "content": "Puedes cambiar el estado en el mismo lugar o reemplazarlo por un valor nuevo. Esa elección afecta lo fácil que es razonar sobre tu aplicación.",
+        "comparison": {
+          "titleA": "Reemplazar (inmutable)",
+          "titleB": "Mutar en el mismo lugar",
+          "points": [
+            {
+              "aspect": "Detección de cambios",
+              "a": "Nueva referencia: fácil detectar un cambio",
+              "b": "Misma referencia: los cambios pueden pasar desapercibidos"
+            },
+            {
+              "aspect": "Depuración",
+              "a": "El estado antiguo y el nuevo coexisten",
+              "b": "El estado antiguo desaparece"
+            },
+            {
+              "aspect": "Encaja con",
+              "a": "Señales, computed, OnPush",
+              "b": "Scripts rápidos y prototipos"
+            }
+          ],
+          "recommendation": "Prefiere reemplazar el estado con objetos/arrays nuevos. Encaja de forma natural con las señales y la detección de cambios de Angular."
+        }
+      },
+      "checkpoint": {
+        "title": "Comprobación rápida",
+        "content": "Confirma el ciclo de UI impulsada por estado.",
+        "checkpoints": [
+          {
+            "question": "¿Cuál es el ciclo correcto para una UI interactiva?",
+            "options": [
+              "Renderizar una vez y luego parchear el DOM directamente para siempre",
+              "Evento → cambiar el estado → renderizar a partir del estado",
+              "Cambiar el estado y esperar que el DOM se actualice",
+              "Renderizar solo al cargar la página"
+            ],
+            "explanation": "Un evento actualiza el estado, y luego vuelves a renderizar la UI a partir de ese estado."
+          },
+          {
+            "question": "¿Por qué devolver un nuevo array en lugar de mutar el anterior?",
+            "options": [
+              "Es más rápido en todos los casos",
+              "Una nueva referencia hace que el cambio sea fácil de detectar",
+              "Los arrays no se pueden mutar en TypeScript",
+              "Usa menos memoria"
+            ],
+            "explanation": "Una referencia nueva indica que \"algo cambió\", lo cual encaja bien con las señales y la detección de cambios OnPush."
+          }
+        ]
+      },
+      "summary": {
+        "title": "Misión completada",
+        "content": "Conectaste eventos a un estado inmutable y volviste a renderizar a partir de él a mano.\n\nA continuación: deja que los valores derivados se calculen solos para que nunca tengas que almacenar el mismo dato dos veces."
+      }
+    }
+  },
+  "reactive-signals": {
+    "title": "Señales reactivas",
+    "description": "Domina las señales de Angular: la primitiva reactiva moderna para un estado que actualiza la UI automáticamente.",
+    "goal": "Crea, lee, actualiza y deriva señales dentro de un componente de Angular.",
+    "steps": {
+      "concept": {
+        "title": "¿Qué son las señales?",
+        "content": "Las señales son la primitiva reactiva central en el Angular moderno. Una señal contiene un valor y notifica a sus consumidores cuando ese valor cambia.\n\nA diferencia de los observables de RxJS, las señales son síncronas y de grano fino: solo los nodos del DOM que leen la señal se vuelven a renderizar cuando cambia."
+      },
+      "example": {
+        "title": "Un contador vivo",
+        "content": "El editor contiene un pequeño componente contador. Lee el código y luego ejecuta la vista previa para ver cómo `signal(0)` y `count.update(...)` trabajan juntos.",
+        "hint": "En el siguiente paso vas a editar este código tú mismo."
+      },
+      "practice": {
+        "title": "Agrega el doble del contador",
+        "content": "Agrega una segunda señal llamada `doubleCount` que se derive de `count`. Actualiza la plantilla para mostrarla.\n\nLuego haz clic en la vista previa para ver el resultado simulado.",
+        "hint": "Usa `computed(() => count() * 2)` y léela como una función dentro de la plantilla."
+      },
+      "comparison": {
+        "title": "Señales frente a RxJS",
+        "content": "Las señales y RxJS resuelven problemas parecidos de maneras distintas. Entender cuándo usar cada una simplifica tu código.",
+        "comparison": {
+          "titleA": "Señales",
+          "titleB": "RxJS BehaviorSubject",
+          "points": [
+            {
+              "aspect": "Forma de la API",
+              "a": "Función getter síncrona: count()",
+              "b": "Flujo observable: count$.subscribe(...)"
+            },
+            {
+              "aspect": "Granularidad",
+              "a": "Grano fino: solo los lectores se vuelven a renderizar",
+              "b": "Basado en flujos: los consumidores gestionan las emisiones"
+            },
+            {
+              "aspect": "Ideal para",
+              "a": "Estado de componentes, valores reactivos simples",
+              "b": "Flujos HTTP, composición de eventos, asincronía compleja"
+            }
+          ],
+          "recommendation": "Empieza con señales para el estado de tus componentes. Recurre a RxJS cuando necesites operadores, flujos asíncronos o composición de eventos."
+        }
+      },
+      "checkpoint": {
+        "title": "Comprobación rápida",
+        "content": "Responde estas preguntas para verificar tu comprensión.",
+        "checkpoints": [
+          {
+            "question": "¿Cómo lees el valor actual de una señal?",
+            "options": [
+              "count.value",
+              "count()",
+              "count.get()",
+              "count.subscribe()"
+            ],
+            "explanation": "Las señales se leen llamándolas como una función: `count()`."
+          },
+          {
+            "question": "¿Qué método crea una señal derivada de otras señales?",
+            "options": [
+              "signal()",
+              "effect()",
+              "computed()",
+              "writable()"
+            ],
+            "explanation": "`computed(() => ...)` crea una señal de solo lectura derivada de otras señales."
+          },
+          {
+            "question": "¿Cuándo deberías preferir RxJS sobre las señales?",
+            "options": [
+              "Para todo valor reactivo",
+              "Solo para contadores simples",
+              "Para flujos asíncronos y operadores complejos",
+              "Nunca; las señales reemplazan a RxJS por completo"
+            ],
+            "explanation": "RxJS sigue siendo la mejor herramienta para flujos asíncronos, peticiones HTTP y cadenas de operadores."
+          }
+        ]
+      },
+      "summary": {
+        "title": "Misión completada",
+        "content": "Aprendiste a crear señales, actualizarlas, derivar valores con `computed` y cuándo combinarlas con RxJS.\n\nSiguiente misión: pasa datos entre componentes con entradas y salidas."
+      }
+    }
+  },
+  "component-communication": {
+    "title": "Entradas y salidas de componentes",
+    "description": "Aprende la forma moderna de pasar datos hacia abajo y enviar eventos hacia arriba entre componentes de Angular.",
+    "goal": "Pasa datos hacia abajo con input() y envía eventos hacia arriba con output().",
+    "steps": {
+      "concept": {
+        "title": "El flujo de entradas y salidas",
+        "content": "Los componentes de Angular forman un árbol. Los padres pasan datos hacia abajo con `input()` y los hijos envían eventos hacia arriba con `output()`.\n\nEste flujo unidireccional hace que las aplicaciones sean predecibles y fáciles de depurar."
+      },
+      "example": {
+        "title": "Componente de calificación",
+        "content": "El editor muestra un componente `Rating` que recibe una entrada `value` y emite una salida `valueChange` cuando el usuario hace clic en una estrella."
+      },
+      "practice": {
+        "title": "Enlaza la calificación",
+        "content": "Completa el componente padre para que muestre la calificación actual y la actualice cuando el hijo emita un cambio.",
+        "hint": "Usa el enlace bidireccional `[(value)]` o el par explícito `[value] + (valueChange)`."
+      },
+      "comparison": {
+        "title": "Entrada obligatoria frente a opcional",
+        "content": "Las entradas de Angular pueden ser obligatorias u opcionales. Elegir el valor por defecto correcto hace que los componentes sean más seguros.",
+        "comparison": {
+          "titleA": "input.required<string>()",
+          "titleB": "input<string>()",
+          "points": [
+            {
+              "aspect": "Verificación del compilador",
+              "a": "El padre debe proporcionar el enlace",
+              "b": "El enlace es opcional"
+            },
+            {
+              "aspect": "Valor en tiempo de ejecución",
+              "a": "Siempre está definido",
+              "b": "Puede ser undefined salvo que se defina un valor por defecto"
+            },
+            {
+              "aspect": "Ideal para",
+              "a": "Valores de configuración críticos",
+              "b": "Indicadores opcionales y valores por defecto"
+            }
+          ],
+          "recommendation": "Usa `input.required()` para valores sin los que el componente no puede funcionar. Usa `input()` opcional con valores por defecto para indicadores y modificadores."
+        }
+      },
+      "checkpoint": {
+        "title": "Comprobación rápida",
+        "content": "Pon a prueba tu conocimiento sobre la comunicación entre componentes.",
+        "checkpoints": [
+          {
+            "question": "¿Qué función declara una salida en un componente hijo?",
+            "options": [
+              "input()",
+              "output()",
+              "emit()",
+              "signal()"
+            ],
+            "explanation": "`output()` crea un emisor de eventos para que el padre se enlace a él."
+          },
+          {
+            "question": "¿Cuál es la forma abreviada de `[value]=\"x\" (valueChange)=\"x=$event\"`?",
+            "options": [
+              "[(value)]=\"x\"",
+              "[value]=\"x\"",
+              "(value)=\"x\"",
+              "bind-value=\"x\""
+            ],
+            "explanation": "El \"banana-in-a-box\" `[(value)]` habilita el enlace bidireccional cuando la salida se llama `valueChange`."
+          }
+        ]
+      },
+      "summary": {
+        "title": "Misión completada",
+        "content": "Ahora puedes pasar datos hacia abajo con entradas, enviar eventos hacia arriba con salidas y elegir entre entradas obligatorias y opcionales.\n\nSiguiente misión: comparte servicios mediante inyección de dependencias."
+      }
+    }
+  },
+  "derived-values": {
+    "title": "Valores derivados",
+    "description": "Calcula valores a partir de tu estado fuente en lugar de almacenarlos dos veces — la idea detrás de las señales computed().",
+    "goal": "Deriva un total a partir del estado fuente y mantenlo correcto sin duplicar datos.",
+    "steps": {
+      "concept": {
+        "title": "No almacenes lo que puedes calcular",
+        "content": "Si un valor se puede calcular a partir de otros valores, no lo almacenes por separado — derívalo. Una copia almacenada puede desincronizarse; un valor derivado siempre es correcto.\n\nEso es exactamente lo que hace `computed(() => ...)` en Angular: recalcula a partir de sus fuentes cada vez que estas cambian."
+      },
+      "example": {
+        "title": "Un total en vivo",
+        "content": "El editor rastrea `price` y `quantity` como estado fuente. La función `total()` deriva el monto en lugar de almacenarlo.\n\nEjecuta la vista previa y haz clic en \"Agregar uno\": el total se recalcula a partir de la nueva cantidad — nunca le asignas un valor directamente.",
+        "hint": "Fíjate en cómo `total()` es una función de `price` y `quantity`, no una variable almacenada."
+      },
+      "practice": {
+        "title": "Agrega un descuento",
+        "content": "Agrega un valor derivado `discounted()` que reste un 10% al total, y muestra una segunda línea como \"Pagas: $36\".\n\nDebe mantenerse correcto a medida que cambia la cantidad.",
+        "hint": "Devuelve `total() * 0.9` desde una nueva función e imprímelo dentro de `render()`. Derívalo — nunca almacenes el número con descuento."
+      },
+      "checkpoint": {
+        "title": "Comprobación rápida",
+        "content": "Confirma la idea del estado derivado.",
+        "checkpoints": [
+          {
+            "question": "¿Por qué derivar un total en lugar de almacenarlo en una variable?",
+            "options": [
+              "Los valores almacenados están prohibidos en TypeScript",
+              "Un valor derivado no puede desincronizarse de sus fuentes",
+              "Las funciones siempre son más rápidas que las variables",
+              "Evita usar estado por completo"
+            ],
+            "explanation": "Un valor derivado se recalcula a partir de sus fuentes, así que siempre es consistente con ellas."
+          },
+          {
+            "question": "¿Qué API de Angular expresa un valor derivado?",
+            "options": [
+              "signal()",
+              "computed()",
+              "effect()",
+              "inject()"
+            ],
+            "explanation": "`computed(() => ...)` produce un valor de solo lectura derivado de otras señales."
+          }
+        ]
+      },
+      "summary": {
+        "title": "Misión completada",
+        "content": "Calculaste valores a partir del estado fuente en lugar de duplicarlos — la idea central de `computed()`.\n\nA continuación: ejecuta efectos secundarios automáticamente cada vez que el estado cambie."
+      }
+    }
+  },
+  "effect-sync": {
+    "title": "Efectos y sincronización automática",
+    "description": "Ejecuta efectos secundarios automáticamente cada vez que el estado cambia — una versión construida desde cero del effect() de Angular.",
+    "goal": "Construye un pequeño valor reactivo que vuelva a ejecutar a sus suscriptores en cada cambio.",
+    "steps": {
+      "concept": {
+        "title": "Reaccionar al cambio",
+        "content": "Un efecto es código que debe volver a ejecutarse cada vez que cambia el estado del que depende: actualizar el DOM, registrar información, sincronizar con almacenamiento.\n\nAngular te ofrece `effect(() => ...)`. Aquí vas a construir la misma idea a mano: un valor que mantiene una lista de listeners y los llama en cada asignación."
+      },
+      "example": {
+        "title": "Un valor reactivo",
+        "content": "El editor define `createState`, un valor con `get`, `set` y `effect`. El contador registra un efecto que escribe en la etiqueta, y este se ejecuta de inmediato y después de cada clic.\n\nEjecuta la vista previa: nunca llamas a `render()` tú mismo — el efecto mantiene la etiqueta sincronizada.",
+        "hint": "Sigue el flujo: `set` actualiza el valor y luego llama a cada listener registrado."
+      },
+      "practice": {
+        "title": "Agrega un segundo efecto",
+        "content": "Registra un SEGUNDO efecto que muestre si el contador es \"Par\" o \"Impar\" en un párrafo separado. Ambos efectos deben ejecutarse en cada clic.",
+        "hint": "Crea otro párrafo, agrégalo a `root`, y luego llama a `count.effect(() => { ... })` leyendo `count.get() % 2`."
+      },
+      "comparison": {
+        "title": "computed frente a effect",
+        "content": "Derivar un valor y reaccionar a un cambio se parecen, pero cumplen roles distintos.",
+        "comparison": {
+          "titleA": "computed()",
+          "titleB": "effect()",
+          "points": [
+            {
+              "aspect": "Produce",
+              "a": "Un valor que lees",
+              "b": "Un efecto secundario, sin valor"
+            },
+            {
+              "aspect": "Cuándo se ejecuta",
+              "a": "De forma perezosa, cuando se lee",
+              "b": "De forma inmediata, después de que cambian sus dependencias"
+            },
+            {
+              "aspect": "Úsalo para",
+              "a": "Totales, listas filtradas, formateo",
+              "b": "Escrituras al DOM, registro de eventos, persistencia"
+            }
+          ],
+          "recommendation": "Usa `computed()` para derivar valores; reserva `effect()` para efectos secundarios que van más allá de tu estado."
+        }
+      },
+      "checkpoint": {
+        "title": "Comprobación rápida",
+        "content": "Confirma cómo funcionan los efectos.",
+        "checkpoints": [
+          {
+            "question": "¿Cuándo debería volver a ejecutarse un efecto?",
+            "options": [
+              "Solo una vez al iniciar",
+              "Cada vez que cambia el estado del que depende",
+              "Con un temporizador fijo",
+              "Solo cuando el usuario recarga"
+            ],
+            "explanation": "Los efectos se vuelven a ejecutar en respuesta a cambios en el estado que leen."
+          },
+          {
+            "question": "¿Qué produce un efecto?",
+            "options": [
+              "Un valor derivado para leer",
+              "Nada — realiza un efecto secundario",
+              "Un nuevo componente",
+              "Una respuesta HTTP"
+            ],
+            "explanation": "Los efectos realizan efectos secundarios (escrituras al DOM, registro de eventos); no devuelven un valor para leer."
+          }
+        ]
+      },
+      "summary": {
+        "title": "Misión completada",
+        "content": "Construiste un valor reactivo que vuelve a ejecutar efectos en cada cambio — el motor detrás de `effect()`.\n\nA continuación: deriva una lista filtrada a partir de un cuadro de búsqueda."
+      }
+    }
+  },
+  "list-search": {
+    "title": "Construye una lista con búsqueda",
+    "description": "Filtra una lista mientras el usuario escribe derivando los elementos visibles a partir de una consulta — sin manipular el DOM a mano.",
+    "goal": "Deriva una lista filtrada a partir de una consulta de búsqueda y vuelve a renderizar en cada pulsación de tecla.",
+    "steps": {
+      "concept": {
+        "title": "La lista visible es derivada",
+        "content": "Un cuadro de búsqueda no mantiene su propia lista de resultados. Los resultados son DERIVADOS: filtras la lista completa según la consulta actual.\n\nMantén una única fuente de verdad (la lista completa + la consulta) y calcula qué mostrar. Es el mismo patrón que `computed()` sobre una señal."
+      },
+      "example": {
+        "title": "Filtra mientras escribes",
+        "content": "El editor renderiza un campo de entrada y una lista de frutas. En cada pulsación de tecla almacena la consulta y vuelve a renderizar, mostrando solo las frutas que coinciden.\n\nEjecuta la vista previa y escribe \"a\": la lista se reduce porque `visible()` la deriva a partir de la consulta.",
+        "hint": "La comparación no distingue mayúsculas de minúsculas: ambos lados se convierten a minúsculas antes de `includes`."
+      },
+      "practice": {
+        "title": "Maneja los resultados vacíos",
+        "content": "Cuando nada coincide con la consulta, muestra un mensaje \"Sin coincidencias\" en lugar de una lista vacía. Muestra también el número de coincidencias, como \"3 coincidencias\".",
+        "hint": "Dentro de `render()`, revisa `visible().length`. Si es 0, agrega un párrafo con el mensaje; de lo contrario, renderiza los elementos y una línea con el conteo."
+      },
+      "checkpoint": {
+        "title": "Comprobación rápida",
+        "content": "Confirma el patrón de lista con búsqueda.",
+        "checkpoints": [
+          {
+            "question": "¿De dónde salen los resultados visibles?",
+            "options": [
+              "Un array separado sincronizado a mano",
+              "Se derivan de la lista completa y la consulta",
+              "Del DOM, leído de vuelta en cada pulsación de tecla",
+              "Una petición al servidor por cada pulsación de tecla"
+            ],
+            "explanation": "La lista visible se deriva de la lista fuente filtrada por la consulta actual."
+          },
+          {
+            "question": "¿Por qué convertir a minúsculas tanto el elemento como la consulta?",
+            "options": [
+              "Para ordenar la lista",
+              "Para que la búsqueda no distinga mayúsculas de minúsculas",
+              "Para eliminar duplicados",
+              "Lo requiere includes()"
+            ],
+            "explanation": "Convertir ambos lados a minúsculas hace que \"Apple\" coincida con una consulta de \"apple\"."
+          }
+        ]
+      },
+      "summary": {
+        "title": "Misión completada",
+        "content": "Construiste una lista con búsqueda derivando los elementos visibles a partir de una consulta.\n\nA continuación: valida la entrada del usuario en un formulario."
+      }
+    }
+  },
+  "dependency-injection": {
+    "title": "Fundamentos de la inyección de dependencias",
+    "description": "Entiende cómo Angular provee e inyecta servicios, y cuándo usar los distintos ámbitos de inyección.",
+    "goal": "Comparte estado reactivo entre componentes con un servicio inyectable e inject().",
+    "steps": {
+      "concept": {
+        "title": "El árbol de inyectores",
+        "content": "Angular construye un árbol de inyectores que refleja el árbol de componentes. Los servicios registrados en la raíz son singletons; los servicios provistos en un componente viven mientras vive ese componente.\n\nUsa `inject()` para solicitar una dependencia al inyector más cercano."
+      },
+      "example": {
+        "title": "Un servicio de tareas",
+        "content": "El editor contiene un `TaskService` provisto en la raíz y un componente `TaskList` que lo inyecta. Fíjate cómo `inject(TaskService)` reemplaza la inyección por constructor."
+      },
+      "practice": {
+        "title": "Agrega un filtro",
+        "content": "Agrega una señal `filter` al servicio y un método `setFilter(query: string)`. Actualiza el componente para que muestre solo las tareas que coinciden.",
+        "hint": "Usa `computed(() => tasks().filter(...))` en el servicio para que todo consumidor vea la lista filtrada."
+      },
+      "checkpoint": {
+        "title": "Comprobación rápida",
+        "content": "Pon a prueba tu conocimiento sobre inyección de dependencias.",
+        "checkpoints": [
+          {
+            "question": "¿Qué función es la forma moderna de inyectar un servicio?",
+            "options": [
+              "constructor()",
+              "inject()",
+              "provide()",
+              "useClass()"
+            ],
+            "explanation": "`inject()` es la API recomendada dentro de componentes, directivas y servicios."
+          },
+          {
+            "question": "¿Qué tiempo de vida tiene un servicio provisto en un componente?",
+            "options": [
+              "El tiempo de vida de la aplicación",
+              "El mismo que el del componente",
+              "Uno por módulo",
+              "Uno por ruta"
+            ],
+            "explanation": "Un servicio provisto en un componente se crea y se destruye junto con esa instancia del componente."
+          }
+        ]
+      },
+      "summary": {
+        "title": "Misión completada",
+        "content": "Ya entiendes cómo Angular resuelve dependencias a través del árbol de inyectores y cómo limitar el ámbito de los servicios a componentes.\n\nSiguiente misión: navega entre vistas con el router moderno de Angular."
+      }
+    }
+  },
+  "modern-routing": {
+    "title": "Enrutamiento moderno en Angular",
+    "description": "Navega entre vistas, lee parámetros de ruta y protege rutas con las APIs modernas del router.",
+    "goal": "Mapea URLs a componentes, lee los parámetros de ruta como entradas y protege la navegación.",
+    "steps": {
+      "concept": {
+        "title": "El router como estado",
+        "content": "La URL es parte del estado de tu aplicación. El router de Angular mapea URLs a componentes, pasa parámetros y te permite proteger la navegación.\n\nEl enrutamiento moderno favorece funciones sobre clases: `resolveFn`, `canActivateFn` y `withComponentInputBinding()`."
+      },
+      "example": {
+        "title": "Parámetros de ruta",
+        "content": "El editor muestra un componente `UserProfile` que lee `:id` desde la ruta. Con `withComponentInputBinding()`, el parámetro se convierte automáticamente en una entrada del componente."
+      },
+      "practice": {
+        "title": "Agrega un guard",
+        "content": "Crea un `canActivateFn` que bloquee la navegación a `/admin` a menos que una función simulada `isAdmin()` devuelva true. Conéctalo en la configuración de la ruta.",
+        "hint": "Devuelve `true` para permitir la navegación o un `UrlTree` para redirigir."
+      },
+      "checkpoint": {
+        "title": "Comprobación rápida",
+        "content": "Pon a prueba tu conocimiento sobre enrutamiento.",
+        "checkpoints": [
+          {
+            "question": "¿Qué función habilita los parámetros de ruta como entradas de componente?",
+            "options": [
+              "withRouterConfig()",
+              "withComponentInputBinding()",
+              "withEnabledBlockingInitialNavigation()",
+              "withHashLocation()"
+            ],
+            "explanation": "`withComponentInputBinding()` mapea los datos y parámetros de ruta a entradas de componente."
+          },
+          {
+            "question": "¿Qué puede devolver un guard para redirigir la navegación?",
+            "options": [
+              "false",
+              "true",
+              "UrlTree",
+              "Todas las anteriores"
+            ],
+            "explanation": "Los guards pueden devolver valores booleanos o un `UrlTree` para redirigir."
+          }
+        ]
+      },
+      "summary": {
+        "title": "Misión completada",
+        "content": "Ya puedes leer parámetros de ruta, enlazarlos a entradas y proteger rutas con guards funcionales.\n\nEstás listo para construir aplicaciones reales con Angular."
+      }
+    }
+  },
+  "form-validation": {
+    "title": "Maneja la validación de formularios",
+    "description": "Ofrece a los usuarios retroalimentación instantánea y amigable mientras escriben, validando la entrada y derivando un mensaje de estado.",
+    "goal": "Valida un campo en cada entrada y muestra un mensaje claro para cada estado.",
+    "steps": {
+      "concept": {
+        "title": "La validación es una función pura",
+        "content": "Una buena validación es una función pura: dado el valor actual, devuelve un mensaje. Sin estado oculto, sin sorpresas.\n\nLa llamas en cada evento de entrada y muestras el resultado. El mensaje se deriva del valor — la misma idea reactiva, aplicada a formularios."
+      },
+      "example": {
+        "title": "Retroalimentación de correo en vivo",
+        "content": "El editor valida un campo de correo electrónico. `validate(value)` devuelve un mensaje para entrada vacía, para la falta de un \"@\", o para una dirección válida.\n\nEjecuta la vista previa y escribe: el mensaje se actualiza en cada pulsación de tecla porque se deriva del valor del campo.",
+        "hint": "La función retorna anticipadamente en cada caso fallido, y al final un mensaje de éxito."
+      },
+      "practice": {
+        "title": "Exige también una contraseña",
+        "content": "Agrega un campo de contraseña que debe tener al menos 8 caracteres. Muestra \"Listo para enviar\" solo cuando TANTO el correo como la contraseña sean válidos.",
+        "hint": "Escribe una función `validPassword(value)` que devuelva un booleano, agrega su propio párrafo de mensaje, y condiciona el mensaje final a ambas comprobaciones."
+      },
+      "comparison": {
+        "title": "Validar en la entrada frente a en el envío",
+        "content": "Puedes validar mientras el usuario escribe o solo cuando envía el formulario. Cada enfoque tiene su lugar.",
+        "comparison": {
+          "titleA": "En la entrada (en vivo)",
+          "titleB": "Al enviar",
+          "points": [
+            {
+              "aspect": "Momento de la retroalimentación",
+              "a": "Inmediata, en cada pulsación de tecla",
+              "b": "Solo después de que el usuario termina"
+            },
+            {
+              "aspect": "Riesgo",
+              "a": "Puede resultar molesta antes de que el usuario termine",
+              "b": "El usuario descubre todos los errores de una vez"
+            },
+            {
+              "aspect": "Es buena para",
+              "a": "Reglas de contraseña, verificaciones de disponibilidad",
+              "b": "Formularios cortos, confirmación final"
+            }
+          ],
+          "recommendation": "Valida en la entrada para dar orientación, pero evita mostrar errores hasta que el usuario haya interactuado con el campo. Vuelve a comprobar siempre al enviar."
+        }
+      },
+      "checkpoint": {
+        "title": "Comprobación rápida",
+        "content": "Confirma el enfoque de validación.",
+        "checkpoints": [
+          {
+            "question": "¿Por qué mantener la validación como una función pura del valor?",
+            "options": [
+              "Es la única forma que permite TypeScript",
+              "Es predecible y fácil de probar",
+              "Evita usar eventos",
+              "Hace que el formulario se envíe automáticamente"
+            ],
+            "explanation": "Una función pura devuelve el mismo mensaje para la misma entrada, lo cual es predecible y comprobable."
+          },
+          {
+            "question": "¿Cuándo debería aparecer el mensaje \"Listo para enviar\"?",
+            "options": [
+              "Cuando el correo es válido",
+              "Cuando cualquiera de los dos campos es válido",
+              "Solo cuando todos los campos son válidos",
+              "Tan pronto se carga el formulario"
+            ],
+            "explanation": "Un estado listo para enviar requiere que todos los campos pasen la validación."
+          }
+        ]
+      },
+      "summary": {
+        "title": "Misión completada",
+        "content": "Validaste la entrada en cada pulsación de tecla y derivaste un estado claro a partir de los valores de los campos.\n\nA continuación: carga datos de forma asíncrona y maneja los estados de carga y error."
+      }
+    }
+  },
+  "async-data": {
+    "title": "Datos asíncronos y estados de carga",
+    "description": "Obtén datos sin congelar la UI y modela los estados de carga, éxito y error que toda aplicación real necesita.",
+    "goal": "Guía una UI a través de carga → éxito/error usando async/await.",
+    "steps": {
+      "concept": {
+        "title": "Tres estados, siempre",
+        "content": "Cualquier dato que obtengas tiene al menos tres estados: carga, éxito y error. Mostrar solo el caso de éxito es el error de UI más común.\n\nCon `async/await` puedes moverte entre estos estados en orden y renderizar el mensaje adecuado para cada uno."
+      },
+      "example": {
+        "title": "Una petición simulada",
+        "content": "`fakeFetch()` devuelve una Promise que se resuelve tras un breve retraso, simulando una petición de red. Al hacer clic en el botón se muestra \"Cargando…\", se espera el resultado y luego se muestra el nombre.\n\nEjecuta la vista previa y haz clic: la UI permanece responsiva mientras espera.",
+        "hint": "El manejador de clic es `async`, así que puede hacer `await` sobre la promesa antes de actualizar el estado."
+      },
+      "practice": {
+        "title": "Maneja el estado de error",
+        "content": "Haz que `fakeFetch` se rechace aproximadamente la mitad de las veces, y luego envuelve el await en `try/catch` para mostrar un mensaje de error amigable cuando falle.",
+        "hint": "En `fakeFetch`, usa `Math.random() < 0.5` para hacer `reject(new Error(\"Network error\"))`. En el manejador, `try { ... } catch (err) { setStatus(\"Failed — try again\"); }`."
+      },
+      "checkpoint": {
+        "title": "Comprobación rápida",
+        "content": "Confirma el manejo de UI asíncrona.",
+        "checkpoints": [
+          {
+            "question": "¿Qué estados debería manejar una UI que obtiene datos?",
+            "options": [
+              "Solo éxito",
+              "Éxito y error",
+              "Carga, éxito y error",
+              "Solo carga"
+            ],
+            "explanation": "Las UIs robustas manejan carga, éxito y error — no solo el camino feliz."
+          },
+          {
+            "question": "¿Cómo capturas una promesa rechazada con async/await?",
+            "options": [
+              "Solo con .then()",
+              "Un try/catch alrededor del await",
+              "Un manejador global de window",
+              "No se puede capturar"
+            ],
+            "explanation": "Envolver el `await` en `try/catch` te permite manejar una promesa rechazada como un error lanzado."
+          }
+        ]
+      },
+      "summary": {
+        "title": "Misión completada",
+        "content": "Guiaste una UI a través de carga, éxito y error con async/await.\n\nA continuación: ordena y presenta una tabla de registros."
+      }
+    }
+  },
+  "data-table-sort": {
+    "title": "Ordena una tabla de datos",
+    "description": "Presenta registros que el usuario puede reordenar, derivando la vista ordenada sin mutar nunca tus datos fuente.",
+    "goal": "Alterna la dirección de orden y renderiza una copia ordenada y derivada de una lista de registros.",
+    "steps": {
+      "concept": {
+        "title": "Ordena una copia, no la fuente",
+        "content": "El método `sort` de los arrays muta en el mismo lugar. Si ordenas tus datos fuente directamente, pierdes el orden original y puedes provocar errores sutiles.\n\nEn su lugar, deriva una COPIA ordenada para mostrar y deja la fuente intacta — la misma regla de \"deriva lo que muestras\" que usaste para la búsqueda."
+      },
+      "example": {
+        "title": "Alterna el orden",
+        "content": "El editor renderiza puntuaciones y un botón que alterna entre ascendente y descendente. `sorted()` devuelve `[...rows].sort(...)`, una copia nueva, así que `rows` nunca cambia.\n\nEjecuta la vista previa y haz clic en el botón para reordenar la lista.",
+        "hint": "El spread `[...rows]` es lo que protege al array original de ser mutado."
+      },
+      "practice": {
+        "title": "Ordena también por nombre",
+        "content": "Agrega un segundo botón que ordene las filas alfabéticamente por nombre. El botón de puntuación debe seguir funcionando de forma independiente.",
+        "hint": "Agrega una variable `sortKey` (\"score\" | \"name\"), asígnala en cada manejador de botón, y ramifica dentro de `sorted()` usando `a.name.localeCompare(b.name)` para los nombres."
+      },
+      "checkpoint": {
+        "title": "Comprobación rápida",
+        "content": "Confirma el ordenamiento seguro.",
+        "checkpoints": [
+          {
+            "question": "¿Por qué ordenar una copia en lugar del array fuente?",
+            "options": [
+              "Las copias se ordenan más rápido",
+              "sort() muta en el mismo lugar y perdería el orden original",
+              "El array fuente es de solo lectura",
+              "Reduce el uso de memoria"
+            ],
+            "explanation": "`sort()` muta el array sobre el que se llama, así que ordenas una copia con spread para proteger la fuente."
+          },
+          {
+            "question": "¿Cómo haces una copia superficial de un array antes de ordenarlo?",
+            "options": [
+              "rows.copy()",
+              "[...rows]",
+              "rows.clone()",
+              "new Array(rows)"
+            ],
+            "explanation": "`[...rows]` esparce los elementos en un nuevo array que puedes ordenar de forma segura."
+          }
+        ]
+      },
+      "summary": {
+        "title": "Misión completada",
+        "content": "Presentaste registros ordenables derivando una copia ordenada y dejando la fuente intacta.\n\nHas completado el recorrido de Enrutamiento y Datos — ahora puedes construir vistas de Angular basadas en datos con confianza."
+      }
+    }
+  }
+}
