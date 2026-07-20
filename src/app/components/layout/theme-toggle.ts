@@ -1,15 +1,14 @@
 import { Component, inject } from '@angular/core';
-import { VoltButton } from '@voltui/components';
+import { VoltButton, VoltTooltip, VoltTooltipContent } from '@voltui/components';
 import { TranslatePipe } from '@ngx-translate/core';
 import { LmnMoonIcon } from 'lumen-icons/moon';
 import { LmnSunIcon } from 'lumen-icons/sun';
-import { TooltipDirective } from 'quartz-headless';
 import { ThemeService } from '../../core/services/theme.service';
 
 @Component({
   selector: 'app-theme-toggle',
   standalone: true,
-  imports: [VoltButton, TranslatePipe, LmnMoonIcon, LmnSunIcon, TooltipDirective],
+  imports: [VoltButton, TranslatePipe, LmnMoonIcon, LmnSunIcon, VoltTooltip, VoltTooltipContent],
   template: `
     <volt-button
       variant="ghost"
@@ -19,11 +18,8 @@ import { ThemeService } from '../../core/services/theme.service';
         (theme.mode() === 'light' ? 'theme.ariaSwitchToDark' : 'theme.ariaSwitchToLight')
           | translate
       "
-      [qzTooltip]="
-        (theme.mode() === 'light' ? 'theme.tooltipSwitchToDark' : 'theme.tooltipSwitchToLight')
-          | translate
-      "
-      tooltipPlacement="bottom"
+      [voltTooltip]="tooltipTpl"
+      placement="bottom"
       (click)="theme.toggle()"
     >
       @if (theme.mode() === 'light') {
@@ -32,6 +28,15 @@ import { ThemeService } from '../../core/services/theme.service';
         <lmn-sun [size]="20" [ariaLabel]="'theme.ariaSwitchToLight' | translate" />
       }
     </volt-button>
+
+    <ng-template #tooltipTpl>
+      <volt-tooltip-content>
+        {{
+          (theme.mode() === 'light' ? 'theme.tooltipSwitchToDark' : 'theme.tooltipSwitchToLight')
+            | translate
+        }}
+      </volt-tooltip-content>
+    </ng-template>
   `,
 })
 export class ThemeToggle {

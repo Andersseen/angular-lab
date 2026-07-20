@@ -4,8 +4,8 @@ import { LmnEyeSlashIcon } from 'lumen-icons/eye-slash';
 
 /**
  * Show/hide switch for a password input. Positions itself against the
- * `relative` wrapper inside `FormField`, so project it as `data-slot="trailing"`
- * and bind the input's `type` to the same signal.
+ * `.al-field-control` relative wrapper (see styles.css), so nest it as a
+ * sibling after `<volt-input>` and bind the input's `type` to the same signal.
  */
 @Component({
   selector: 'app-password-toggle',

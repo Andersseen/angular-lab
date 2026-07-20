@@ -7,14 +7,13 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { VoltButton } from '@voltui/components';
+import { VoltButton, VoltFormField, VoltInput, VoltLabel } from '@voltui/components';
 import { TranslatePipe } from '@ngx-translate/core';
 import { LmnKeyIcon } from 'lumen-icons/key';
 import { LmnLockClosedIcon } from 'lumen-icons/lock-closed';
 import { AuthService } from '../core/services/auth.service';
 import { Alert } from '../components/ui/alert';
 import { AuthLayout } from '../components/ui/auth-layout';
-import { FormField } from '../components/ui/form-field';
 import { PasswordToggle } from '../components/ui/password-toggle';
 
 export const routeMeta: RouteMeta = {
@@ -27,9 +26,11 @@ export const routeMeta: RouteMeta = {
   imports: [
     ReactiveFormsModule,
     VoltButton,
+    VoltFormField,
+    VoltLabel,
+    VoltInput,
     TranslatePipe,
     AuthLayout,
-    FormField,
     PasswordToggle,
     Alert,
     LmnKeyIcon,
@@ -55,24 +56,22 @@ export const routeMeta: RouteMeta = {
           (ngSubmit)="onSubmit()"
           class="flex flex-col gap-4"
         >
-          <app-form-field
-            [label]="'auth.resetPassword.newPasswordLabel' | translate"
-            controlId="password"
-          >
-            <lmn-lock-closed data-slot="icon" [size]="16" />
-            <input
-              id="password"
-              [type]="showPassword() ? 'text' : 'password'"
-              formControlName="password"
-              placeholder="••••••••"
-              autocomplete="new-password"
-              class="al-input pl-9 pr-10"
-            />
-            <app-password-toggle
-              data-slot="trailing"
-              [(visible)]="showPassword"
-            />
-          </app-form-field>
+          <volt-form-field>
+            <volt-label htmlFor="password">{{
+              'auth.resetPassword.newPasswordLabel' | translate
+            }}</volt-label>
+            <div class="al-field-control al-field-control--trailing">
+              <span class="al-field-icon"><lmn-lock-closed [size]="16" /></span>
+              <volt-input
+                id="password"
+                [type]="showPassword() ? 'text' : 'password'"
+                formControlName="password"
+                placeholder="••••••••"
+                autocomplete="new-password"
+              />
+              <app-password-toggle [(visible)]="showPassword" />
+            </div>
+          </volt-form-field>
 
           @if (error()) {
             <app-alert variant="danger">{{ error() }}</app-alert>

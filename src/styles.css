@@ -242,40 +242,136 @@ h6 {
 }
 
 /*
- * Native text control, styled from the token layer.
- *
- * Volt ships `<volt-input>` as an *element* component with its own
- * ControlValueAccessor and internal <input>, which does not fit FormField's
- * native `<label for>` association (Decision 14) — and the auth pages had been
- * writing it as an attribute (`<input volt-input>`), which Angular silently
- * ignores, so the controls rendered completely unstyled. Styling the native
- * input here keeps the label wiring, the reactive-forms bindings and the design
- * tokens all in one place. The global :focus-visible rule supplies the ring.
+ * Leading-icon / trailing-control layout for `<volt-input>` fields (auth
+ * pages). `VoltInput`'s inner `<input>` has a fixed `px-3` baked into its own
+ * template with no class-merging hook exposed, so an overlapping icon/toggle
+ * can't be made room for the way a plain `class="pl-9"` would on a native
+ * input. These rules live outside any `@layer`, which in CSS cascade layers
+ * always outranks Tailwind's own layered utilities regardless of source order
+ * or specificity — so they reliably override VoltInput's internal padding
+ * without touching the library.
+ */
+.al-field-control {
+  position: relative;
+}
+
+.al-field-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  display: flex;
+  pointer-events: none;
+  transform: translateY(-50%);
+  color: var(--al-ink-muted);
+}
+
+.al-field-control volt-input input {
+  padding-left: 2.25rem;
+}
+
+.al-field-control--trailing volt-input input {
+  padding-right: 2.5rem;
+}
+
+/*
+ * quartz-headless ships `qz-toast` / `qz-toast-container` fully unstyled by
+ * design ("you own the styles, Quartz owns the behaviour") — the container's
+ * own positioning/z-index come baked into its component styles, but the toast
+ * card itself has zero CSS anywhere until now. Styled from the same token
+ * layer as Alert (Decision 14): body text stays in ink/ink-muted so it always
+ * clears AA on the tinted fill, the status colour is carried by the border
+ * and progress bar only.
  */
 @layer components {
-  .al-input {
+  .qz-toast {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
     width: 100%;
-    padding: 0.5rem 0.75rem;
+    overflow: hidden;
+    padding: 1rem;
+    border-radius: 0.75rem;
     border: 1px solid var(--al-line);
-    border-radius: 0.5rem;
     background-color: var(--al-surface-raised);
+    box-shadow: 0 10px 30px -10px color-mix(in oklab, var(--al-ink) 25%, transparent);
     color: var(--al-ink);
-    font-size: 0.875rem;
-    line-height: 1.5rem;
-    transition: border-color var(--motion-fast) var(--motion-ease);
   }
 
-  .al-input::placeholder {
+  .qz-toast--success {
+    border-color: color-mix(in oklab, var(--al-success) 30%, transparent);
+    background-color: color-mix(in oklab, var(--al-success) 10%, var(--al-surface-raised));
+  }
+  .qz-toast--error {
+    border-color: color-mix(in oklab, var(--al-danger) 30%, transparent);
+    background-color: color-mix(in oklab, var(--al-danger) 10%, var(--al-surface-raised));
+  }
+  .qz-toast--warning {
+    border-color: color-mix(in oklab, var(--al-warning) 40%, transparent);
+    background-color: color-mix(in oklab, var(--al-warning) 10%, var(--al-surface-raised));
+  }
+  .qz-toast--info {
+    border-color: color-mix(in oklab, var(--al-brand) 30%, transparent);
+    background-color: color-mix(in oklab, var(--al-brand) 10%, var(--al-surface-raised));
+  }
+
+  .qz-toast__content {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .qz-toast__title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--al-ink);
+  }
+
+  .qz-toast__message {
+    margin-top: 0.125rem;
+    font-size: 0.875rem;
     color: var(--al-ink-muted);
   }
 
-  .al-input:hover:not(:disabled) {
-    border-color: color-mix(in oklab, var(--al-brand) 45%, var(--al-line));
+  .qz-toast__close {
+    flex-shrink: 0;
+    padding: 0.25rem;
+    border: none;
+    border-radius: 0.375rem;
+    background: none;
+    color: var(--al-ink-muted);
+    cursor: pointer;
+    transition:
+      color var(--motion-fast) var(--motion-ease),
+      background-color var(--motion-fast) var(--motion-ease);
+  }
+  .qz-toast__close:hover {
+    color: var(--al-ink);
+    background-color: var(--al-surface);
   }
 
-  .al-input:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+  .qz-toast__progress {
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 2px;
+    background-color: var(--al-line);
+  }
+
+  .qz-toast__progress-bar {
+    height: 100%;
+    background-color: var(--al-brand);
+    transition: width 250ms linear;
+  }
+  .qz-toast--success .qz-toast__progress-bar {
+    background-color: var(--al-success);
+  }
+  .qz-toast--error .qz-toast__progress-bar {
+    background-color: var(--al-danger);
+  }
+  .qz-toast--warning .qz-toast__progress-bar {
+    background-color: var(--al-warning);
+  }
+  .qz-toast--info .qz-toast__progress-bar {
+    background-color: var(--al-brand);
   }
 }
 
