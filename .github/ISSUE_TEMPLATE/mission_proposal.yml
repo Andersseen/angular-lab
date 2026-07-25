@@ -1,0 +1,67 @@
+name: Mission proposal
+description: Propose a new learning mission for the catalog
+labels: [content, mission]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Missions are short, hands-on lessons. Read `specs/learning-model.md` and
+        `specs/missions.md` first — they define what makes a good mission here.
+
+  - type: input
+    id: title
+    attributes:
+      label: Mission title
+      placeholder: Signals and the async pipe
+    validations:
+      required: true
+
+  - type: dropdown
+    id: track
+    attributes:
+      label: Track
+      options:
+        - Fundamentals
+        - Reactivity with Signals
+        - Routing & Data
+        - A new track (explain below)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: difficulty
+    attributes:
+      label: Difficulty
+      options: [Beginner, Intermediate, Advanced]
+    validations:
+      required: true
+
+  - type: textarea
+    id: outcome
+    attributes:
+      label: What will the learner be able to do afterwards?
+      description: One concrete, checkable skill — not a topic list.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Rough step outline
+      placeholder: |
+        1. Concept — why `computed` beats a getter
+        2. Comparison — getter vs. computed
+        3. Exercise — convert this component
+        4. Checkpoint — when does a computed re-run?
+
+  - type: dropdown
+    id: preview
+    attributes:
+      label: Can it run live in the playground?
+      description: Live execution needs plain TypeScript/DOM. Angular-framework code still uses a mock preview.
+      options:
+        - Yes — plain TypeScript / DOM
+        - 'No — it needs the Angular framework at runtime'
+        - Not sure
+    validations:
+      required: true

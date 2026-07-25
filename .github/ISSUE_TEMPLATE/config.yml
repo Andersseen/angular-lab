@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Try the platform
+    url: https://angular-lab.pages.dev
+    about: The deployed site — reproduce the issue there before filing.
+  - name: Questions and ideas
+    url: https://github.com/Andersseen/angular-lab/discussions
+    about: Open-ended questions, mission ideas and feedback go to Discussions.
+  - name: How this project is built
+    url: https://github.com/Andersseen/angular-lab/blob/main/context.md
+    about: Architecture, every design decision and why it was made.

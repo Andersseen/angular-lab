@@ -1,0 +1,61 @@
+name: Bug report
+description: Something in Angular Lab does not behave the way it should
+labels: [bug]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What did you see, and what did you expect instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Go to /mission/reactive-signals
+        2. Edit the code in step 3
+        3. …
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Mission content or steps
+        - Playground / code execution
+        - Accounts, login or progress sync
+        - Streaks, badges or the dashboard
+        - Translations (English / Español / Українська)
+        - Layout, theming or accessibility
+        - Something else
+    validations:
+      required: true
+
+  - type: input
+    id: where
+    attributes:
+      label: Where did you hit it
+      description: The deployed site, `pnpm dev` (:5173), or `pnpm dev:pages` (:8788)?
+      placeholder: https://angular-lab.pages.dev
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and OS
+      placeholder: Chrome 140 on macOS 15
+    validations:
+      required: true
+
+  - type: textarea
+    id: console
+    attributes:
+      label: Console output
+      description: Any errors in the browser devtools console. Rendered as code, no backticks needed.
+      render: shell

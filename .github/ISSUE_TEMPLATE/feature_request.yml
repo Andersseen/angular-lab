@@ -1,0 +1,38 @@
+name: Feature request
+description: Suggest a change to how the platform works
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Two things are out of scope by decision, not by omission: **payments**, and
+        **competitive engagement mechanics** (points, leaderboards, streak penalties,
+        notifications). Engagement here is reflective — see `specs/engagement.md`.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What is hard or missing today? Describe the situation, not the solution.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you'd like instead
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered
+
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope check
+      options:
+        - label: This is not payments, and not a competitive mechanic (points, leaderboards, penalties)
+          required: true

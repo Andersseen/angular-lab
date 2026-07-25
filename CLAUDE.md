@@ -12,6 +12,10 @@ Analog.js 2.6 (Angular 22, static `ssr: false`) · TypeScript strict · pnpm · 
 - `pnpm dev:pages` → build + `wrangler pages dev` on **:8788**, **with** Functions + D1. Use this for anything touching auth, progress sync, or the database.
 - Run `pnpm db:migrate` before `dev:pages` if the schema changed.
 
+## Deployment
+
+One axis only: `ci.yml` (the reusable quality gate) → `deploy.yml` (push to `main`) → D1 migrations `--remote` → Cloudflare Pages. Cloudflare's own Git integration must stay disconnected, or every push builds twice. Details and troubleshooting: [docs/deployment.md](docs/deployment.md).
+
 ## Common commands
 
 ```bash

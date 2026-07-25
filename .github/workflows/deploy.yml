@@ -1,0 +1,66 @@
+name: Deploy
+
+# The only path to production. Cloudflare's own Git integration must stay
+# disconnected — otherwise every push builds twice and the two deployments race.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Never let two production deploys overlap, and never cancel one midway:
+# a half-applied D1 migration is worse than a queued deploy.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  deployments: write
+
+jobs:
+  ci:
+    name: CI
+    uses: ./.github/workflows/ci.yml
+
+  deploy:
+    name: Cloudflare Pages
+    needs: ci
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: production
+      url: https://angular-lab.pages.dev
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Schema first: the Functions in `functions/api/` are deployed together
+      # with the client, so the tables they query have to exist before the new
+      # code is live. Wrangler tracks applied migrations, so this is a no-op
+      # when the schema is unchanged.
+      - name: Apply D1 migrations
+        run: pnpm exec wrangler d1 migrations apply angular-lab-db --remote
+
+      - name: Build
+        run: pnpm build:prod
+
+      - name: Deploy to Cloudflare Pages
+        run: >-
+          pnpm exec wrangler pages deploy dist/analog/public
+          --project-name=angular-lab
+          --branch=main

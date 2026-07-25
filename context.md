@@ -21,7 +21,7 @@ This file is the primary context source for future AI sessions working on Angula
 - Progress sync is live for logged-in users: localStorage remains the first write, then `ProgressSyncService` merges local ↔ D1 on login and write-through syncs mission changes via `GET/PUT /api/progress`. Guests stay local-only.
 - Dashboard exists (`/dashboard`, auth-guarded) with profile/progress/**achievements**/settings tabs; the progress tab shows real started/completed counts and per-mission percentages from stored progress, and the achievements tab shows the practice streak and the badge catalogue.
 - Engagement is live (Phase 09): a practice-day streak (D1 `activity_days`, `GET/PUT /api/activity`), 9 derived badges, and a shareable SVG completion card on mission completion. Spec: `specs/engagement.md`.
-- CI: `pr-validation.yml` (lint + unit + E2E + build on PRs), `deploy-cloudflare-pages.yml` (deploy on push to `main`, needs `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID` secrets).
+- CI/CD: **one deployment axis** (Decision 19). `ci.yml` is the single quality gate — it runs on `pull_request` *and* exposes `workflow_call`; `deploy.yml` (push to `main`) calls it, then applies D1 migrations `--remote` and deploys to Pages, into a GitHub `production` environment. Needs `CLOUDFLARE_API_TOKEN` (Pages: Edit **+** D1: Edit) + `CLOUDFLARE_ACCOUNT_ID`. Cloudflare's own Git integration must stay disconnected. Full detail: `docs/deployment.md`.
 
 ## Technology Stack
 
@@ -47,7 +47,9 @@ This file is the primary context source for future AI sessions working on Angula
 
 ```text
 angular-lab/
-├── .github/workflows/       # pr-validation.yml, deploy-cloudflare-pages.yml
+├── .github/                  # workflows/ (ci.yml, deploy.yml), ISSUE_TEMPLATE/, dependabot.yml,
+│                             # pull_request_template.md
+├── docs/                     # deployment.md + screenshots/ (used by README.md)
 ├── e2e/                      # Playwright: home, mission, playground, auth, auth-hardening,
 │                             # achievements, not-found (+ global-setup)
 ├── functions/api/            # auth endpoints + progress & activity sync endpoints
@@ -201,6 +203,13 @@ angular-lab/
    - **Form controls followed the same rule** (see Decision 16): `app-form-field`/`.al-input` retired in favour of `volt-form-field`/`volt-label`/`volt-input` on the 4 auth pages. `VoltInput`'s inner `<input>` has a hard-coded `px-3` baked into its own template with **no class-merging hook** — `class="pl-9"` on `<volt-input>` lands on the host element, not the inner input, so it can't make room for an overlapping leading icon or the password toggle the way it could on a native input. Fixed with `.al-field-control` / `.al-field-icon` / `.al-field-control--trailing` in `styles.css`, written **outside any `@layer`** — CSS cascade layers always let unlayered rules win over layered ones regardless of source order or specificity, so `.al-field-control volt-input input { padding-left: … }` reliably overrides Tailwind's layered utility classes without touching the library. `<volt-label [htmlFor]>` is passed explicitly (matching the control's `id`) rather than relying on `NgpFormField`'s auto-derived `aria-labelledby`-only wiring, so the native `<label for>` accessible-name mechanism the E2E suite depends on (Decision 14) keeps working unchanged.
    - **`ConfirmDialog` stays custom, on purpose.** `volt-dialog` is built trigger+template (`[ngpDialogTrigger]` on the opening element + `NgpDialogManager`), not a component controlled by `[open]="signal()"`. Both real call sites (`settings-tab`, `mission/[id].page`) toggle a boolean signal from elsewhere in the component, decoupled from the triggering click — migrating would mean rearchitecting both call sites' state model, not just the dialog component, to rework already-tested a11y behaviour (conditional initial focus, focus trap, `role="alertdialog"`) that isn't actually broken. Decided not to force it: only migrate what the routing rule cleanly fits, not everything Volt happens to also offer.
    - **What was deliberately left alone:** `stat-tile`, `auth-layout`, `gradient-icon`, `page-header`, `empty-state`, `badge-tile`, `alert` in `src/app/components/ui/` have no Volt/quartz equivalent — they're app-specific composition (brand identity, dashboard layout), which is exactly what a project built *on* a component library still writes itself. quartz's `splitter`/`tree`/`virtual-scroll`/`drag-drop` and Volt's `select`/`table`/`toggle-group` have no current call site forcing adoption — not migrated speculatively.
+
+19. **One deployment axis: GitHub Actions → Cloudflare Pages (ad hoc, 2026-07-25)**
+   - **The problem:** Cloudflare Pages can build from a connected Git repo *and* the repo shipped its own `wrangler pages deploy` workflow. With both active every push to `main` builds twice and the two deployments race for the production alias, with no ordering guarantee — the symptom is a live site that lags a commit or appears to revert. **Decision: GitHub Actions is the only path; Cloudflare's Git integration stays disconnected.** Chosen over the reverse because it keeps the whole pipeline in the repo, reviewable in a PR, and lets the deploy reuse the exact CI gate.
+   - **Workflows restructured:** `pr-validation.yml` + `deploy-cloudflare-pages.yml` → `ci.yml` + `deploy.yml`. `ci.yml` triggers on `pull_request` **and** declares `workflow_call`; `deploy.yml` calls it as a job rather than duplicating the steps, so a PR and a production deploy run byte-identical validation and `main` cannot deploy on an unvalidated build. Node version comes from `.nvmrc`, pnpm version from `packageManager` in `package.json` — one source each, no version drift between jobs.
+   - **Migrations moved into the pipeline.** Nothing previously applied D1 migrations to production: the client and the Functions ship in one deployment, so a Function could go live querying a table that did not exist. `deploy.yml` now runs `wrangler d1 migrations apply --remote` *before* the deploy — idempotent (wrangler tracks applied migrations server-side), and a failure blocks the deploy on purpose. This requires the API token to carry **D1: Edit** in addition to Pages: Edit.
+   - **`cancel-in-progress: false`** on the deploy concurrency group: cancelling mid-`migrations apply` risks a half-applied schema, which is worse than a queued deploy. CI keeps `cancel-in-progress: true` — superseded PR runs are pure waste.
+   - Deploys target a GitHub `production` environment with the live URL, so deployment history surfaces on the repo home page and a required-reviewer gate can be added later without touching the workflow.
 
 ## Conventions
 

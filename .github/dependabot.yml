@@ -1,0 +1,33 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
+    labels: [dependencies]
+    groups:
+      # Angular and Analog release in lockstep; splitting them into separate
+      # PRs produces builds that cannot compile.
+      angular:
+        patterns:
+          - '@angular/*'
+          - '@angular-*'
+          - 'angular-eslint'
+          - '@analogjs/*'
+      dev-tooling:
+        dependency-type: development
+        patterns:
+          - 'eslint*'
+          - '@eslint/*'
+          - 'typescript-eslint'
+          - 'vitest'
+          - '@testing-library/*'
+          - '@playwright/*'
+          - 'playwright'
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    labels: [dependencies, ci]
